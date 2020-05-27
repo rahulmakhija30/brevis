@@ -17,6 +17,12 @@ npm install
 ```
 +
 |--- frontend
+|     |
+|     |--- src
+|     |--- node_modules
+|     |--- public
+|
+|
 |
 |--- backend
 |
@@ -41,7 +47,7 @@ python3 prog.py
 Open a new terminal
 To start the client type the follwoing commands :
 ```
-cd frontend;
+cd frontend
 ```
 
 ```
