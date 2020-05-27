@@ -13,6 +13,22 @@ cd frontend
 npm install
 ```
 
+*Folder Structure*
+```
++
+|--- frontend
+|
+|--- backend
+|
+|--- README
+|
+|--- .gitignore
+|
++
+
+```
+
+
 *Starting the Application*
 
 To start the server type the following  commands :
