@@ -37,7 +37,7 @@ class DownloadFile extends React.Component {
 	
 	render() {
 		return (
-    <div>
+    <div className="left-alignment">
       Choose according to your requirement
       <p>
       <label>
@@ -61,7 +61,7 @@ class DownloadFile extends React.Component {
       </label>
     </p>
      <br></br>
-    <button className="waves-effect waves-light btn" onClick={this.handleDownload}>Download</button>
+    <div className="Download-button"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
     </div>
   );
 	}

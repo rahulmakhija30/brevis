@@ -14,7 +14,7 @@ class App extends React.Component {
       <BrowserRouter>
       <div >
         <Navbar />
-        <h1 className="center">BREVIS</h1>
+        <h1 className="brevis">BREVIS</h1>
         <Route  exact path='/' component={Home} />
         <Route path='/about' component={About} />
         
