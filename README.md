@@ -1,13 +1,13 @@
 *Requirements*
 ```
-Python version-3.6.7
-Flask version - 0.12
-npm   version - 6.14.5
+Python version - 3.6.7
+Flask version  - 0.12
+npm version    - 6.14.5
 ```
 
 *Dependencies Installation*
 ```
-cd frontend;
+cd frontend
 ```
 ```
 npm install
@@ -17,7 +17,7 @@ npm install
 
 To start the server type the following  commands :
 ```
-cd backend;
+cd backend
 ```
 ```
 python3 prog.py
