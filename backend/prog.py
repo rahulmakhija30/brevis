@@ -42,7 +42,7 @@ def res():
 @app.route('/send',methods=['GET','POST'])
 def send():
     print("v burvb")
-    return send_file('/home/smrnmakhija/brevis/downloadfile.zip',attachment_filename='downloadfile.zip')
+    return send_file('/home/smrnmakhija/brevis/backend/downloadfile.zip',attachment_filename='downloadfile.zip')
     #f = open('downloadfile.txt','r')
     #print("xx",f.read())
     #return 'downloadfile.txt'
