@@ -1,10 +1,54 @@
+html{
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: url(/img/image.jpg) no-repeat;
+  background-size: cover;
+  background-position: left;
+  background-color: #EDEEF0;
+}
+
+.brevis{
+  font-family: Rammetto One;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 40px;
+  padding-left: 60%;
+  line-height: 84px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.left-alignment{
+  width: 85%;
+  padding-left: 50%;
+}
+
+.Download-button{
+  padding-left: 40.5%;
+}
+
+.button{
+  padding-left: 65%;
+}
+
+.btn{
+  border-radius: 20px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #636363;
+  opacity: 1; /* Firefox */
+  font-weight: bold;
+}
+
+.Radio-Button{
+  text-decoration-color: black;
+  opacity: 1; /* Firefox */
+  font-weight: bold;
 }
 
 code {
