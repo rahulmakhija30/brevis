@@ -50,6 +50,28 @@ body {
   opacity: 1; /* Firefox */
   font-weight: bold;
 }
+.custom-select option{
+  display:inline-block;
+  padding: 30px;
+  -webkit-appearance: button;
+  appearance: button;
+  font-size: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
+.custom-select select {
+  display:inline-block; /*hide original SELECT element: */
+  color: black;
+  background-color:#EDEEF0;
+  width: 300px;
+  border: none;
+  font-size: 15px;
+  font-family: serif;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  -webkit-appearance: button;
+  appearance: button;
+  outline: none;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
