@@ -25,6 +25,12 @@ npm install
 |
 |
 |--- backend
+|     |
+|     |--- main.py
+|     |--- youtube_transcription.py
+|     |--- keywords_extractor.py
+|     |--- summary_generator.py
+|
 |
 |--- README
 |
@@ -54,3 +60,8 @@ cd frontend
 npm start
 ```
 
+Testing Transcription, Keywords Extraction, and Summarization
+
+```
+Install modules mentioned in requirements.txt
+```
