@@ -11,7 +11,7 @@ class Navbar extends Component {
           <Link to='/'>Home</Link>
           <Link to='/about'>About</Link>
       </div>
-      <span className="openbtn" onClick={window.openNav}>&#9776;</span>      
+      <span className="openbtn stick" onClick={window.openNav}>&#9776;</span>      
   </div>
   )}
 }

@@ -6,7 +6,7 @@ body {
   margin: 0;
   background: url(/img/image.jpg) no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
   background-color: #EDEEF0;
 }
 
@@ -16,6 +16,18 @@ body {
   font-weight: normal;
   font-size: 40px;
   padding-left: 60%;
+  line-height: 84px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.about-brevis{
+  font-family: Rammetto One;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 40px;
+  text-align: center;
   line-height: 84px;
   letter-spacing: 0.05em;
   text-transform: uppercase;

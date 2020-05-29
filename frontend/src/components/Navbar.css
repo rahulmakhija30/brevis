@@ -1,6 +1,6 @@
 .mysidenav {
     height: 100%; /* 100% Full-height */
-    width: 0px; /* 0 width - change this with JavaScript */
+    width: 20px; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
@@ -17,6 +17,11 @@
     padding-top: 5%;
     padding:2%;
     stroke-width: 2px;
+  }
+
+  .stick{
+    position: sticky;
+    top: 0;
   }
   
   /* The navigation menu links */

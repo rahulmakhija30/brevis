@@ -66,6 +66,7 @@ class Home extends React.Component {
     }
     return (
       <div>
+      <h1 className="brevis">BREVIS</h1>
         <p className="left-alignment">
           <input type="text" onChange={this.handleChange} placeholder="Enter the link"></input>
         </p>
@@ -73,7 +74,7 @@ class Home extends React.Component {
           <button className="btn waves-effect waves-light" type="submit" onClick={this.handleSubmit}>Submit</button>
         </div> 
         <p></p>
-        <p id="fail"></p>
+        <p id="fail" className="left-alignment"></p>
           {download}
       </div>
     );
