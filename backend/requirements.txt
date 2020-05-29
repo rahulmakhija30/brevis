@@ -1,3 +1,13 @@
+1.>Python (version 3.7.7)
+
+2.>Spacy (version 2.2.4) 
+For installation use :-
 pip install spacy
+
+3.> Spacy Large Prediction Model
+For installation use :-
 python -m spacy download en_core_web_lg
+
+4.>Yotube Transcript API (version 0.3.1)
+For installation use :-
 pip install youtube-transcript-api
