@@ -25,14 +25,24 @@ class Home extends React.Component {
         console.log("III",response)
         //document.getElementById('print').innerHTML=response.data.result;
         let download=null;
-        if(response.data.result)
+        if(response.data.result==1)
           {
             this.setState({
               validurl:true
             });
+            document.getElementById('disp').innerHTML=""
           }
         else{
-          document.getElementById('fail').innerHTML='Not an educational video!'
+            this.setState({
+              validurl:false
+            });
+            if(response.data.result==0)
+            {
+              document.getElementById('disp').innerHTML='Transcripts for the video do not exist!'
+            }
+            else{
+          document.getElementById('disp').innerHTML='Not an educational video!'
+            }
         }
         
         },(error) => {
@@ -40,7 +50,7 @@ class Home extends React.Component {
           if (error) {
               //console.log("4")
               console.log(error.name)
-              document.getElementById("fail").innerHTML=error.message;
+              document.getElementById("disp").innerHTML=error.message;
           }
         }
         
@@ -50,7 +60,7 @@ class Home extends React.Component {
       if (error) {
           //console.log("4")
           console.log(error.name)
-          document.getElementById("fail").innerHTML='Please check the link again!';
+          document.getElementById("disp").innerHTML='Please check the link again!';
       }
     }
 
@@ -74,7 +84,7 @@ class Home extends React.Component {
           <button className="btn waves-effect waves-light" type="submit" onClick={this.handleSubmit}>Submit</button>
         </div> 
         <p></p>
-        <p id="fail" className="left-alignment"></p>
+        <p id="disp" className="left-alignment"></p>
           {download}
       </div>
     );
