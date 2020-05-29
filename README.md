@@ -65,3 +65,9 @@ Testing Transcription, Keywords Extraction, and Summarization
 ```
 Install modules mentioned in requirements.txt
 ```
+
+Run the command to test
+
+```
+python3 main.py
+```
