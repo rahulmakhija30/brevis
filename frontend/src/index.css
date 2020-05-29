@@ -6,7 +6,7 @@ body {
   margin: 0;
   background: url(/img/image.jpg) no-repeat;
   background-size: cover;
-  background-position: left;
+  background-position: center;
   background-color: #EDEEF0;
 }
 
@@ -50,11 +50,10 @@ body {
   opacity: 1; /* Firefox */
   font-weight: bold;
 }
+
 .custom-select option{
-  display:inline-block;
-  padding: 30px;
-  -webkit-appearance: button;
-  appearance: button;
+  padding:20px;
+  /* display:inline-block; */
   font-size: 15px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
 }
@@ -63,14 +62,16 @@ body {
   display:inline-block; /*hide original SELECT element: */
   color: black;
   background-color:#EDEEF0;
-  width: 300px;
+  width: 85%;
   border: none;
   font-size: 15px;
   font-family: serif;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-  -webkit-appearance: button;
-  appearance: button;
   outline: none;
+}
+
+.dropdown{
+  padding-left: 10%;
 }
 
 code {

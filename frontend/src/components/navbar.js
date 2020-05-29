@@ -1,21 +1,19 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {Link,NavLink} from 'react-router-dom'
+import './Navbar.css'
 
-
-const Navbar=()=> {
+class Navbar extends Component {
+  render(){
   return (
-      <nav className="nav-wrapper blue">
-        <div>
-          <ul >
-              <li><Link to='/'>Home</Link></li>
-              <li><Link to='/about'>About</Link></li>
-
-
-          </ul>
-
+    <div>
+      <div id="mySidenav" className="mysidenav">
+          <a href="javascript:void(0)" className="closebtn" onClick={window.closeNav}>&times;</a>
+          <Link to='/'>Home</Link>
+          <Link to='/about'>About</Link>
       </div>
-      </nav>
-  );
+      <span className="openbtn" onClick={window.openNav}>&#9776;</span>      
+  </div>
+  )}
 }
 
-export default Navbar
+export default Navbar;
