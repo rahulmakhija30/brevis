@@ -1,7 +1,7 @@
 #Loading spacy larger prediction model 
 import spacy
-# nlp=spacy.load('en_core_web_lg')
-nlp=spacy.load('en_core_web_md')
+nlp=spacy.load('en_core_web_lg')
+#nlp=spacy.load('en_core_web_md')
 from string import punctuation #To detect punctuation marks
 
 
