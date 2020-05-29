@@ -1,6 +1,7 @@
 
 
 import React from 'react';
+import '../index.css'
 
 
 class DownloadFile extends React.Component {
@@ -37,31 +38,16 @@ class DownloadFile extends React.Component {
 	
 	render() {
 		return (
-    <div>
-      Choose according to your requirement
-      <p>
-      <label>
-        <input name="group1" type="radio" value="both" checked={this.state.value === 'both'} 
-      onChange={this.handleChange} />
-        <span>Both</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input name="group1" type="radio" value="shortsummary"  checked={this.state.value === 'shortsummary'} 
-     onChange={this.handleChange} />
-        <span>Short Summary</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input  name="group1" type="radio" value="detailednotes" checked={this.state.value === 'detailednotes'} 
-      onChange={this.handleChange}  />
-        <span>Detailed Notes </span>
-      </label>
-    </p>
+    <div className="left-alignment">
+      <div class="custom-select">
+    <select onChange={this.handleChange} value={this.state.value}>
+      <option value="both">Short Summary and Detailed Notes</option>
+      <option value="shortsummary">Short Summary only</option>
+      <option value="detailednotes">Detailed Notes only</option>
+    </select>
+      </div>
      <br></br>
-    <button className="waves-effect waves-light btn" onClick={this.handleDownload}>Download</button>
+    <div className="Download-button"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
     </div>
   );
 	}

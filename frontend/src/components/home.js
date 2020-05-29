@@ -65,14 +65,17 @@ class Home extends React.Component {
       download=<DownloadFile/>;
     }
     return (
-      <div className="container">
-        <input type="text" onChange={this.handleChange} placeholder="Enter the link"></input>
-        <button class="btn waves-effect waves-light" type="submit" onClick={this.handleSubmit}>Submit
-      </button> 
-      <p></p>
-        <p id="fail"></p>
-        {download}
-        
+      <div>
+      <h1 className="brevis">BREVIS</h1>
+        <p className="left-alignment">
+          <input type="text" onChange={this.handleChange} placeholder="Enter the link"></input>
+        </p>
+        <div className="button">
+          <button className="btn waves-effect waves-light" type="submit" onClick={this.handleSubmit}>Submit</button>
+        </div> 
+        <p></p>
+        <p id="fail" className="left-alignment"></p>
+          {download}
       </div>
     );
   }

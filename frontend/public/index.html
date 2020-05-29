@@ -25,6 +25,10 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>React App</title>
   </head>
   <body>
@@ -40,5 +44,20 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      openNav = (e) => {
+          document.getElementById("mySidenav").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+          document.body.style.backgroundPosition="150px";
+          document.body.style.transition = ".5s";
+      }
+        
+      /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+      closeNav = (e) => {
+          document.getElementById("mySidenav").style.width = "10px";
+          document.getElementById("main").style.marginLeft = "0";
+          document.body.style.backgroundPosition="center";
+      }
+    </script>
   </body>
 </html>

@@ -12,13 +12,10 @@ class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-      <div >
-        <Navbar />
-        <h1 className="center">BREVIS</h1>
+      <Navbar />
+      <div id="main">
         <Route  exact path='/' component={Home} />
         <Route path='/about' component={About} />
-        
-       
       </div>
       </BrowserRouter>
     );
