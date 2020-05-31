@@ -72,7 +72,7 @@ class Home extends React.Component {
     let download=null;
     if(this.state.validurl)
     {
-      download=<DownloadFile/>;
+      download=<DownloadFile url={this.state.url}/>;
     }
     return (
       <div>

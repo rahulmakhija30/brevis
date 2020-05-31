@@ -7,11 +7,15 @@ class Navbar extends Component {
   return (
     <div>
       <div id="mySidenav" className="mysidenav">
-          <a href="javascript:void(0)" className="closebtn" onClick={window.closeNav}>&times;</a>
-          <Link to='/'>Home</Link>
-          <Link to='/about'>About</Link>
-      </div>
-      <span className="openbtn stick" onClick={window.openNav}>&#9776;</span>      
+          <div className="tooltip">
+            <Link to='/'><i class="medium material-icons">home</i></Link>
+            <span className="tooltiptext">Home</span>
+          </div>
+          <div className="tooltip">
+            <Link to='/about'><i class="medium material-icons">face</i></Link>
+            <span className="tooltiptext" container="body">About</span>  
+          </div>    
+      </div>   
   </div>
   )}
 }
