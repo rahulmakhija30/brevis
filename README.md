@@ -30,6 +30,8 @@ npm install
 |     |--- youtube_transcription.py
 |     |--- keywords_extractor.py
 |     |--- summary_generator.py
+|     |--- SmartStoplist.txt
+|     |--- requirements.txt
 |
 |
 |--- README
