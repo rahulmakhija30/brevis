@@ -1,32 +1,21 @@
 .mysidenav {
     height: 100%; /* 100% Full-height */
-    width: 20px; /* 0 width - change this with JavaScript */
+    width: 80px; 
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 1; 
     top: 0; /* Stay at the top */
     left: 0;
-    background-color:#a1a1a1; /* Black*/
+    background-color:#d4d4d4; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-  }
-  
-  .openbtn{
-    font-size:30px;
-    cursor:pointer;
-    padding-top: 5%;
-    padding:2%;
-    stroke-width: 2px;
-  }
 
-  .stick{
-    position: sticky;
-    top: 0;
   }
   
   /* The navigation menu links */
   .mysidenav a {
-    padding: 8px 8px 8px 32px;
+    padding: 8px;
+    padding-bottom: 0px;
+    text-align:right;
     text-decoration: none;
     font-size: 25px;
     color: #5e5e5e;
@@ -39,24 +28,42 @@
     color: Black;
   }
   
-  /* Position and style the close button (top right corner) */
-  .mysidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-  }
-  
-  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-  #main {
-    transition: margin-left .5s;
-    padding: 20px;
-  }
-
-  
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
   @media screen and (max-height: 450px) {
     .mysidenav {padding-top: 15px;}
     .mysidenav a {font-size: 18px;}
   }
+
+  
+.tooltip {
+  margin-bottom: 0px;
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  margin:8px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  visibility: hidden;
+  width: 160px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}

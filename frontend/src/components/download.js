@@ -1,9 +1,8 @@
-
-
 import React from 'react';
 import '../index.css'
 import axios from 'axios';
 
+import ReactPlayer from "react-player"
 
 class DownloadFile extends React.Component {
 	
@@ -80,9 +79,9 @@ class DownloadFile extends React.Component {
 	}
 	
 	render() {
-		return (
+    return (
     <div className="left-alignment">
-      <div class="custom-select">
+      <div className="custom-select">
     <select onChange={this.handleChange} value={this.state.value}>
       <option value="both">Short Summary and Detailed Notes</option>
       <option value="shortsummary">Short Summary only</option>
@@ -90,7 +89,9 @@ class DownloadFile extends React.Component {
     </select>
       </div>
      <br></br>
-    <div className="Download-button"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
+     <ReactPlayer height="70%" width="90%" style={{padding: "10px", paddingLeft: "25%"}}
+        url={this.props.url}/>
+     <div className="Download-button"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
     </div>
   );
 	}
