@@ -2,6 +2,7 @@
 
 import React from 'react';
 import '../index.css'
+import axios from 'axios';
 
 
 class DownloadFile extends React.Component {
@@ -19,21 +20,63 @@ class DownloadFile extends React.Component {
     });
   }
 	
-	handleDownload = () => {
-		fetch('/send')
-			.then(response => {
-        console.log(response)
-				response.blob().then(blob => {
-          console.log(blob)
-          let url = window.URL.createObjectURL(blob);
+	handleDownload = async() => {
+    let response= await axios.post('/download',this.state);
+        console.log("helloworld",response)
+       let res= await axios.get('/send/'+this.props.url.slice(32)+this.state.value,{responseType: 'blob'});
+          console.log("heyyy",res)
+        //res.data.blob()
+        //.then(blob => {
+          //console.log(blob)
+          let url = window.URL.createObjectURL(res.data);
           console.log(url)
 					let a = document.createElement('a');
 					a.href = url;
-					a.download = 'downloadfile.zip';
+					a.download = 'brevis_notes2.zip';
 					a.click();
-				});
-				//window.location.href = response.url;
-		});
+				//});
+        //window.location.href = response.url;
+        
+
+   /* const method = 'GET';
+
+    const url = '/download';
+
+    axios
+
+      .request({
+
+        url,
+
+        method,
+
+        responseType: 'blob', //important
+
+      })
+
+      .then(({ data }) => {
+
+        const downloadUrl = window.URL.createObjectURL(new Blob([data]));
+
+        const link = document.createElement('a');
+
+        link.href = downloadUrl;
+
+        link.setAttribute('download', 'brevis_notes2.zip'); //any other extension
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+      })
+      .catch((error)=>{
+
+        console.log(error.response)
+
+      });*/
+    
 	}
 	
 	render() {
