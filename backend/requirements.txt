@@ -23,3 +23,12 @@ pip install sumy
 7.>NLTK (version 3.5)
 For installation use :-
 pip install nltk
+
+8.>youtube_dl (version 2020.5.29)
+For installation use :-
+pip install youtube-dl
+
+9.>pafy (version 0.5.5)
+For installation use :-
+pip install pafy
+
