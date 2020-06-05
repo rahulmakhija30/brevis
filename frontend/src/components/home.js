@@ -17,13 +17,11 @@ class Home extends React.Component {
     console.log(this.state)
     axios.post('/result',this.state)
     .then(res=>{
-      console.log("HHH", res)
      
 
       axios.get('/res')
       .then(response=>{
-        console.log("III",response)
-        //document.getElementById('print').innerHTML=response.data.result;
+       
         let download=null;
         if(response.data.result==1)
           {
@@ -46,9 +44,9 @@ class Home extends React.Component {
         }
         
         },(error) => {
-          //console.log("3")
+          
           if (error) {
-              //console.log("4")
+              
               console.log(error.name)
               document.getElementById("disp").innerHTML=error.message;
           }
@@ -56,9 +54,9 @@ class Home extends React.Component {
         
         )
     },(error) => {
-      //console.log("3")
+      
       if (error) {
-          //console.log("4")
+          
           console.log(error.name)
           document.getElementById("disp").innerHTML='Please check the link again!';
       }
