@@ -1,6 +1,6 @@
 import RAKE
 import operator
-def get_keywords(n):
+def get_keywords(text,n):
     stop_dir = "SmartStoplist.txt"
     rake_object = RAKE.Rake(stop_dir)
     keywords_weighted = rake_object.run(text)

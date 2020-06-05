@@ -2,11 +2,13 @@ from flask import Flask, request,jsonify,send_file
 import requests
 from bs4 import BeautifulSoup as bs
 from youtube_transcription import youtube_transcribe
-#from keywords_extractor import get_keywords
+from keywords_extractor import get_keywords
 from summary_generator import summary
 #import io
 from zipfile import ZipFile
 import os.path
+import RAKE
+import operator
 
 app = Flask(__name__)
 
@@ -24,17 +26,20 @@ def generate(data):
 	if number_of_transciptions:
 		text = transcripts[0]
     # Keywords Extractor
-	#keywords=get_keywords(text,15)
-	#print('\nKeywords:\n',keywords)
-
+	keywords=get_keywords(text,10)
+	print('\nKeywords:\n',keywords)
+	fp=open("keywords.txt","w")
+	fp.write("\n".join(keywords))
+	fp.close()
     # Summarization
-	result = summary(text,60)
+	result = summary(text,50)
 	fh=open("summary.txt","w")
 	fh.write(result)
 	fh.close()
 	with ZipFile('brevis_notes2.zip','w') as zip:
 		print("Writing zip")
 		zip.write("summary.txt") 
+		zip.write("keywords.txt")
 	zip.close()
 	path=os.path.abspath("brevis_notes2.zip")
 	
