@@ -20,13 +20,13 @@ npm install
 |     |
 |     |--- src
 |            |---components
-                   |---profileimages
-                   |---about.js
-                   |---About.css
-                   |---download.js
-                   |---home.js
-                   |---navbar.js
-                   |---Navbar.css
+|                  |---profileimages
+|                  |---about.js
+|                  |---About.css
+|                  |---download.js
+|                  |---home.js
+|                  |---navbar.js
+|                  |---Navbar.css
 |            |---App.js
 |            |---index.css
 |            |---index.js
@@ -34,30 +34,33 @@ npm install
 |            |---setupTests.js
 |     |--- node_modules
 |     |--- public
-             |---img
-             |---favicon.ico
-             |---index.html
-             |---manifest.json
-             |---robots.txt
-      |---package-lock.json
-      |---package.json
+|            |---img
+|            |---favicon.ico
+|            |---index.html
+|            |---manifest.json
+|            |---robots.txt
+|     |---package-lock.json
+|     |---package.json
 |
 |
 |
 |--- backend
 |     |
 |     |--- main.py
-      |--- server.py
+|     |--- server.py
 |     |--- youtube_transcription.py
 |     |--- keywords_extractor.py
 |     |--- summary_generator.py
 |     |--- SmartStoplist.txt
-|     |--- requirements.txt
+|     |--- keyframes.py (Image Processing is pending)
+|     
 |
 |
 |--- README
 |
 |--- .gitignore
+|
+|--- requirements.txt
 |
 +
 
