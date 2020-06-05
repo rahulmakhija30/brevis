@@ -23,3 +23,11 @@ pip install youtube-dl
 7.>pafy (version 0.5.5)
 For installation use :-
 pip install pafy
+
+8.>Sumy (version 0.8.1)
+For installation use :-
+pip install sumy
+
+9.>NLTK (version 3.5)
+For installation use :-
+pip install nltk
