@@ -15,3 +15,11 @@ pip install youtube-transcript-api
 5.>RAKE (version 1.4.5)
 For installation use :-
 pip install python-rake
+
+6.>youtube_dl (version 2020.5.29)
+For installation use :-
+pip install youtube-dl
+
+7.>pafy (version 0.5.5)
+For installation use :-
+pip install pafy
