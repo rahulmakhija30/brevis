@@ -19,14 +19,35 @@ npm install
 |--- frontend
 |     |
 |     |--- src
+|            |---components
+                   |---profileimages
+                   |---about.js
+                   |---About.css
+                   |---download.js
+                   |---home.js
+                   |---navbar.js
+                   |---Navbar.css
+|            |---App.js
+|            |---index.css
+|            |---index.js
+|            |---serviceWorker.js
+|            |---setupTests.js
 |     |--- node_modules
 |     |--- public
+             |---img
+             |---favicon.ico
+             |---index.html
+             |---manifest.json
+             |---robots.txt
+      |---package-lock.json
+      |---package.json
 |
 |
 |
 |--- backend
 |     |
 |     |--- main.py
+      |--- server.py
 |     |--- youtube_transcription.py
 |     |--- keywords_extractor.py
 |     |--- summary_generator.py
@@ -50,7 +71,7 @@ To start the server type the following  commands :
 cd backend
 ```
 ```
-python3 prog.py
+python3 server.py
 ```
 Open a new terminal
 To start the client type the follwoing commands :
