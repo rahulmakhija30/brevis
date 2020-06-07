@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import DownloadFile from './download';
 import './home.css'
+import Preview from './Preview'
 
 
 class Home extends React.Component {
@@ -68,23 +69,23 @@ class Home extends React.Component {
 }
 
   render() {
-    let download=null;
+    let preview=null;
     if(this.state.validurl)
     {
-      download=<DownloadFile url={this.state.url}/>;
+      preview=<Preview url={this.state.url}/>;
     }
     return (
       <div>
         <h1 className="brevis-home center-align middle-align animate__fadeIn animate__animated animate__slow">BREVIS</h1>
         <div className="center-align middle-align animate__fadeIn animate__animated animate__slow">
-          <input type="text" className="input" placeholder="Enter Link"></input>
+          <input type="text" className="input" placeholder="Enter Link" onChange={this.handleChange}></input>
         </div>  
           <div className="button center-align">
           <button className="btn waves-effect waves-light animate__fadeIn animate__animated animate__slow" type="submit" onClick={this.handleSubmit}>Preview</button>
         </div> 
         <p></p>
         <p id="disp"></p>
-        {download}
+        {preview}
       </div>
     );
   }

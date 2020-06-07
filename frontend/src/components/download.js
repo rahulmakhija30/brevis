@@ -8,20 +8,10 @@ class DownloadFile extends React.Component {
 	constructor(props) {
 		super(props);
   }
-  state={
-    value:"both"
-  }
-
-  handleChange=(e)=>{
-    this.setState({
-      value:e.target.value
-    });
-  }
 	
 	handleDownload = async() => {
-    let response= await axios.post('/download',this.state);
     
-    let res= await axios.get('/send/'+this.props.url.slice(32)+this.state.value,{responseType: 'blob'});
+    let res= await axios.get('/send/'+this.props.url.slice(32)+this.props.value,{responseType: 'blob'});
 
     let url = window.URL.createObjectURL(res.data);
 		let a = document.createElement('a');
@@ -34,14 +24,6 @@ class DownloadFile extends React.Component {
     return (
       
     <div>
-      <div className="custom-select">
-        <select onChange={this.handleChange} value={this.state.value}>
-          <option value="both">Short Summary and Detailed Notes</option>
-          <option value="shortsummary">Short Summary only</option>
-          <option value="detailednotes">Detailed Notes only</option>
-        </select>
-      </div>
-      <br></br>
       <div className="Download-button"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
     </div>
   );
