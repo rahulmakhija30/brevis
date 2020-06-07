@@ -1,0 +1,34 @@
+.input{
+    box-shadow: 5px 5px 5px grey !important;
+    border-radius: 20px !important;
+    width:40% !important;
+    margin: 8px !important;
+    background-image: url('./search.svg');
+    background-size: 30px 40px !important; 
+    background-repeat: no-repeat !important;
+    background-position: 5px;
+    padding-left:45px  !important;
+    background-color: white !important;
+}
+
+::placeholder{
+    font-weight: bold;
+}
+
+.brevis-home{
+    color:#1D3E53;
+    font-weight: bold;
+    padding-top: 5% !important;
+}
+
+.middle-align{
+    padding-top: 1%;
+}
+
+.button{
+    padding:20px;
+}
+
+.btn{
+    border-radius: 20px;
+}

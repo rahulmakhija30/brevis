@@ -6,13 +6,14 @@ class Navbar extends Component {
   render(){
   return (
     <div>
-      <div id="mySidenav" className="mysidenav">
-          <div className="tooltip">
-            <Link to='/'><i class="medium material-icons">home</i></Link>
+      <div id="mySidenav" className="mysidenav links">
+        <span className="dot"></span>  
+        <div className="tooltip">
+            <Link to='/'><i class="medium material-icons">assignment</i></Link>
             <span className="tooltiptext">Home</span>
           </div>
           <div className="tooltip">
-            <Link to='/about'><i class="medium material-icons">face</i></Link>
+            <Link to='/about'><i class="medium material-icons">contact_support</i></Link>
             <span className="tooltiptext" container="body">About</span>  
           </div>    
       </div>   

@@ -1,98 +1,23 @@
 html{
+  height: 100%;
+}
+
+body{
+  background : #476D7C;
   min-height: 100%;
 }
 
-body {
-  padding:85px;
-  background: url(/img/image.jpg) no-repeat;
-  background-size: 100%;
-  background-position: bottom;
-  background-color: #EDEEF0;
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: rgb(69, 82, 90); 
+  font-weight: bold;
 }
 
 .brevis{
-  font-family: Rammetto One;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 40px;
-  padding-left: 60%;
-  line-height: 84px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #000000;
-}
-
-.about-brevis{
-  font-family: Rammetto One;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 40px;
-  text-align: center;
-  line-height: 84px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #000000;
-}
-
-.left-alignment{
-  width: 90%;
-  padding-left: 50%;
-}
-
-.Download-button{
-  padding-left: 40.5%;
-}
-
-.button{
-  padding-left: 65%;
-}
-
-.btn{
-  border-radius: 20px;
-}
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #636363;
-  opacity: 1; /* Firefox */
-  font-weight: bold;
-}
-
-.Radio-Button{
-  text-decoration-color: black;
-  opacity: 1; /* Firefox */
-  font-weight: bold;
-}
-
-.custom-select{
-  width:100%;
-  padding-left: 50px;
-  
-}
-
-.custom-select option{
-  padding:10px;
-  /* display:inline-block; */
-  font-size: 15px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-  margin-left: 10px;
-}
-
-.custom-select select {
-  display:inline-block; /*hide original SELECT element: */
-  color: black;
-  background-color:#EDEEF0;
-  border: none;
-  font-size: 15px;
-  font-family: serif;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-  outline: none;
-}
-
-.dropdown{
-  padding-left: 10%;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  padding: 8px;
+  padding-left: 0px;
 }

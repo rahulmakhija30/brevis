@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import DownloadFile from './download'
+import DownloadFile from './download';
+import './home.css'
 
 
 class Home extends React.Component {
@@ -74,16 +75,16 @@ class Home extends React.Component {
     }
     return (
       <div>
-      <h1 className="brevis">BREVIS</h1>
-        <p className="left-alignment">
-          <input type="text" onChange={this.handleChange} placeholder="Enter the link"></input>
-        </p>
-        <div className="button">
-          <button className="btn waves-effect waves-light" type="submit" onClick={this.handleSubmit}>Submit</button>
+        <h1 className="brevis-home center-align middle-align animate__fadeIn animate__animated animate__slow">BREVIS</h1>
+        <div className="center-align middle-align animate__fadeIn animate__animated animate__slow">
+          <input type="text" className="input" placeholder="Enter Link"></input>
+        </div>  
+          <div className="button center-align">
+          <button className="btn waves-effect waves-light animate__fadeIn animate__animated animate__slow" type="submit" onClick={this.handleSubmit}>Preview</button>
         </div> 
         <p></p>
-        <p id="disp" className="left-alignment"></p>
-          {download}
+        <p id="disp"></p>
+        {download}
       </div>
     );
   }
