@@ -1,31 +1,21 @@
 .mysidenav {
-    height: 100%; /* 100% Full-height */
+    height: 100%; 
     width: 80px; 
-    position: fixed; /* Stay in place */
-    z-index: 1; 
+    position: fixed;
     top: 0; /* Stay at the top */
     left: 0;
-    background-color:#d4d4d4; /* Black*/
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
-
+    background-color:#1D3E53;
   }
-  
-  /* The navigation menu links */
+
   .mysidenav a {
     padding: 8px;
     padding-bottom: 0px;
     text-align:right;
     text-decoration: none;
     font-size: 25px;
-    color: #5e5e5e;
-    display: block;
+    color:white;
+    display: block; 
     transition: 0.3s;
-  }
-  
-  /* When you mouse over the navigation links, change their color */
-  .mysidenav a:hover {
-    color: Black;
   }
   
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -34,36 +24,44 @@
     .mysidenav a {font-size: 18px;}
   }
 
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
   
-.tooltip {
-  margin-bottom: 0px;
-  position: relative;
-  display: inline-block;
-}
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    top: 20px;
+    left: 110%;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+  }
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
 
-.tooltip .tooltiptext {
-  margin:8px;
-  margin-top: 0px;
-  margin-bottom: 10px;
-  visibility: hidden;
-  width: 160px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px;
-}
-
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent black transparent transparent;
-}
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
+  .dot {
+    height: 54px;
+    width: 54px;
+    background-color: white;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 9.5px;
+    margin-bottom: 150px;
+  }
