@@ -5,8 +5,8 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Navbar from './components/navbar'
 import About from './components/about'
 import Footer from './components/footer';
-import DownloadFile from './components/download';
-
+import DownloadFile from './components/download'
+import Collapsible from './components/collapsible'
 
 
 
@@ -18,10 +18,10 @@ class App extends React.Component {
       <BrowserRouter>
       <Navbar />
       <div id="main">
-       <Route  exact path='/' component={Home} />
-       <Route path='/about' component={About} />
-       
-      </div>
+      <Route  exact path='/' component={Home} />
+       <Route path='/about' component={About} />       
+    </div>
+
       <div className="footer">
         <Footer/>
       </div>
