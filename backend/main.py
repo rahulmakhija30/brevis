@@ -16,10 +16,19 @@ if __name__ == '__main__':
     number_of_transciptions,transcripts = youtube_transcribe(url)
 
     if number_of_transciptions:
-        with io.open("transcript.txt", "w", encoding="utf-8") as f:
-            text = transcripts[0]
-            f.write(transcripts[0])
-            print("Transcription Done!!")
+        with open("transcript.txt","w") as f:
+        
+                while number_of_transciptions > 0:
+                    if '.' in transcripts[number_of_transciptions-1]:
+                        f.write(transcripts[number_of_transciptions-1])
+                        break
+                
+                    if number_of_transciptions == 1:
+                        f.write(transcripts[0])
+                        
+                    number_of_transciptions-=1
+                    
+        print("Transcription Done!!")
     else:
         print("No Transcript Available")
 
