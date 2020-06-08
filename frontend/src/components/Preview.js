@@ -3,14 +3,16 @@ import ReactPlayer from "react-player"
 import DownloadFile from './download'
 import axios from 'axios';
 import { BrowserRouter, Route } from 'react-router-dom';
-
-
+import './Preview.css'
+import {Link,NavLink} from 'react-router-dom'
+import LoadingSpinner from './LoadingSpinner'
 
 
 class Preview extends React.Component{ 
     state={
         value:"both",
-        showdownload:false
+        showdownload:false,
+        loading:false
     }
     handleChange=(e)=>{
         this.setState({
@@ -18,9 +20,14 @@ class Preview extends React.Component{
         });
       }
 
-      handleSubmit = async() => {
+    handleSubmit = async() => {
+      this.setState({loading:true},async() =>{
         let response= await axios.post('/download',this.state);
-        console.log(response)
+        console.log(response);})
+        document.getElementById('Preview').style.visibility = "hidden";
+        document.getElementById('Preview').disabled=true;
+        document.getElementById('Inputfield').style.visibility = "hidden";
+        document.getElementById('Inputfield').disabled=true;
         this.setState({
             showdownload:true
         })
@@ -28,33 +35,36 @@ class Preview extends React.Component{
     render(){
         let download=null
         if(this.state.showdownload)
-        {
-            download=<DownloadFile url={this.props.url} value={this.state.value} />
+        { 
+          return (
+            <DownloadFile url={this.props.url} value={this.state.value}/> 
+          )
         }
-    return(
-
-        <div>
-            <ReactPlayer height="70%" 
-                        width="90%" 
-                        style={{
-                            padding: "10px",
-                            paddingLeft: "25%",
-                            borderRadius:"20px",
-                        }}
-                        url={this.props.url}/>
-         <div className="custom-select">
-        <select onChange={this.handleChange} value={this.state.value} class='browser-default'>
-          <option value="both">Short Summary and Detailed Notes</option>
-          <option value="shortsummary">Short Summary only</option>
-          <option value="detailednotes">Detailed Notes only</option>
-        </select>
-        </div>
-         <div className="button center-align">
-          <button className="btn waves-effect waves-light animate__fadeIn animate__animated animate__slow" type="submit" onClick={this.handleSubmit}>Generate</button>
-        </div> 
-        {download}
-        </div>
-    )
+        else{
+          return(
+            <div>
+              <ReactPlayer width="100%"
+                          style={{
+                              paddingLeft: "30%",
+                              paddingRight: "30%",
+                              paddingBottom: "20px",
+                            }}
+                          url={this.props.url}
+                          className="animate__fadeIn animate__animated animate__slow"/>
+             <div className="custom-select center-align dropdown">
+                <select onChange={this.handleChange} value={this.state.value} className='browser-default animate__fadeIn animate__animated animate__slow'>
+                  <option value="both">Short Summary and Detailed Notes</option>
+                  <option value="shortsummary">Short Summary only</option>
+                  <option value="detailednotes">Detailed Notes only</option>
+                </select>
+              </div>
+              <div className="button center-align">
+                <button className="btn waves-effect waves-light animate__fadeIn animate__animated animate__slow" type="submit" onClick={this.handleSubmit}>Generate</button>
+              </div> 
+              <div className="center-align bold">{this.state.loading ? <LoadingSpinner /> : ""}</div>
+            </div>
+          )
+      }
 }
 }
 

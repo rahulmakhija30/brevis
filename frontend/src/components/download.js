@@ -2,12 +2,13 @@ import React from 'react';
 import '../index.css'
 import axios from 'axios';
 import ReactPlayer from "react-player"
+import {Link,NavLink} from 'react-router-dom'
+import Collapsible from './collapsible'
 
 class DownloadFile extends React.Component {
-	
 	constructor(props) {
 		super(props);
-  }
+  	}
 	
 	handleDownload = async() => {
     
@@ -22,13 +23,12 @@ class DownloadFile extends React.Component {
 	
 	render() {
     return (
-      
-    <div>
-      <div className="Download-button"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
+	<div>
+		<Collapsible/>	
+    	<div className="Download-button center-align animate__fadeIn animate__animated animate__slow"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
     </div>
   );
 	}
-
 }
 
 export default DownloadFile;

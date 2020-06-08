@@ -3,13 +3,14 @@ import axios from 'axios';
 import DownloadFile from './download';
 import './home.css'
 import Preview from './Preview'
-
+import LoadingSpinner from './LoadingSpinner'
 
 class Home extends React.Component {
 
  state={
    url:'',
-   validurl:false
+   validurl:false,
+   loading: false
  }
   handleChange=(event)=> {
     this.setState({url:event.target.value});
@@ -17,55 +18,59 @@ class Home extends React.Component {
 
   handleSubmit=(event)=> {
     console.log(this.state)
-    axios.post('/result',this.state)
-    .then(res=>{
-     
-
-      axios.get('/res')
-      .then(response=>{
-       
-        let download=null;
-        if(response.data.result==1)
-          {
-            this.setState({
-              validurl:true
-            });
-            document.getElementById('disp').innerHTML=""
-          }
-        else{
-            this.setState({
-              validurl:false
-            });
-            if(response.data.result==0)
+    this.setState({loading:true} , () => {
+      axios.post('/result',this.state)
+      .then(res=>{
+        axios.get('/res')
+        .then(response=>{
+        
+          let download=null;
+          if(response.data.result==1)
             {
-              document.getElementById('disp').innerHTML='Transcripts for the video do not exist!'
-            }
-            else{
-          document.getElementById('disp').innerHTML='Not an educational video!'
-            }
-        }
-        
-        },(error) => {
-          
-          if (error) {
-              
-              console.log(error.name)
-              document.getElementById("disp").innerHTML=error.message;
+              this.setState({
+                validurl:true,
+                loading:false
+              });
+              document.getElementById('disp').innerHTML=""
           }
-        }
-        
-        )
-    },(error) => {
-      
-      if (error) {
+          else{
+              this.setState({
+                validurl:false,
+                loading:false
+              });
+              if(response.data.result==0)
+              {
+                document.getElementById('disp').innerHTML='Transcripts for the video do not exist!'
+              }
+              else{
+                document.getElementById('disp').innerHTML='Not an educational video!'
+              }
+          } 
           
-          console.log(error.name)
-          document.getElementById("disp").innerHTML='Please check the link again!';
+        },(error) => {
+            if (error) {
+                this.setState({
+                  loading:false
+                })
+                console.log(error.name)
+                document.getElementById("disp").innerHTML=error.message;
+            }
+          }
+          
+          )
+      },(error) => {
+        
+        if (error) {
+          this.setState({
+            loading:false
+          })
+            console.log(error.name)
+            document.getElementById("disp").innerHTML='Please check the link again!';
+        }
       }
-    }
 
-    );
-  
+      );
+    })
 }
 
   render() {
@@ -77,14 +82,15 @@ class Home extends React.Component {
     return (
       <div>
         <h1 className="brevis-home center-align middle-align animate__fadeIn animate__animated animate__slow">BREVIS</h1>
-        <div className="center-align middle-align animate__fadeIn animate__animated animate__slow">
+        <div className="center-align middle-align animate__fadeIn animate__animated animate__slow" id="Inputfield">
           <input type="text" className="input" placeholder="Enter Link" onChange={this.handleChange}></input>
         </div>  
           <div className="button center-align">
-          <button className="btn waves-effect waves-light animate__fadeIn animate__animated animate__slow" type="submit" onClick={this.handleSubmit}>Preview</button>
+          <button className="btn waves-effect waves-light animate__fadeIn animate__animated animate__slow" type="submit" onClick={this.handleSubmit} id="Preview">Preview</button>
         </div> 
         <p></p>
-        <p id="disp"></p>
+        <div className="center-align bold">{this.state.loading ? <LoadingSpinner /> : ""}</div>
+        <p id="disp" className="center-align"></p>
         {preview}
       </div>
     );
