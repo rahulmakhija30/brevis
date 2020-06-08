@@ -20,10 +20,12 @@ if __name__ == '__main__':
         
                 while number_of_transciptions > 0:
                     if '.' in transcripts[number_of_transciptions-1]:
+                        text = transcripts[number_of_transciptions-1]
                         f.write(transcripts[number_of_transciptions-1])
                         break
                 
                     if number_of_transciptions == 1:
+                        text = transcripts[0]
                         f.write(transcripts[0])
                         
                     number_of_transciptions-=1
