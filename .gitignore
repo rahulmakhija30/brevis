@@ -1,2 +1,5 @@
 __pycache_
 node_modules
+.pcl
+out
+crop
