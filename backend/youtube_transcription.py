@@ -95,19 +95,28 @@ def youtube_transcribe(url,descp=False):
     return 0,[0]
 
 if __name__ == '__main__':
-  url = input("Enter the URL = ")
+    url = input("Enter the URL = ")
 
-  number_of_transciptions,transcripts = youtube_transcribe(url)
+    number_of_transciptions,transcripts = youtube_transcribe(url)
 
-  # print('\nNumber of transcript =',number_of_transciptions)
+#     print('\nNumber of transcript =',number_of_transciptions)
 
-  # for i in range(number_of_transciptions):
-  #   print('\nTranscript Number =',i+1,'\n\n',transcripts[i],'\n\n')
-
-  if number_of_transciptions:
-    with open("transcript.txt","w") as f:
-      f.write(transcripts[-1])
-      print("Transcription Done!!")
-  else:
-    print("No Transcript Available")
-
+#     for i in range(number_of_transciptions):
+#         print('\nTranscript Number =',i+1,'\n\n',transcripts[i],'\n\n')
+    
+    if number_of_transciptions:
+        with open("transcript.txt","w") as f:
+        
+                while number_of_transciptions > 0:
+                    if '.' in transcripts[number_of_transciptions-1]:
+                        f.write(transcripts[number_of_transciptions-1])
+                        break
+                
+                    if number_of_transciptions == 1:
+                        f.write(transcripts[0])
+                        
+                    number_of_transciptions-=1
+                    
+        print("Transcription Done!!")
+    else:
+        print("No Transcript Available")
