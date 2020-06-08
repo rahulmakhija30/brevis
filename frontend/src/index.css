@@ -17,6 +17,10 @@ body{
   font-weight: bold;
 }
 
+.Download-button{
+  margin-top:20px;
+}
+
 .brevis{
   padding: 8px;
   padding-left: 0px;
