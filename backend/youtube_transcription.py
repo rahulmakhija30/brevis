@@ -93,7 +93,6 @@ def youtube_transcribe(url,descp=False):
 
         number_of_transciptions = len(transcripts)
         text = ''
-        number_of_transciptions = 0
         if number_of_transciptions:
             with open("transcript.txt","w") as f:
                     while number_of_transciptions > 0:

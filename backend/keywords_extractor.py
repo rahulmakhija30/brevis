@@ -20,4 +20,3 @@ if __name__=="__main__":
     keywords=get_keywords(text,keyword_number)
     if(keywords!=-1):
         print ("keywords: ", keywords)
-

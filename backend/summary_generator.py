@@ -29,9 +29,5 @@ if __name__ == "__main__":
     text=input("Enter text : ")
     print()
     percentage=int(input("Enter the percentage of information in text you want as summary : "))
-    
     res = summary(text,percentage)
-    
     print(res)
-
-

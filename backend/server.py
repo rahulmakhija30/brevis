@@ -3,6 +3,7 @@ from keywords_extractor import get_keywords
 from summary_generator import summary
 from clean_transcript import add_punctuations,correct_mistakes
 from keyframes import Image_Processing
+from text_recognition_and_extraction import text_recognition
 
 from flask import Flask, request,jsonify,send_file
 import requests
@@ -52,6 +53,10 @@ def generate(data):
     # Keyframe Extraction
     Image_Processing(video_url,keywords)
     print("Images Extracted in 'out' folder")
+    
+    # Text Recognition And Extraction
+    text_recognition()
+    print("Cropped Text Extracted in 'crop' folder")
 
 
 @app.route('/result',methods=['GET','POST'])
