@@ -18,7 +18,9 @@ sumy==0.8.1
 python-rake==1.4.5
 beautifulsoup4==4.9.0
 urllib3==1.25.9
-
+beautifulsoup4==4.9.1
+fake-useragent==0.1.11
+youtube-search==0.1.4
 
 Additional Models
 
