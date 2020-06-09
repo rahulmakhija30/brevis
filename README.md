@@ -56,6 +56,9 @@ npm install
 |     |--- prog.py
 |     |--- SmartStoplist.txt
 |     |--- downloadfile.zip
+|     |--- google_scrape.py
+|     |--- youtube_scrape.py
+|     |--- web_scraping.py
 |     
 |
 |
