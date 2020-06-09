@@ -51,15 +51,20 @@ npm install
 |
 |
 |--- backend
-|     |---clean_transcript.py
-|     |--- main.py
+|     |
 |     |--- server.py
 |     |--- youtube_transcription.py
+|     |--- clean_transcript.py
 |     |--- keywords_extractor.py
 |     |--- summary_generator.py
+|     |--- google_speech_to_text.py
+|     |--- keyframes.py
+|     |--- prog.py
 |     |--- SmartStoplist.txt
-|     |--- keyframes.py (Image Processing is pending)
-|     |---text_recognition_and_extraction.py
+|     |--- downloadfile.zip
+|     |--- google_scrape.py
+|     |--- youtube_scrape.py
+|     |--- web_scraping.py
 |     
 |
 |

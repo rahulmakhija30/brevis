@@ -15,7 +15,6 @@ def summary(text,percentage):
     summarizer_LexRank.stop_words = get_stop_words(LANGUAGE)
     res=[]
     count=0
-    print("this is summary")
     for sentence in summarizer_LexRank(parser.document, SENTENCES_COUNT):    
         res.append(str(sentence))
         count+=1
