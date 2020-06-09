@@ -1,8 +1,10 @@
 # Import Modules
 from youtube_transcript_api import YouTubeTranscriptApi
+from google_speech_to_text import speech_to_text
 import requests
 from bs4 import BeautifulSoup as bs
 from urllib import parse
+from clean_transcript import add_punctuations,correct_mistakes
 
 # Function to get details about a video
 def get_video_info(url):
@@ -70,53 +72,55 @@ def get_video_info(url):
 '''
 
 def youtube_transcribe(url,descp=False):
-  try:
-    parse.urlsplit(url)
-    parse.parse_qs(parse.urlsplit(url).query)
-    url_id = dict(parse.parse_qsl(parse.urlsplit(url).query))['v']
+    try:
+        parse.urlsplit(url)
+        parse.parse_qs(parse.urlsplit(url).query)
+        url_id = dict(parse.parse_qsl(parse.urlsplit(url).query))['v']
 
-    available_transcript = list(YouTubeTranscriptApi.list_transcripts(url_id))
+        available_transcript = list(YouTubeTranscriptApi.list_transcripts(url_id))
 
-    transcript = []
-    for i in available_transcript:
-      if i.language_code == 'en':
-        res = ''
-        for j in i.fetch():
-          res = res + j['text'] +' '
-        transcript.append(res)
+        transcripts = []
+        for i in available_transcript:
+            if i.language_code == 'en':
+                res = ''
+                for j in i.fetch():
+                    res = res + j['text'] +' '
+                transcripts.append(res)
 
-    if(descp):
-      data,res = get_video_info(url)
-      print("Video Description:\n\n",res)
+        if(descp):
+            data,res = get_video_info(url)
+            print("Video Description:\n\n",res)
+
+        number_of_transciptions = len(transcripts)
+        text = ''
+        number_of_transciptions = 0
+        if number_of_transciptions:
+            with open("transcript.txt","w") as f:
+                    while number_of_transciptions > 0:
+                        if '.' in transcripts[number_of_transciptions-1]:
+                            text = transcripts[number_of_transciptions-1]
+                            f.write(transcripts[number_of_transciptions-1])
+                            break
+                        
+                        # Cleanig Transcript
+                        if number_of_transciptions == 1:
+                            text = transcripts[0]
+                            text=add_punctuations(text,punct_model)
+                            text=correct_mistakes(text,lang_model)
+                            f.write(transcripts[0])
+
+                        number_of_transciptions-=1
+
+            print("Transcription and Cleaing Done!!")
+        else:
+            print("No Transcript Available")
+            text = speech_to_text(url)
+        return text
     
-    return len(transcript),transcript
-
-  except:
-    return 0,[0]
+    except:
+        print("Transcription Error")
+        return ''
 
 if __name__ == '__main__':
     url = input("Enter the URL = ")
-
-    number_of_transciptions,transcripts = youtube_transcribe(url)
-
-#     print('\nNumber of transcript =',number_of_transciptions)
-
-#     for i in range(number_of_transciptions):
-#         print('\nTranscript Number =',i+1,'\n\n',transcripts[i],'\n\n')
-    
-    if number_of_transciptions:
-        with open("transcript.txt","w") as f:
-        
-                while number_of_transciptions > 0:
-                    if '.' in transcripts[number_of_transciptions-1]:
-                        f.write(transcripts[number_of_transciptions-1])
-                        break
-                
-                    if number_of_transciptions == 1:
-                        f.write(transcripts[0])
-                        
-                    number_of_transciptions-=1
-                    
-        print("Transcription Done!!")
-    else:
-        print("No Transcript Available")
+    text = youtube_transcribe(url)

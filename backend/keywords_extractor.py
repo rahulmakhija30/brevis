@@ -17,7 +17,7 @@ def get_keywords(text,n):
 if __name__=="__main__":
     text =input("Enter text : ")
     keyword_number=int(input("Enter number of keywords to be extracted : "))
-    keywords=get_keywords(keyword_number)
+    keywords=get_keywords(text,keyword_number)
     if(keywords!=-1):
         print ("keywords: ", keywords)
 

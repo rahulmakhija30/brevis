@@ -1,14 +1,17 @@
-from flask import Flask, request,jsonify,send_file
-import requests
-from bs4 import BeautifulSoup as bs
 from youtube_transcription import youtube_transcribe
 from keywords_extractor import get_keywords
 from summary_generator import summary
-#import io
+from clean_transcript import add_punctuations,correct_mistakes
+from keyframes import Image_Processing
+
+from flask import Flask, request,jsonify,send_file
+import requests
+from bs4 import BeautifulSoup as bs
+import io
 from zipfile import ZipFile
 import os.path
-import RAKE
 import operator
+
 
 app = Flask(__name__)
 
@@ -21,17 +24,20 @@ x=""
 def generate(data):
 	global video_url
 	global path
-	number_of_transciptions,transcripts = youtube_transcribe(video_url)
-
-	if number_of_transciptions:
-		text = transcripts[0]
+    
+    # Transcription and Cleaning
+	text = youtube_transcribe(video_url)
+        
     # Keywords Extractor
-	keywords=get_keywords(text,10)
+    keywords=get_keywords(text,15)
 	print('\nKeywords:\n',keywords)
 	fp=open("keywords.txt","w")
 	fp.write("\n".join(keywords))
 	fp.close()
+    
     # Summarization
+    # Percentage of summary - input
+    # percentage=int(input())
 	result = summary(text,50)
 	fh=open("summary.txt","w")
 	fh.write(result)
@@ -42,11 +48,10 @@ def generate(data):
 		zip.write("keywords.txt")
 	zip.close()
 	path=os.path.abspath("brevis_notes2.zip")
-	
 
-	
-
-
+    # Keyframe Extraction
+    Image_Processing(video_url,keywords)
+    print("Images Extracted in 'out' folder")
 
 
 @app.route('/result',methods=['GET','POST'])
