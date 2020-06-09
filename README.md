@@ -46,13 +46,16 @@ npm install
 |
 |--- backend
 |     |
-|     |--- main.py
 |     |--- server.py
 |     |--- youtube_transcription.py
+|     |--- clean_transcript.py
 |     |--- keywords_extractor.py
 |     |--- summary_generator.py
+|     |--- google_speech_to_text.py
+|     |--- keyframes.py
+|     |--- prog.py
 |     |--- SmartStoplist.txt
-|     |--- keyframes.py (Image Processing is pending)
+|     |--- downloadfile.zip
 |     
 |
 |
