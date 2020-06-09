@@ -45,7 +45,7 @@ def frames(u,s,e):
     start = s
     end = e
     start = start + 250
-    global count
+    # global count
     while(start <= end):
         
         capture.set(cv2.CAP_PROP_POS_MSEC,start)
@@ -55,10 +55,10 @@ def frames(u,s,e):
             start = start+250
             continue
             
-        cv2.imwrite("out/image"+str(count)+".jpg", frame)
-        count+=1
+        cv2.imwrite("out/image"+str(start)+".jpg", frame)
+        # count+=1
         
-        start = start+5000
+        start = start+2500
         prev_frame = frame
         
     capture.release()
@@ -100,37 +100,12 @@ def start_end(transcript,search):
             
     return int(start * 1000),int(end * 1000)
 
-if __name__ == '__main__':
-    url = input("Enter the URL : ")
-    number_of_transciptions,transcripts = youtube_transcribe(url)
-
-    if number_of_transciptions:
-        with open("transcript.txt","w") as f:
-        
-                while number_of_transciptions > 0:
-                    if '.' in transcripts[number_of_transciptions-1]:
-                        text = transcripts[number_of_transciptions-1]
-                        f.write(transcripts[number_of_transciptions-1])
-                        break
-                
-                    if number_of_transciptions == 1:
-                        text = transcripts[0]
-                        f.write(transcripts[0])
-                        
-                    number_of_transciptions-=1
-                    
-        print("Transcription Done!!")
-    else:
-        print("No Transcript Available")
-
-    # Keywords Extractor
-    keywords=get_keywords(text,20)
-    print('\nKeywords:\n',keywords)
-    
+def Image_Processing(url,keywords):
     urlID = url.partition('https://www.youtube.com/watch?v=')[-1]
     transcript = YouTubeTranscriptApi.get_transcript(urlID)
     
-    os.mkdir('out') 
+    if not os.path.exists('out'):
+        os.mkdir('out')
 
     # Process Every Keyword
     count=0
@@ -172,3 +147,15 @@ if __name__ == '__main__':
         else:
             os.remove('out/'+files[i])
             i+=1
+    
+
+if __name__ == '__main__':
+    url = input("Enter the URL = ")
+    text = youtube_transcribe(url)
+
+    # Keywords Extractor
+    keywords=get_keywords(text,10)
+    print('\nKeywords:\n',keywords)
+    
+    Image_Processing(url,keywords)
+    print("Images Extracted in 'out' folder")
