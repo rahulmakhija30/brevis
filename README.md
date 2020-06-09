@@ -23,10 +23,17 @@ npm install
 |                  |---profileimages
 |                  |---about.js
 |                  |---About.css
+|                  |---collapsible.css
+|                  |---collapsible.js
 |                  |---download.js
+|                  |---footer.js
 |                  |---home.js
+|                  |---LoadingSpinner.js
 |                  |---navbar.js
 |                  |---Navbar.css
+|                  |---Preview.css
+|                  |---Preview.js
+|                  |---search.svg
 |            |---App.js
 |            |---index.css
 |            |---index.js
@@ -34,7 +41,6 @@ npm install
 |            |---setupTests.js
 |     |--- node_modules
 |     |--- public
-|            |---img
 |            |---favicon.ico
 |            |---index.html
 |            |---manifest.json
@@ -45,7 +51,7 @@ npm install
 |
 |
 |--- backend
-|     |
+|     |---clean_transcript.py
 |     |--- main.py
 |     |--- server.py
 |     |--- youtube_transcription.py
@@ -53,6 +59,7 @@ npm install
 |     |--- summary_generator.py
 |     |--- SmartStoplist.txt
 |     |--- keyframes.py (Image Processing is pending)
+|     |---text_recognition_and_extraction.py
 |     
 |
 |
