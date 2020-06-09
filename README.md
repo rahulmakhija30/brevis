@@ -23,10 +23,17 @@ npm install
 |                  |---profileimages
 |                  |---about.js
 |                  |---About.css
+|                  |---collapsible.css
+|                  |---collapsible.js
 |                  |---download.js
+|                  |---footer.js
 |                  |---home.js
+|                  |---LoadingSpinner.js
 |                  |---navbar.js
 |                  |---Navbar.css
+|                  |---Preview.css
+|                  |---Preview.js
+|                  |---search.svg
 |            |---App.js
 |            |---index.css
 |            |---index.js
@@ -34,7 +41,6 @@ npm install
 |            |---setupTests.js
 |     |--- node_modules
 |     |--- public
-|            |---img
 |            |---favicon.ico
 |            |---index.html
 |            |---manifest.json
