@@ -65,6 +65,8 @@ npm install
 |     |--- google_scrape.py
 |     |--- youtube_scrape.py
 |     |--- web_scraping.py
+|     |--- wikipedia_summary.py
+|     |--- wikipedia_sections.py
 |     
 |
 |
