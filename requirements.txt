@@ -21,6 +21,7 @@ urllib3==1.25.9
 beautifulsoup4==4.9.1
 fake-useragent==0.1.11
 youtube-search==0.1.4
+Wikipedia-API==0.5.4
 
 Additional Models
 
