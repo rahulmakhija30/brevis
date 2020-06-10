@@ -104,7 +104,7 @@ def youtube_transcribe(url,descp=False):
                         # Cleanig Transcript
                         if number_of_transciptions == 1:
                             text = transcripts[0]
-                            text=add_punctuations(text,punct_model)
+                            text=punct_model.punctuate(text)
                             text=correct_mistakes(text,lang_model)
                             f.write(transcripts[0])
 
@@ -116,8 +116,9 @@ def youtube_transcribe(url,descp=False):
             text = speech_to_text(url)
         return text
     
-    except:
+    except Exception:
         print("Transcription Error")
+        traceback.print_exc()
         return ''
 
 if __name__ == '__main__':
