@@ -12,7 +12,8 @@ class Preview extends React.Component{
     state={
         value:"both",
         showdownload:false,
-        loading:false
+        loading:false,
+        scrape:{}
     }
     handleChange=(e)=>{
         this.setState({
@@ -21,15 +22,18 @@ class Preview extends React.Component{
       }
 
     handleSubmit = async() => {
-      this.setState({loading:true},async() =>{
+      //this.setState({loading:true},async() =>{
         let response= await axios.post('/download',this.state);
-        console.log(response);})
+        console.log(response);
+        const scrape=response.data;
+        console.log({scrape});
         document.getElementById('Preview').style.visibility = "hidden";
         document.getElementById('Preview').disabled=true;
         document.getElementById('Inputfield').style.visibility = "hidden";
         document.getElementById('Inputfield').disabled=true;
         this.setState({
-            showdownload:true
+            showdownload:true,
+            scrape:scrape
         })
       }
     render(){
@@ -37,7 +41,7 @@ class Preview extends React.Component{
         if(this.state.showdownload)
         { 
           return (
-            <DownloadFile url={this.props.url} value={this.state.value}/> 
+            <DownloadFile url={this.props.url} value={this.state.value} scrape={this.state.scrape}/> 
           )
         }
         else{

@@ -27,7 +27,7 @@ from PIL import Image
 import pytesseract
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 def detect_text(img):
     text = pytesseract.image_to_string(img,lang='eng')

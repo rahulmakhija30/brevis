@@ -4,7 +4,7 @@ from summary_generator import summary
 from clean_transcript import add_punctuations,correct_mistakes
 from keyframes import Image_Processing
 from text_recognition_and_extraction import text_recognition
-
+from web_scraping import web_scrape
 from flask import Flask, request,jsonify,send_file
 import requests
 from bs4 import BeautifulSoup as bs
@@ -20,22 +20,24 @@ output=0
 path=""
 video_url=""
 x=""
+json_result=dict()
+
 
 
 def generate(data):
 	global video_url
 	global path
-    
+	global json_result
     # Transcription and Cleaning
 	text = youtube_transcribe(video_url)
         
     # Keywords Extractor
-    keywords=get_keywords(text,15)
+	keywords=get_keywords(text,15)
 	print('\nKeywords:\n',keywords)
 	fp=open("keywords.txt","w")
 	fp.write("\n".join(keywords))
 	fp.close()
-    
+	json_result=web_scrape(keywords[:2])
     # Summarization
     # Percentage of summary - input
     # percentage=int(input())
@@ -49,14 +51,14 @@ def generate(data):
 		zip.write("keywords.txt")
 	zip.close()
 	path=os.path.abspath("brevis_notes2.zip")
-
-    # Keyframe Extraction
-    Image_Processing(video_url,keywords)
-    print("Images Extracted in 'out' folder")
-    
-    # Text Recognition And Extraction
-    text_recognition()
-    print("Cropped Text Extracted in 'crop' folder")
+	
+	    # Keyframe Extraction
+	Image_Processing(video_url,keywords)
+	print("Images Extracted in 'out' folder")
+	    
+	    # Text Recognition And Extraction
+	text_recognition()
+	print("Cropped Text Extracted in 'crop' folder")
 
 
 @app.route('/result',methods=['GET','POST'])
@@ -109,7 +111,8 @@ def download():
 	data=x['value']
 	if(output ==1):
 		generate(data)
-	return jsonify({'result':output})
+	print(json_result)
+	return jsonify(json_result)
 	
 	
 	
