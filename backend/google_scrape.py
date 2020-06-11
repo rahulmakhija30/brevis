@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import re
 
 #Function to scrape results from Google Search
-def google_scrapper(query,number_results=3):
+def google_scrapper(query,google_result,number_results=2):
   query = urllib.parse.quote_plus(query) # Format into URL encoding
   ua = UserAgent()
   assert isinstance(query, str) #Search term must be a string
@@ -34,7 +34,11 @@ def google_scrapper(query,number_results=3):
     except:
         continue
   links=clean_results(links,titles)
-  return dict(zip(titles,links))
+  for i in range(0,number_results):
+    d=dict()
+    d["title"]=titles[i]
+    d["linktopage"]=links[i]
+    google_result.append(d)
 
 #Function to remove useless results and clean the links
 def clean_results(links,titles):
@@ -58,5 +62,6 @@ def clean_results(links,titles):
 if __name__=="__main__":
   query=input("Enter Query : ")
   number_results=int(input("Enter number of results to be fetched : "))
-  res=google_scrapper(query,number_results)
+  res=[]
+  google_scrapper(query,res,number_results)
   print(res)
