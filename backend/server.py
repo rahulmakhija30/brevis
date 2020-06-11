@@ -12,7 +12,10 @@ import io
 from zipfile import ZipFile
 import os.path
 import operator
+import pytesseract
 
+# Path to your tesseract executable
+pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 app = Flask(__name__)
 
