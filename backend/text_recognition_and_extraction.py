@@ -6,7 +6,7 @@ from PIL import Image
 import pytesseract
 import os
 
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 def text_filter(file_name):
     
