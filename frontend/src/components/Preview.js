@@ -22,7 +22,9 @@ class Preview extends React.Component{
       }
 
     handleSubmit = async() => {
-      this.setState({loading:true},async() =>{
+        this.setState({
+          loading:true
+        })
         document.getElementById('Preview').style.visibility = "hidden";
         document.getElementById('Inputfield').style.visibility = "hidden";
         document.getElementById('Preview').disabled=true;
@@ -36,7 +38,6 @@ class Preview extends React.Component{
             scrape:scrape,
             loading: false
         })
-      })
         let res= await axios.get('/down');
         console.log({res})
       }
