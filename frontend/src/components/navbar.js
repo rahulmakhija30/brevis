@@ -9,11 +9,11 @@ class Navbar extends Component {
       <div id="mySidenav" className="mysidenav links">
         <span className="dot"></span>  
         <div className="tooltip">
-            <Link to='/'><i class="medium material-icons">assignment</i></Link>
+            <Link to='/'><i className="Homedot"></i></Link>
             <span className="tooltiptext">Home</span>
           </div>
           <div className="tooltip">
-            <Link to='/about'><i class="medium material-icons">contact_support</i></Link>
+            <Link to='/about'><i className="Aboutdot"></i></Link>
             <span className="tooltiptext" container="body">About</span>  
           </div>    
       </div>   

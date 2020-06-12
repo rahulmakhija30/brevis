@@ -5,6 +5,8 @@
     top: 0; /* Stay at the top */
     left: 0;
     background-color:#1D3E53;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 
   .mysidenav a {
@@ -16,6 +18,46 @@
     color:white;
     display: block; 
     transition: 0.3s;
+  }
+
+  .tooltip .Homedot{
+    height: 54px;
+    width: 54px;
+    background-image: url('./register.svg');
+    background-size: 54px 54px;
+    position: center;
+    display: inline-block;
+    margin: 9.5px;
+    margin-right: 0px;
+    margin-bottom: 0;
+    filter:invert(100%);
+  }
+
+  .tooltip .Aboutdot{
+    height: 54px;
+    width: 54px;
+    background-image: url('./question.svg');
+    background-size: 54px 54px;
+    position: center;
+    display: inline-block;
+    margin-left: 0px;
+    margin-right: 9px;
+    color: white;
+    filter:invert(100%);
+  }
+
+  .tooltip .Aboutdot:hover{
+    height: 60px;
+    width: 60px;
+    background-size: 60px 60px;
+    transition: ease-out 0.2s;
+  }
+
+  .tooltip .Homedot:hover{
+    height: 60px;
+    width: 60px;
+    background-size: 60px 60px;
+    transition: ease-out 0.2s;
   }
   
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -32,10 +74,11 @@
   .tooltip .tooltiptext {
     visibility: hidden;
     width: 120px;
-    background-color: black;
-    color: #fff;
+    background-color: #1D3E53;
+    color: white;
     text-align: center;
     border-radius: 6px;
+    border-color: 1px white;
     padding: 5px 0;
     position: absolute;
     top: 20px;
@@ -50,7 +93,7 @@
     margin-top: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: transparent black transparent transparent;
+    border-color: transparent #1D3E53 transparent transparent;
   }
   .tooltip:hover .tooltiptext {
     visibility: visible;
@@ -59,7 +102,9 @@
   .dot {
     height: 54px;
     width: 54px;
-    background-color: white;
+    background-image: url('./logo.png');
+    background-size: 54px 54px;
+    position: center;
     border-radius: 50%;
     display: inline-block;
     margin: 9.5px;
