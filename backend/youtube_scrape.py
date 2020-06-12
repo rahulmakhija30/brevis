@@ -39,6 +39,7 @@ def youtube_scrapper(query,youtube_result,number_results=2):
     if(links[i].find("watch")!=-1):
       links[i]=links[i].replace("%3F","?")
       links[i]=links[i].replace("%3D","=")
+      links[i]=links[i].split("&")[0]
     else:
       continue
   for i in range(0,number_results):
