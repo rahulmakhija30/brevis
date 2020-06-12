@@ -6,6 +6,8 @@ from keyframes import Image_Processing
 from text_recognition_and_extraction import text_recognition
 from web_scraping import web_scrape
 from add_frames import add_picture
+#from paragraph_headings import paragraph
+#from paragraph_headings import get_titles_paras
 from flask import Flask, request,jsonify,send_file
 import requests
 from bs4 import BeautifulSoup as bs
@@ -26,6 +28,7 @@ video_url=""
 x=""
 json_result=dict()
 keywords=[]
+text=""
 
 
 
@@ -34,6 +37,7 @@ def generate(data):
 	global path
 	global json_result
 	global keywords
+	global text
     # Transcription and Cleaning
 	text = youtube_transcribe(video_url)
         
@@ -43,7 +47,7 @@ def generate(data):
 	fp=open("keywords.txt","w")
 	fp.write("\n".join(keywords))
 	fp.close()
-	json_result=web_scrape(keywords[:2])
+	json_result=web_scrape(keywords)
     # Summarization
     # Percentage of summary - input
     # percentage=int(input())
@@ -70,13 +74,17 @@ def gen():
 	global video_url
 	global keywords
 	global path
+	global json_result
+	global text
 	Image_Processing(video_url,keywords)
 	print("Images Extracted in 'out' folder")
 	    
 	    # Text Recognition And Extraction
 	text_recognition()
 	print("Cropped Text Extracted in 'crop' folder")
-	add_picture(video_url)
+	#list_para = paragraph(text)
+	#title_para = get_titles_paras(list_para)
+	add_picture(video_url,json_result)
 	print("images extracted")
 	
 	with ZipFile('brevis_notes2.zip','w') as zip:
