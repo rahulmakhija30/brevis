@@ -143,7 +143,7 @@ def Image_Processing(url,keywords):
         
         dis = res['output']['distance']
         if dis >= dis_threshold:
-            i+=2
+            i+=1
         else:
             os.remove('out/'+files[i])
             i+=1

@@ -5,6 +5,7 @@ import os
 directory = os.getcwd()+'/out'
 
 def add_picture(url):
+	print("adding picture")
 	urlID = url.partition('https://www.youtube.com/watch?v=')[-1]
 	transcript = YouTubeTranscriptApi.get_transcript(urlID)
 
@@ -55,8 +56,9 @@ def add_picture(url):
 				f.write(name)
 				f.write("\n")
 				r.add_text('\n')
-	document.save('test10.docx')
+	document.save('brevis.docx')
+	print("writing doc")
 	f.close()
 
-#add_picture('https://www.youtube.com/watch?v=ESusD8HRLBI&list=PLAD5B880806EBE0A4&index=64')
+#add_picture('https://www.youtube.com/watch?v=MAS6mBRZZXA&list=PLAD5B880806EBE0A4&index=12')
 

@@ -5,6 +5,7 @@ from clean_transcript import add_punctuations,correct_mistakes
 from keyframes import Image_Processing
 from text_recognition_and_extraction import text_recognition
 from web_scraping import web_scrape
+from add_frames import add_picture
 from flask import Flask, request,jsonify,send_file
 import requests
 from bs4 import BeautifulSoup as bs
@@ -12,7 +13,10 @@ import io
 from zipfile import ZipFile
 import os.path
 import operator
+import pytesseract
 
+# Path to your tesseract executable
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 app = Flask(__name__)
 
@@ -21,6 +25,7 @@ path=""
 video_url=""
 x=""
 json_result=dict()
+keywords=[]
 
 
 
@@ -28,6 +33,7 @@ def generate(data):
 	global video_url
 	global path
 	global json_result
+	global keywords
     # Transcription and Cleaning
 	text = youtube_transcribe(video_url)
         
@@ -45,20 +51,42 @@ def generate(data):
 	fh=open("summary.txt","w")
 	fh.write(result)
 	fh.close()
-	with ZipFile('brevis_notes2.zip','w') as zip:
-		print("Writing zip")
-		zip.write("summary.txt") 
-		zip.write("keywords.txt")
-	zip.close()
-	path=os.path.abspath("brevis_notes2.zip")
+	#with ZipFile('brevis_notes2.zip','w') as zip:
+	#	print("Writing zip")
+	#	zip.write("summary.txt") 
+	#	zip.write("keywords.txt")
+	#zip.close()
+	#path=os.path.abspath("brevis_notes2.zip")
 	
 	    # Keyframe Extraction
+	#Image_Processing(video_url,keywords)
+	#print("Images Extracted in 'out' folder")
+	    
+	    # Text Recognition And Extraction
+	#text_recognition()
+	#print("Cropped Text Extracted in 'crop' folder")
+
+def gen():
+	global video_url
+	global keywords
+	global path
 	Image_Processing(video_url,keywords)
 	print("Images Extracted in 'out' folder")
 	    
 	    # Text Recognition And Extraction
 	text_recognition()
 	print("Cropped Text Extracted in 'crop' folder")
+	add_picture(video_url)
+	print("images extracted")
+	
+	with ZipFile('brevis_notes2.zip','w') as zip:
+		print("Writing zip")
+		zip.write("brevis.docx") 
+	zip.close()
+	path=os.path.abspath("brevis_notes2.zip")
+	
+
+	
 
 
 @app.route('/result',methods=['GET','POST'])
@@ -113,10 +141,15 @@ def download():
 		generate(data)
 	print(json_result)
 	return jsonify(json_result)
+@app.route('/down',methods=['GET','POST'])
+def down():
+	global output
+	if(output==1):
+		print("in down")
+		gen()
+	return jsonify({'result':output})
+		
 	
-	
-	
-
 @app.route('/send/<x>',methods=['GET','POST'])
 def send(x):
 	global path

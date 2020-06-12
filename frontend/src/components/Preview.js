@@ -35,6 +35,8 @@ class Preview extends React.Component{
             showdownload:true,
             scrape:scrape
         })
+        let res= await axios.get('/down');
+        console.log({res})
       }
     render(){
         let download=null

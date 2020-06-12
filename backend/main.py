@@ -5,14 +5,16 @@ from clean_transcript import add_punctuations,correct_mistakes
 from keyframes import Image_Processing
 from text_recognition_and_extraction import text_recognition
 import io
+import pytesseract
+
+# Path to your tesseract executable
+pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 if __name__ == '__main__':
     
     # Transcription and Cleaning
     url = input("Enter the URL = ")
     text = youtube_transcribe(url)
-    print('\nTranscript:\n',text)
-    print(text)
     
     # Keywords Extractor
     keywords=get_keywords(text,15)
