@@ -22,19 +22,21 @@ class Preview extends React.Component{
       }
 
     handleSubmit = async() => {
-      //this.setState({loading:true},async() =>{
+      this.setState({loading:true},async() =>{
+        document.getElementById('Preview').style.visibility = "hidden";
+        document.getElementById('Inputfield').style.visibility = "hidden";
+        document.getElementById('Preview').disabled=true;
+        document.getElementById('Inputfield').disabled=true;
         let response= await axios.post('/download',this.state);
         console.log(response);
         const scrape=response.data;
         console.log({scrape});
-        document.getElementById('Preview').style.visibility = "hidden";
-        document.getElementById('Preview').disabled=true;
-        document.getElementById('Inputfield').style.visibility = "hidden";
-        document.getElementById('Inputfield').disabled=true;
         this.setState({
             showdownload:true,
-            scrape:scrape
+            scrape:scrape,
+            loading: false
         })
+      })
         let res= await axios.get('/down');
         console.log({res})
       }
@@ -46,14 +48,19 @@ class Preview extends React.Component{
             <DownloadFile url={this.props.url} value={this.state.value} scrape={this.state.scrape}/> 
           )
         }
+        else if(this.state.loading){
+          return(
+            <div className="center-align bold">{this.state.loading ? <LoadingSpinner /> : ""}</div>
+          )
+        }
         else{
           return(
             <div>
               <ReactPlayer width="100%"
                           style={{
-                              paddingLeft: "30%",
-                              paddingRight: "30%",
-                              paddingBottom: "20px",
+                              paddingLeft: "35%",
+                              paddingRight: "35%",
+                              paddingBottom: "60px",
                             }}
                           url={this.props.url}
                           className="animate__fadeIn animate__animated animate__slow"/>
@@ -67,7 +74,6 @@ class Preview extends React.Component{
               <div className="button center-align">
                 <button className="btn waves-effect waves-light animate__fadeIn animate__animated animate__slow" type="submit" onClick={this.handleSubmit}>Generate</button>
               </div> 
-              <div className="center-align bold">{this.state.loading ? <LoadingSpinner /> : ""}</div>
             </div>
           )
       }

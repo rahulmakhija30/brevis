@@ -5,6 +5,7 @@ html{
 body{
   background : #476D7C;
   min-height: 100%;
+  margin-bottom: 20px;
 }
 
 .footer{
@@ -13,7 +14,7 @@ body{
   bottom: 0;
   width: 100%;
   text-align: center;
-  color: rgb(69, 82, 90); 
+  color:white; 
   font-weight: bold;
 }
 

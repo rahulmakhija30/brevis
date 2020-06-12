@@ -17,16 +17,17 @@ class Collapsible extends Component{
         var i;
         
         for (i = 0; i < coll.length; i++) {
-          coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.maxHeight){
-              content.style.maxHeight = null;
-            } else {
-              content.style.maxHeight = 150 + "px";
-              content.style.visibility = "visible";
-            } 
-          });
+          for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+              this.classList.toggle("active");
+              var content = this.nextElementSibling;
+              if (content.style.maxHeight){
+                content.style.maxHeight = null;
+              } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+              }
+            });
+          }
         }
     }
 
@@ -54,14 +55,17 @@ class Collapsible extends Component{
                 <div className="content">
                 <p>{this.state.summary}</p>
                 </div>
+                <p></p>
                 <button className="collapsible z-depth-0" onClick={this.Button}>Links to useful Articles...</button>
                 <div className="content">
                 {googleList}
                 </div>
+                <p></p>
                 <button className="collapsible z-depth-0" onClick={this.Button}>Links to useful Videos...</button>
                 <div className="content">
                 {youtubeList}
                 </div>
+                <p></p>
             </div>
         )
     }
