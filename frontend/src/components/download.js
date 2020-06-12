@@ -24,7 +24,7 @@ class DownloadFile extends React.Component {
 	render() {
     return (
 	<div>
-		<Collapsible/>	
+		<Collapsible scrape={this.props.scrape}/>	
     	<div className="Download-button center-align animate__fadeIn animate__animated animate__slow"><button className="btn waves-effect waves-light" onClick={this.handleDownload}>Download</button></div>
     </div>
   );

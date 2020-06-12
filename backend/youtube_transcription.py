@@ -1,126 +1,97 @@
 # Import Modules
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import NoTranscriptAvailable
+from youtube_transcript_api._errors import TranscriptsDisabled
+from youtube_transcript_api._errors import *
+from requests import ConnectionError
+
 from google_speech_to_text import speech_to_text
-import requests
-from bs4 import BeautifulSoup as bs
 from urllib import parse
 from clean_transcript import add_punctuations,correct_mistakes
+import clean_transcript
+import requests
+import traceback
+import re
 
-# Function to get details about a video
-def get_video_info(url):
-    # download HTML code
-    content = requests.get(url)
-    # create beautiful soup object to parse HTML
-    soup = bs(content.content, "html.parser")
-    # initialize the result
-    result = {}
-    # video title
-    result['title'] = soup.find("span", attrs={"class": "watch-title"}).text.strip()
-     # video views (converted to integer)
-    result['views'] = int(soup.find("div", attrs={"class": "watch-view-count"}).text[:-6].replace(",", ""))
-    # video description
-    result['description'] = soup.find("p", attrs={"id": "eow-description"}).text
-    # date published
-    result['date_published'] = soup.find("strong", attrs={"class": "watch-time-text"}).text
-     # number of likes as integer
-    result['likes'] = int(soup.find("button", attrs={"title": "I like this"}).text.replace(",", ""))
-    # number of dislikes as integer
-    result['dislikes'] = int(soup.find("button", attrs={"title": "I dislike this"}).text.replace(",", ""))
-     # channel details
-    channel_tag = soup.find("div", attrs={"class": "yt-user-info"}).find("a")
-    # channel name
-    channel_name = channel_tag.text
-    # channel URL
-    channel_url = f"https://www.youtube.com{channel_tag['href']}"
-    # number of subscribers as str
-    channel_subscribers = soup.find("span", attrs={"class": "yt-subscriber-count"}).text.strip()
-    result['channel'] = {'name': channel_name, 'url': channel_url, 'subscribers': channel_subscribers}
-    # return the result
-    
-    res = (f"Title: {data['title']}" + '\n'
-           f"Views: {data['views']}" + '\n'
-           f"\nDescription: {data['description']}\n" + '\n'
-           f"{data['date_published']}" + '\n'
-           f"Likes: {data['likes']}" + '\n'
-           f"Dislikes: {data['dislikes']}" + '\n'
-           f"\nChannel Name: {data['channel']['name']}" + '\n'
-           f"Channel URL: {data['channel']['url']}" + '\n'
-           f"Channel Subscribers: {data['channel']['subscribers']}" + '\n')
-
-    return result,res.strip()
-
-# If you want to print individual fields, uncomment them
-
-# data,res = get_video_info(url)
-# print(f"Title: {data['title']}")
-# print(f"Views: {data['views']}")
-# print(f"\nDescription: {data['description']}\n")
-# print(data['date_published'])
-# print(f"Likes: {data['likes']}")
-# print(f"Dislikes: {data['dislikes']}")
-# print(f"\nChannel Name: {data['channel']['name']}")
-# print(f"Channel URL: {data['channel']['url']}")
-# print(f"Channel Subscribers: {data['channel']['subscribers']}")
-
-# No transcript - https://www.youtube.com/watch?v=Bv_5Zv5c-Ts&t=1836s
+# No transcript - https://www.youtube.com/channel/UCsFmLpSNJuFzpKqdEj5jeHw (Testing)
 
 '''
   Function youtube_transcribe
-  Input : url, optional arg -> descp 
-          decsp : Provides description of YouTube Video : bool
-  Output : number of transcriptions available and transcriptions
+  Input : url
+  Output : transcript
 '''
 
-def youtube_transcribe(url,descp=False):
+def youtube_transcribe(url):
+    text = ''
     try:
-        parse.urlsplit(url)
-        parse.parse_qs(parse.urlsplit(url).query)
-        url_id = dict(parse.parse_qsl(parse.urlsplit(url).query))['v']
+        urlID = url.partition('https://www.youtube.com/watch?v=')[-1]
 
-        available_transcript = list(YouTubeTranscriptApi.list_transcripts(url_id))
+        transcript_list = YouTubeTranscriptApi.list_transcripts(urlID)
 
-        transcripts = []
-        for i in available_transcript:
-            if i.language_code == 'en':
-                res = ''
-                for j in i.fetch():
-                    res = res + j['text'] +' '
-                transcripts.append(res)
+        t = list(transcript_list)
 
-        if(descp):
-            data,res = get_video_info(url)
-            print("Video Description:\n\n",res)
+        for i in range(len(t)):
+            if t[i].language_code == 'en':
 
-        number_of_transciptions = len(transcripts)
-        text = ''
-        if number_of_transciptions:
-            with open("transcript.txt","w") as f:
-                    while number_of_transciptions > 0:
-                        if '.' in transcripts[number_of_transciptions-1]:
-                            text = transcripts[number_of_transciptions-1]
-                            f.write(transcripts[number_of_transciptions-1])
-                            break
+                # Manually Created
+                if not(t[i].is_generated):
+                    print("Got Manually Created Transcript")
+                    data = t[i].fetch()
+                    res=''
+                    for i in data:
+                        res += i['text']
+                    break
+
+                # Auto-generated 
+                if i == len(t)-1 and t[i].is_generated:
+                    print("Got Auto-generated Transcript")
+                    data = t[i].fetch()
+                    res=''
+                    for i in data:
+                        res += i['text']
                         
-                        # Cleanig Transcript
-                        if number_of_transciptions == 1:
-                            text = transcripts[0]
-                            text=punct_model.punctuate(text)
-                            text=correct_mistakes(text,lang_model)
-                            f.write(transcripts[0])
-
-                        number_of_transciptions-=1
-
-            print("Transcription and Cleaing Done!!")
-        else:
-            print("No Transcript Available")
-            text = speech_to_text(url)
+        
+        print("Cleaning Transcript")
+        text = res.replace('\n','')
+        text = add_punctuations(text,clean_transcript.punct_model)
+        text = correct_mistakes(text,clean_transcript.lang_model)
+        text = re.sub("[\[].*?[\]]", "", text).strip()
+        
+        with open("transcript.txt","w") as f:
+            f.write(text)
+        
+        print("Transcription and Cleaning Done!!")
         return text
-    
-    except Exception:
-        print("Transcription Error")
+        
+    # No Transcript
+    except NoTranscriptAvailable as t:
+        print("No Transcript Available - Trying to generate one!!")
+        text = speech_to_text(url)
+        
+    except TranscriptsDisabled as s:
+        print("Subtitles are disabled for this video - Trying to generate one!!")
+        text = speech_to_text(url)
+        
+    # Other Errors
+    except VideoUnavailable as v:
+        print("Video is not available")
+        
+    except ConnectionError as c:
+        print("No Internet")
+        
+    except Exception as e:
         traceback.print_exc()
-        return ''
+        print(e)
+        
+    finally:
+        if text == '': 
+            print("No Transcript")
+            return ''
+        
+        else: return text
+        
 
 if __name__ == '__main__':
     url = input("Enter the URL = ")
     text = youtube_transcribe(url)
+    print(text)

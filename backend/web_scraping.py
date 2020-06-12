@@ -11,6 +11,7 @@ def web_scrape(keywords,google_res=2,youtube_res=2):
   scrape_result=dict()
   scrape_result["google"]=google_result
   scrape_result["youtube"]=youtube_result
+  return scrape_result
   write_json(scrape_result)
 
 def write_json(scrape_result):
