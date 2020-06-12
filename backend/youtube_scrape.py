@@ -33,7 +33,8 @@ def youtube_scrapper(query,youtube_result,number_results=2):
     # Next loop if one element is not present
     except:
         continue
-  links=clean_results(links,titles)
+  for i in range(0,number_results):
+    links[i]=links[i].replace("/url?q=","")
   for i in range(0,number_results):
     if(links[i].find("watch")!=-1):
       links[i]=links[i].replace("%3F","?")
@@ -46,23 +47,6 @@ def youtube_scrapper(query,youtube_result,number_results=2):
     d["linktopage"]=links[i]
     youtube_result.append(d)
 
-#Function to remove useless results and clean the links
-def clean_results(links,titles):
-  to_remove = []
-  clean_links = []
-  for i, l in enumerate(links):
-    clean = re.search('\/url\?q\=(.*)\&sa',l)
-
-    # Anything that doesn't fit the above pattern will be removed
-    if clean is None:
-        to_remove.append(i)
-        continue
-    clean_links.append(clean.group(1))
-
-# Remove the corresponding titles
-  for x in to_remove:
-    del titles[x]
-  return clean_links
 
 #Driver Code
 if __name__=="__main__":
