@@ -5,6 +5,71 @@ from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 import re
 
+def remove_encoding(links):
+  for i in range(0,len(links)):
+    if(links[i].find("%7B")!=-1):
+      links[i]=links[i].replace("%7B","{")
+      
+    if(links[i].find("%7C")!=-1):
+      links[i]=links[i].replace("%7C","|")
+
+    if(links[i].find("%7D")!=-1):
+      links[i]=links[i].replace("%7D","}")
+
+    if(links[i].find("%7E")!=-1):
+      links[i]=links[i].replace("%7E","~")
+
+    if(links[i].find("%2B")!=-1):
+      links[i]=links[i].replace("%2B","+")
+      
+    if(links[i].find("%2A")!=-1):
+      links[i]=links[i].replace("%2A","*")
+
+    if(links[i].find("%2C")!=-1):
+      links[i]=links[i].replace("%2C",",")
+
+    if(links[i].find("%2D")!=-1):
+      links[i]=links[i].replace("%2D","-")
+
+    if(links[i].find("%2E")!=-1):
+      links[i]=links[i].replace("%2E",".")
+      
+    if(links[i].find("%2F")!=-1):
+      links[i]=links[i].replace("%2F","/")
+
+    if(links[i].find("%5B")!=-1):
+      links[i]=links[i].replace("%5B","[")
+
+    if(links[i].find("%5C")!=-1):
+      links[i]=links[i].replace("%5C","\\")
+
+    if(links[i].find("%5D")!=-1):
+      links[i]=links[i].replace("%5D","]")
+      
+    if(links[i].find("%3A")!=-1):
+      links[i]=links[i].replace("%3A",":")
+
+    if(links[i].find("%3B")!=-1):
+      links[i]=links[i].replace("%3B",";")
+
+    if(links[i].find("%3C")!=-1):
+      links[i]=links[i].replace("%3C","<")
+
+    if(links[i].find("%3D")!=-1):
+      links[i]=links[i].replace("%3D","=")
+      
+    if(links[i].find("%3E")!=-1):
+      links[i]=links[i].replace("%3E",">")
+
+    if(links[i].find("%3F")!=-1):
+      links[i]=links[i].replace("%3F","?")
+
+    if(links[i].find("%40")!=-1):
+      links[i]=links[i].replace("%40","@")
+      
+    
+
+      
 #Function to scrape results from Google Search
 def google_scrapper(query,google_result,number_results=2):
   query = urllib.parse.quote_plus(query) # Format into URL encoding
@@ -33,12 +98,30 @@ def google_scrapper(query,google_result,number_results=2):
     # Next loop if one element is not present
     except:
         continue
-  for i in range(0,number_results):
-    d=dict()
-    d["title"]=titles[i]
-    d["linktopage"]=links[i].replace("/url?q=","")
-    google_result.append(d)
+  if(len(links)==0):
+    return 
+  else:
+    links=clean_results(links)
+    #print(links)
+    remove_encoding(links)
+    #print(links)
+    for i in range(0,len(links)):
+      d=dict()
+      d["title"]=titles[i]
+      d["linktopage"]=links[i]
+      google_result.append(d)
 
+def clean_results(links):
+  clean_links = []
+  for i, l in enumerate(links):
+    clean = re.search('\/url\?q\=(.*)\&sa',l)
+
+    # Anything that doesn't fit the above pattern will be removed
+    if clean is None:
+        continue
+    clean_links.append(clean.group(1))
+    
+  return clean_links
 
 #Driver Code
 if __name__=="__main__":
