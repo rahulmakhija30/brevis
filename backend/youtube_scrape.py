@@ -13,6 +13,7 @@ def youtube_scrapper(query,youtube_result,number_results=2):
   assert isinstance(number_results, int) #Number of results must be an integer
   escaped_search_term = query.replace(' ', '+')
   google_url = "https://www.google.com/search?q={}&num={}".format(query+"+site:youtube.com",number_results+1)
+  #print(google_url)
   response = requests.get(google_url, {"User-Agent": ua.random})
   soup = BeautifulSoup(response.text, "html.parser")
   result_div = soup.find_all('div', attrs = {'class': 'ZINbbc'})
@@ -33,20 +34,24 @@ def youtube_scrapper(query,youtube_result,number_results=2):
     # Next loop if one element is not present
     except:
         continue
-  for i in range(0,number_results):
+  #print(links)
+  for i in range(0,len(links)):
     links[i]=links[i].replace("/url?q=","")
-  for i in range(0,number_results):
+  for i in range(0,len(links)):
     if(links[i].find("watch")!=-1):
       links[i]=links[i].replace("%3F","?")
       links[i]=links[i].replace("%3D","=")
       links[i]=links[i].split("&")[0]
     else:
       continue
-  for i in range(0,number_results):
-    d=dict()
-    d["title"]=titles[i]
-    d["linktopage"]=links[i]
-    youtube_result.append(d)
+  if(len(links)==0):
+    return
+  else:
+    for i in range(0,len(links)):
+      d=dict()
+      d["title"]=titles[i]
+      d["linktopage"]=links[i]
+      youtube_result.append(d)
 
 
 #Driver Code
