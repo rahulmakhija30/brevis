@@ -56,10 +56,16 @@ def add_hyperlink(paragraph, url, text, color, underline):
     return hyperlink
 
 def get_title(url):
+    r = requests.get(url) 
+    s = bs(r.text, "html.parser") 
+    title = s.find("span", class_="watch-title")
+    
+    while title == None:
         r = requests.get(url) 
         s = bs(r.text, "html.parser") 
-        title = s.find("span", class_="watch-title").text.replace("\n", "") 
-        return title.strip()
+        title = s.find("span", class_="watch-title")
+
+    return title.text.replace("\n", "") .strip()
 
 def add_picture(url,scrape_results):
         urlID = url.partition('https://www.youtube.com/watch?v=')[-1]
