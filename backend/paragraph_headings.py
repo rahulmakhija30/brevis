@@ -157,7 +157,7 @@ def get_titles_paras(list_para,sentence_threshold = 5):
         heading = GenerateTitle(in_para).stip().upper()
         title.append((heading,in_para))
 
-    with open("summary1.txt","w") as f:
+    with open("paragraph_headings.txt","w") as f:
         for i,j in title_para:
             f.write(i + " $ " + j + "\n")
 

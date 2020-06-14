@@ -23,61 +23,61 @@ from web_scraping import web_scrape
 directory = os.getcwd()+'/out'
 
 def add_hyperlink(paragraph, url, text, color, underline):
-	"""
-	A function that places a hyperlink within a paragraph object.
-	
-	:param paragraph: The paragraph we are adding the hyperlink to.
-	:param url: A string containing the required url
-	:param text: The text displayed for the url
-	:return: The hyperlink object
-	"""
+    """
+    A function that places a hyperlink within a paragraph object.
 
-# This gets access to the document.xml.rels file and gets a new relation id value
-	part = paragraph.part
-	r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
+    :param paragraph: The paragraph we are adding the hyperlink to.
+    :param url: A string containing the required url
+    :param text: The text displayed for the url
+    :return: The hyperlink object
+    """
 
-# Create the w:hyperlink tag and add needed values
-	hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
-	hyperlink.set(docx.oxml.shared.qn('r:id'), r_id, )
+    # This gets access to the document.xml.rels file and gets a new relation id value
+    part = paragraph.part
+    r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
 
-# Create a w:r element
-	new_run = docx.oxml.shared.OxmlElement('w:r')
+    # Create the w:hyperlink tag and add needed values
+    hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
+    hyperlink.set(docx.oxml.shared.qn('r:id'), r_id, )
 
-# Create a new w:rPr element
-	rPr = docx.oxml.shared.OxmlElement('w:rPr')
+    # Create a w:r element
+    new_run = docx.oxml.shared.OxmlElement('w:r')
 
-# Add color if it is given
-	if not color is None:
-		c = docx.oxml.shared.OxmlElement('w:color')
-		c.set(docx.oxml.shared.qn('w:val'), color)
-		rPr.append(c)
-	
-	# Remove underlining if it is requested
-	if not underline:
-		u = docx.oxml.shared.OxmlElement('w:u')
-		u.set(docx.oxml.shared.qn('w:val'), 'none')
-		rPr.append(u)
-	
-	# Join all the xml elements together add add the required text to the w:r element
-	new_run.append(rPr)
-	new_run.text = text
-	hyperlink.append(new_run)
-	
-	paragraph._p.append(hyperlink)
-	
-	return hyperlink
+    # Create a new w:rPr element
+    rPr = docx.oxml.shared.OxmlElement('w:rPr')
+
+    # Add color if it is given
+    if not color is None:
+        c = docx.oxml.shared.OxmlElement('w:color')
+        c.set(docx.oxml.shared.qn('w:val'), color)
+        rPr.append(c)
+
+    # Remove underlining if it is requested
+    if not underline:
+        u = docx.oxml.shared.OxmlElement('w:u')
+        u.set(docx.oxml.shared.qn('w:val'), 'none')
+        rPr.append(u)
+
+    # Join all the xml elements together add add the required text to the w:r element
+    new_run.append(rPr)
+    new_run.text = text
+    hyperlink.append(new_run)
+
+    paragraph._p.append(hyperlink)
+
+    return hyperlink
 
 def get_title(url):
-	r = requests.get(url) 
-	s = bs(r.text, "html.parser") 
-	title = s.find("span", class_="watch-title")
-	
-	while title == None:
-		r = requests.get(url) 
-		s = bs(r.text, "html.parser") 
-		title = s.find("span", class_="watch-title")
+    r = requests.get(url) 
+    s = bs(r.text, "html.parser") 
+    title = s.find("span", class_="watch-title")
 
-	return title.text.replace("\n", "") .strip()
+    while title == None:
+        r = requests.get(url) 
+        s = bs(r.text, "html.parser") 
+        title = s.find("span", class_="watch-title")
+
+    return title.text.replace("\n", "") .strip()
 
 def add_picture(url,scrape_results):
         urlID = url.partition('https://www.youtube.com/watch?v=')[-1]
@@ -87,7 +87,7 @@ def add_picture(url,scrape_results):
 
 
 
-        f1=open('summary.txt')
+        f1=open('paragraph_headings.txt')
         summary=f1.read()
 
         f1.close()
@@ -118,11 +118,11 @@ def add_picture(url,scrape_results):
                                 text=data['text'].replace('\n',' ')
                                 t=(text,time)
                                 while index <(len(paras)):
-                                        if(text[:(len(text)//2)] in paras[index][0] or text[(len(text)//2):] in paras[index][0]):
+                                        if(text in paras[index][0]):
                                                 if(filename not in paras[index][1]):
                                                         paras[index][1].append(filename)
                                                 break
-			
+
                                         index+=1
                         j+=1
 
@@ -212,7 +212,7 @@ def add_picture(url,scrape_results):
                 add_hyperlink(p,d["linktopage"],d["title"],"0000FF",True)
                 p.add_run().add_break()
 
-        document.save('brevis.docx')
+        document.save('test1.docx')
         #f.close()
 
 if __name__ == "__main__":
