@@ -3,16 +3,16 @@ from keywords_extractor import get_keywords
 from summary_generator import summary
 from clean_transcript import add_punctuations,correct_mistakes
 from keyframes import Image_Processing
-from text_recognition_and_extraction import text_recognition
+from paragraph_headings import paragraph,get_titles_paras
+from notes import add_picture
 from web_scraping import web_scrape
-from add_frames import add_picture
-#from paragraph_headings import paragraph
-#from paragraph_headings import get_titles_paras
 from flask import Flask, request,jsonify,send_file
-import requests
 from bs4 import BeautifulSoup as bs
-import io
 from zipfile import ZipFile
+
+import notes
+import requests
+import io
 import os.path
 import operator
 import pytesseract
@@ -38,6 +38,7 @@ def generate(data):
 	global json_result
 	global keywords
 	global text
+    
     # Transcription and Cleaning
 	text = youtube_transcribe(video_url)
         
@@ -48,6 +49,7 @@ def generate(data):
 	fp.write("\n".join(keywords))
 	fp.close()
 	json_result=web_scrape(keywords)
+    
     # Summarization
     # Percentage of summary - input
     # percentage=int(input())
@@ -55,6 +57,7 @@ def generate(data):
 	fh=open("summary.txt","w")
 	fh.write(result)
 	fh.close()
+    
 	#with ZipFile('brevis_notes2.zip','w') as zip:
 	#	print("Writing zip")
 	#	zip.write("summary.txt") 
@@ -62,11 +65,11 @@ def generate(data):
 	#zip.close()
 	#path=os.path.abspath("brevis_notes2.zip")
 	
-	    # Keyframe Extraction
+	# Keyframe Extraction
 	#Image_Processing(video_url,keywords)
 	#print("Images Extracted in 'out' folder")
 	    
-	    # Text Recognition And Extraction
+	# Text Recognition And Extraction
 	#text_recognition()
 	#print("Cropped Text Extracted in 'crop' folder")
 
@@ -76,14 +79,21 @@ def gen():
 	global path
 	global json_result
 	global text
+    
+    # Keyframe Extraction (Output : 'out' folder)
 	Image_Processing(video_url,keywords)
 	print("Images Extracted in 'out' folder")
-	    
-	    # Text Recognition And Extraction
-	text_recognition()
-	print("Cropped Text Extracted in 'crop' folder")
+    
+    # Paragraph and Headings (Output : paragraph_headings.txt)
+    list_para = paragraph(text)
+    title_para = get_titles_paras(list_para)
+    
 	#list_para = paragraph(text)
 	#title_para = get_titles_paras(list_para)
+    
+    # Final Notes - To be added (Refer : main.py)
+    
+   
 	add_picture(video_url,json_result)
 	print("images extracted")
 	

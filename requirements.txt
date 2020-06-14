@@ -21,11 +21,20 @@ urllib3==1.25.9
 beautifulsoup4==4.9.1
 fake-useragent==0.1.11
 Wikipedia-API==0.5.4
+spacy==2.1.0
+
+neuralcoref
+pysbd
+python-docx
+spacy-universal-sentence-encoder
+
 
 Additional Models
-
 Demo-Europarl-EN.pcl : https://drive.google.com/drive/folders/0B7BsN5f2F1fZQnFsbzJ3TWxxMms
 language_tool_python.LanguageTool('en-US')
 ffmpeg : https://www.ffmpeg.org/download.html
 Tesseract : https://github.com/UB-Mannheim/tesseract/wiki
 nltk.download('punkt')
+spacy.cli.download("en")
+nlp = spacy.load("en")
+wiki_wiki = wikipediaapi.Wikipedia('en')

@@ -3,7 +3,11 @@ from keywords_extractor import get_keywords
 from summary_generator import summary
 from clean_transcript import add_punctuations,correct_mistakes
 from keyframes import Image_Processing
-from text_recognition_and_extraction import text_recognition
+from paragraph_headings import paragraph,get_titles_paras
+from notes import add_picture
+from web_scraping import web_scrape
+
+import notes
 import io
 import pytesseract
 
@@ -21,14 +25,21 @@ if __name__ == '__main__':
     print('\nKeywords:\n',keywords)
 
     # Summarization
-    percentage=int(input("Enter the percentage of information in text you want as summary : "))
-    result = summary(text,percentage)
+    # percentage=int(input("Enter the percentage of information in text you want as summary : "))
+    result = summary(text,40)
     print('\nSummary:\n',result)
     
-    # Keyframe Extraction
+    # Keyframe Extraction (Output : 'out' folder)
     Image_Processing(url,keywords)
     print("Images Extracted in 'out' folder")
     
-    # Text Recognition And Extraction
-    text_recognition()
-    print("Cropped Text Extracted in 'crop' folder")
+    # Paragraph and Headings (Output : paragraph_headings.txt)
+    list_para = paragraph(text)
+    title_para = get_titles_paras(list_para)
+    
+    # Web Scraping
+    
+    
+    # Final Notes
+    s=web_scrape(["Artificial Intelligence"])
+    add_picture("https://www.youtube.com/watch?v=ukzFI9rgwfU",s)
