@@ -154,11 +154,12 @@ def get_titles_paras(list_para,sentence_threshold = 5):
 
     if in_para != '':
         # print(len(res))
-        heading = GenerateTitle(in_para).stip().upper()
+        heading = GenerateTitle(in_para).strip().upper()
         title.append((heading,in_para))
 
     with open("paragraph_headings.txt","w") as f:
-        for i,j in title_para:
+        for i,j in title:
+            # print(i)
             f.write(i + " $ " + j + "\n")
 
     return title
