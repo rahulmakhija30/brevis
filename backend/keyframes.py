@@ -41,7 +41,7 @@ def frames(u,s,e):
 #     capture = cv2.VideoCapture(play.url)
     
     # Download
-    ydl_opts = {'outtmpl': 'video.mp4'}
+    ydl_opts = {'outtmpl': 'video.mp4','format': 'mp4'}
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
         
