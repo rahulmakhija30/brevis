@@ -27,19 +27,25 @@ from PIL import Image
 import pytesseract
 
 # Path to your tesseract executable
-#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 def detect_text(img):
     text = pytesseract.image_to_string(img,lang='eng')
     return text
 
 def frames(u,s,e):    
+    # URL
     url = u
-    vPafy = pafy.new(url)
-    play = vPafy.getbest()
-    capture = cv2.VideoCapture(play.url)
+#     vPafy = pafy.new(url)
+#     play = vPafy.getbest()
+#     capture = cv2.VideoCapture(play.url)
     
-#   capture = cv2.VideoCapture("video1.mp4")   
+    # Download
+    ydl_opts = {'outtmpl': 'video.mp4'}
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+        
+    capture = cv2.VideoCapture("video.mp4")   
 
     _,frame = capture.read()
     start = s
@@ -120,7 +126,7 @@ def Image_Processing(url,keywords):
     text_threshold = 50
     files = os.listdir(r"out")
     for i in files:
-        res = detect_text('out/'+i)
+        res = detect_text("out/"+i)
         if res == '' or len(res) < text_threshold :
             os.remove('out/'+i)
             
