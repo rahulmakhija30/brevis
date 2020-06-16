@@ -7,12 +7,17 @@ from paragraph_headings import paragraph,get_titles_paras
 from notes import add_picture
 from web_scraping import web_scrape
 
+import paragraph_headings
 import notes
 import io
+import os
 import pytesseract
+import tensorflow_hub as hub
 
 # Path to your tesseract executable
 pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
+model = hub.load(module_url)
 
 if __name__ == '__main__':
     
@@ -31,15 +36,14 @@ if __name__ == '__main__':
     
     # Keyframe Extraction (Output : 'out' folder)
     Image_Processing(url,keywords)
-    print("Images Extracted in 'out' folder")
+    print(len(os.listdir(r"out")),"images extracted in 'out' folder")
     
     # Paragraph and Headings (Output : paragraph_headings.txt)
-    list_para = paragraph(text)
+    print("Generating Paragraphs and Headings")
+    list_para = paragraph(text,model)
     title_para = get_titles_paras(list_para)
     
-    # Web Scraping
-    
-    
-    # Final Notes
-    s=web_scrape(["Artificial Intelligence"])
-    add_picture("https://www.youtube.com/watch?v=ukzFI9rgwfU",s)
+    # Final Notes (Includes Web Scraping) 
+    s=web_scrape(keywords)
+    add_picture(url,s)
+    print("Brevis-Notes Generated. Also delete video.mp4 if not required.")

@@ -10,15 +10,22 @@ from flask import Flask, request,jsonify,send_file
 from bs4 import BeautifulSoup as bs
 from zipfile import ZipFile
 
-import notes
 import requests
-import io
 import os.path
 import operator
+import paragraph_headings
+import notes
+import io
+import os
 import pytesseract
+import tensorflow_hub as hub
 
 # Path to your tesseract executable
-#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+
+# Tensorflow Model
+module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
+model = hub.load(module_url)
 
 app = Flask(__name__)
 
@@ -29,7 +36,6 @@ x=""
 json_result=dict()
 keywords=[]
 text=""
-
 
 
 def generate(data):
@@ -84,19 +90,15 @@ def gen():
 	Image_Processing(video_url,keywords)
 	print("Images Extracted in 'out' folder")
     
-    # Paragraph and Headings (Output : paragraph_headings.txt)
-    list_para = paragraph(text)
+    # Paragraph and Headings (Output : paragraph_headings.txt)    
+	list_para = paragraph(text,model)
     title_para = get_titles_paras(list_para)
     
-	#list_para = paragraph(text)
-	#title_para = get_titles_paras(list_para)
-    
     # Final Notes - To be added (Refer : main.py)
-    
-   
 	add_picture(video_url,json_result)
-	print("images extracted")
+	print("Notes Generated")
 	
+    
 	with ZipFile('brevis_notes2.zip','w') as zip:
 		print("Writing zip")
 		zip.write("brevis.docx") 
