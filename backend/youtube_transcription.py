@@ -57,7 +57,7 @@ def youtube_transcribe(url):
         text = correct_mistakes(text,clean_transcript.lang_model)
         text = re.sub("[\[].*?[\]]", "", text).strip()
         
-        with open("transcript.txt","w") as f:
+        with open("transcript.txt","w",encoding="utf-8") as f:
             f.write(text)
         
         print("Transcription and Cleaning Done!!")
