@@ -24,26 +24,28 @@
     height: 54px;
     width: 54px;
     background-image: url('./register.svg');
-    background-size: 54px 54px;
+    background-size: 51px 51px;
     position: center;
     display: inline-block;
     margin: 9.5px;
     margin-right: 0px;
     margin-bottom: 0;
     filter:invert(100%);
+    background-repeat: no-repeat;
   }
 
   .tooltip .Aboutdot{
     height: 54px;
     width: 54px;
     background-image: url('./question.svg');
-    background-size: 54px 54px;
+    background-size: 44px 44px;
     position: center;
     display: inline-block;
-    margin-left: 0px;
+    margin-left: 5px;
     margin-right: 9px;
     color: white;
     filter:invert(100%);
+    background-repeat: no-repeat;
   }
 
   .tooltip .Aboutdot:hover{
