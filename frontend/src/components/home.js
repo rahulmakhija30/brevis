@@ -4,6 +4,8 @@ import DownloadFile from './download';
 import './home.css'
 import Preview from './Preview'
 import LoadingSpinner from './LoadingSpinner'
+import Collapsible from './collapsible'
+
 
 class Home extends React.Component {
 
@@ -18,7 +20,7 @@ class Home extends React.Component {
 
   handleSubmit=(event)=> {
     console.log(this.state)
-    this.setState({loading:true} , () => {
+    this.setState({loading:true})
       axios.post('/result',this.state)
       .then(res=>{
         axios.get('/res')
@@ -70,7 +72,6 @@ class Home extends React.Component {
       }
 
       );
-    })
 }
 
   render() {

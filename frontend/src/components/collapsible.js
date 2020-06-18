@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import './collapsible.css'
+import './collapse.css'
 //import data from '../scrape_results.json'
 //var fs = require('fs');
 //var data = JSON.parse(fs.readFileSync('../scrape_results.json', 'utf8'));
@@ -12,23 +12,21 @@ class Collapsible extends Component{
         VideoLink:""
     }
     
-    Button = () => {
-        var coll = document.getElementsByClassName("collapsible");
-        var i;
-        
-        for (i = 0; i < coll.length; i++) {
-          for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-              this.classList.toggle("active");
-              var content = this.nextElementSibling;
-              if (content.style.maxHeight){
-                content.style.maxHeight = null;
-              } else {
-                content.style.maxHeight = content.scrollHeight + "px";
+    onClick = () =>{
+      var acc = document.getElementsByClassName("accordion");
+              var i;
+      
+              for (i = 0; i < acc.length; i++) {
+              acc[i].addEventListener("click", function() {
+                  this.classList.toggle("active");
+                  var panel = this.nextElementSibling;
+                  if (panel.style.maxHeight) {
+                  panel.style.maxHeight = null;
+                  } else {
+                  panel.style.maxHeight = panel.scrollHeight + "px";
+                  } 
+                  });
               }
-            });
-          }
-        }
     }
 
     
@@ -51,18 +49,18 @@ class Collapsible extends Component{
       })
         return(
             <div className="Top-align animate__fadeIn animate__animated">
-                <button className="collapsible z-depth-0" onClick={this.Button}>Text Summary</button>
-                <div className="content">
+              <button class="accordion" onClick={this.onClick}>Text Summary</button>
+              <div class="panel">
                 <p>{this.state.summary}</p>
                 </div>
                 <p></p>
-                <button className="collapsible z-depth-0" onClick={this.Button}>Links to useful Articles...</button>
-                <div className="content">
+                <button class="accordion" onClick={this.onClick}>Links to useful Articles</button>
+                <div class="panel">
                 {googleList}
                 </div>
                 <p></p>
-                <button className="collapsible z-depth-0" onClick={this.Button}>Links to useful Videos...</button>
-                <div className="content">
+                <button class="accordion" onClick={this.onClick}>Links to related Youtube Videos</button>
+                <div class="panel">
                 {youtubeList}
                 </div>
                 <p></p>
