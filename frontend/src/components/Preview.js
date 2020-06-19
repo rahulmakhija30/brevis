@@ -6,6 +6,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import './Preview.css'
 import {Link,NavLink} from 'react-router-dom'
 import LoadingSpinner from './LoadingSpinner'
+import Collapsible from './collapsible'
 
 
 class Preview extends React.Component{ 
@@ -13,7 +14,8 @@ class Preview extends React.Component{
         value:"both",
         showdownload:false,
         loading:false,
-        scrape:{}
+        scrape:{},
+        Downloadresponse:false
     }
     handleChange=(e)=>{
         this.setState({
@@ -40,14 +42,24 @@ class Preview extends React.Component{
         })
         let res= await axios.get('/down');
         console.log({res})
+        this.setState({Downloadresponse:true})
       }
     render(){
         let download=null
-        if(this.state.showdownload)
+        if(this.state.showdownload && this.state.Downloadresponse)
         { 
           return (
-            <DownloadFile url={this.props.url} value={this.state.value} scrape={this.state.scrape}/> 
+            <div>
+            <Collapsible scrape={this.state.scrape}/>
+            <DownloadFile url={this.props.url} value={this.state.value}/> 
+            </div>
           )
+        }
+        else if(this.state.showdownload){
+          <div>
+          <Collapsible scrape={this.state.scrape}/>
+          <p>Your File is being Prepared ...</p>
+          </div>
         }
         else if(this.state.loading){
           return(
