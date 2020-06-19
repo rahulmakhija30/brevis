@@ -20,6 +20,8 @@ body{
 
 .Download-button{
   margin-top:20px;
+  position: static;
+  bottom: 20px;
 }
 
 .brevis{

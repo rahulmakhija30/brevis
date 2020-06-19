@@ -49,18 +49,18 @@ class Collapsible extends Component{
       })
         return(
             <div className="Top-align animate__fadeIn animate__animated">
-              <button class="accordion" onClick={this.onClick}>Text Summary</button>
-              <div class="panel">
+              <button className="accordion" onClick={this.onClick}>Text Summary</button>
+              <div className="panel">
                 <p>{this.state.summary}</p>
                 </div>
                 <p></p>
-                <button class="accordion" onClick={this.onClick}>Links to useful Articles</button>
-                <div class="panel">
+                <button className="accordion" onClick={this.onClick}>Links to useful Articles</button>
+                <div className="panel">
                 {googleList}
                 </div>
                 <p></p>
-                <button class="accordion" onClick={this.onClick}>Links to related Youtube Videos</button>
-                <div class="panel">
+                <button className="accordion" onClick={this.onClick}>Links to related Youtube Videos</button>
+                <div className="panel">
                 {youtubeList}
                 </div>
                 <p></p>

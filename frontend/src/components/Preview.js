@@ -15,7 +15,7 @@ class Preview extends React.Component{
         showdownload:false,
         loading:false,
         scrape:{},
-        Downloadresponse:false
+        downloadresponse:false
     }
     handleChange=(e)=>{
         this.setState({
@@ -42,16 +42,17 @@ class Preview extends React.Component{
         })
         let res= await axios.get('/down');
         console.log({res})
-        this.setState({Downloadresponse:true})
+        this.setState({downloadresponse:true})
+        document.getElementById('LoadingMessage').style.visibility = "hidden";
       }
     render(){
         let download=null
-        if(this.state.Downloadresponse)
+        if(this.state.downloadresponse)
         { 
           return (
             <div>
-            <Collapsible scrape={this.state.scrape}/>
-            <DownloadFile url={this.props.url} value={this.state.value}/> 
+              <Collapsible scrape={this.state.scrape}/>
+              <DownloadFile url={this.props.url} value={this.state.value}/> 
             </div>
           )
         }
@@ -59,7 +60,7 @@ class Preview extends React.Component{
           return(
           <div>
           <Collapsible scrape={this.state.scrape}/>
-          <p className="center">Your File is being Prepared ...</p>
+          <p className="center" id="LoadingMessage">Your File is being Prepared ...</p>
           </div>)
         }
         else if(this.state.loading){
