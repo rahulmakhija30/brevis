@@ -46,7 +46,7 @@ class Preview extends React.Component{
       }
     render(){
         let download=null
-        if(this.state.showdownload && this.state.Downloadresponse)
+        if(this.state.Downloadresponse)
         { 
           return (
             <div>
@@ -56,10 +56,11 @@ class Preview extends React.Component{
           )
         }
         else if(this.state.showdownload){
+          return(
           <div>
           <Collapsible scrape={this.state.scrape}/>
-          <p>Your File is being Prepared ...</p>
-          </div>
+          <p className="center">Your File is being Prepared ...</p>
+          </div>)
         }
         else if(this.state.loading){
           return(

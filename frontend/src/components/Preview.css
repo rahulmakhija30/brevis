@@ -16,3 +16,9 @@
 select{
     border-radius: 20px !important;
 }
+
+.center{
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
