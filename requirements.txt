@@ -30,7 +30,8 @@ tensorflow-hub==0.8.0
 sklearn==0.0
 tensorflow-estimator==2.0.1
 tensorboard==2.0.2
-
+fse==0.1.15
+gensim==3.8.3
 
 Additional Models
 Demo-Europarl-EN.pcl : https://drive.google.com/drive/folders/0B7BsN5f2F1fZQnFsbzJ3TWxxMms

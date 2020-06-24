@@ -18,14 +18,15 @@ import notes
 import io
 import os
 import pytesseract
-import tensorflow_hub as hub
 
 # Path to your tesseract executable
 pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
-# Tensorflow Model
-module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
-model = hub.load(module_url)
+import logging
+logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
+
+import warnings
+warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
 
@@ -44,6 +45,7 @@ def generate(data):
 	global json_result
 	global keywords
 	global text
+    global result
     
     # Transcription and Cleaning
 	text = youtube_transcribe(video_url)
@@ -85,13 +87,14 @@ def gen():
 	global path
 	global json_result
 	global text
+    global result
     
     # Keyframe Extraction (Output : 'out' folder)
 	Image_Processing(video_url,keywords)
-	print("Images Extracted in 'out' folder")
+	print(len(os.listdir(r"out")),"images extracted in 'out' folder")
     
     # Paragraph and Headings (Output : paragraph_headings.txt)    
-	list_para = paragraph(text,model)
+	list_para = paragraph(result)
     title_para = get_titles_paras(list_para)
     
     # Final Notes - To be added (Refer : main.py)
@@ -99,11 +102,11 @@ def gen():
 	print("Notes Generated")
 	
     
-	with ZipFile('brevis_notes2.zip','w') as zip:
+	with ZipFile('brevis_notes.zip','w') as zip:
 		print("Writing zip")
-		zip.write("brevis.docx") 
+		zip.write("Brevis-Notes.docx") 
 	zip.close()
-	path=os.path.abspath("brevis_notes2.zip")
+	path=os.path.abspath("brevis_notes.zip")
 	
 
 	
@@ -173,7 +176,7 @@ def down():
 @app.route('/send/<x>',methods=['GET','POST'])
 def send(x):
 	global path
-	return send_file(path,attachment_filename='brevis_notes2.zip')
+	return send_file(path,attachment_filename='brevis_notes.zip')
 
 	
 

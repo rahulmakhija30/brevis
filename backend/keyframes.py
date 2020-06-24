@@ -36,16 +36,15 @@ def detect_text(img):
 def frames(u,s,e):    
     # URL
     url = u
-#     vPafy = pafy.new(url)
-#     play = vPafy.getbest()
-#     capture = cv2.VideoCapture(play.url)
+    vPafy = pafy.new(url)
+    play = vPafy.getbest()
+    capture = cv2.VideoCapture(play.url)
     
     # Download
-    ydl_opts = {'outtmpl': 'video.mp4','format': 'mp4'}
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
-        
-    capture = cv2.VideoCapture("video.mp4")   
+#     ydl_opts = {'outtmpl': 'video.mp4','format': 'mp4'}
+#     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+#         ydl.download([url])  
+#     capture = cv2.VideoCapture("video.mp4")   
 
     _,frame = capture.read()
     start = s
@@ -64,7 +63,7 @@ def frames(u,s,e):
         cv2.imwrite("out/image"+str(start)+".jpg", frame)
         # count+=1
         
-        start = start+2500
+        start = start+1500
         prev_frame = frame
         
     capture.release()
@@ -164,4 +163,4 @@ if __name__ == '__main__':
     print('\nKeywords:\n',keywords)
     
     Image_Processing(url,keywords)
-    print("Images Extracted in 'out' folder")
+    print(len(os.listdir(r"out")),"images extracted in 'out' folder")
