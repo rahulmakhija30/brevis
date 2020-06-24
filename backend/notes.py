@@ -13,12 +13,20 @@ from web_scraping import web_scrape
 import shutil
 import re
 import pysbd
+from gensim.models.wrappers import FastText
+from gensim.models import FastText
+import re
+from fse.models import Average
+from fse import IndexedList
+import time
+import logging
 
-# from sklearn.metrics.pairwise import cosine_similarity
-# import tensorflow_hub as hub
+logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
+
+import warnings
+warnings.filterwarnings("ignore")
 
 directory = os.getcwd()+'/out'
-
 
 def clean(text):
     clean = re.sub(r"""
@@ -29,16 +37,22 @@ def clean(text):
                text, flags=re.VERBOSE).lower().strip()
     return clean
 
-# if(t1 in t2 or similarity(t1,t2,model)):
-# def similarity(text1,text2,model):
-#     sentences = [text1,text2]
-#     embedding = model(sentences)
-#     similarity = cosine_similarity(embedding, embedding)
-#     if round(similarity[0][1],2) > 0.45:
-#         return True
+def modify(string):
+    return re.sub('[^A-Za-z0-9]+', ' ', string).strip().lower().split()
+
+def sentence_similarity(text1,text2,similarity_threshold=0.35):
+    sentences = [modify(text1),modify(text2)]
+    ft = FastText(sentences, min_count=1,size=12,workers=4)
+
+    model = Average(ft)
+    model.train(IndexedList(sentences),update=True,report_delay=10,queue_factor=4)
+    sim = model.sv.similarity(0,1)
     
-#     else:
-#         return False
+    if sim >= similarity_threshold:
+        return True
+    
+    else:
+        return False
     
 def add_hyperlink(paragraph, url, text, color, underline):
     """
@@ -103,7 +117,7 @@ def add_picture(url,scrape_results):
         vid_title=get_title(url)
         vid_title="Notes on " + vid_title
 
-        f1=open('paragraph_headings.txt')
+        f1=open('paragraph_headings.txt',encoding="utf-8")
         summary=f1.read()
 
         f1.close()
@@ -136,7 +150,7 @@ def add_picture(url,scrape_results):
                                 while index <(len(paras)):
                                         t1 = clean(text)
                                         t2 = clean(paras[index][0])
-                                        if(t1 in t2):
+                                        if((t1 in t2) or sentence_similarity(t1,t2)):
                                                 if(filename not in paras[index][1]):
                                                         # print(filename)
                                                         paras[index][1].append(filename)

@@ -39,9 +39,13 @@ def youtube_transcribe(url):
                     data = t[i].fetch()
                     res=''
                     for i in data:
-                        res += i['text']
+                        res = res + ' ' + i['text']
+                    
+                    print("Cleaning Manually Created Transcript")
+                    text = res.replace('\n',' ')
+                    text = text.strip()
                     break
-
+                    
                 # Auto-generated 
                 if i == len(t)-1 and t[i].is_generated:
                     print("Got Auto-generated Transcript")
@@ -50,11 +54,11 @@ def youtube_transcribe(url):
                     for i in data:
                         res += i['text']
                         
-        
-        print("Cleaning Transcript")
-        text = res.replace('\n','')
-        text = add_punctuations(text,clean_transcript.punct_model)
-        text = correct_mistakes(text,clean_transcript.lang_model)
+                    print("Cleaning Auto-generated Transcript")
+                    text = res.replace('\n',' ')
+                    text = add_punctuations(text,clean_transcript.punct_model)
+                    text = correct_mistakes(text,clean_transcript.lang_model)
+                    
         text = re.sub("[\[].*?[\]]", "", text).strip()
         
         with open("transcript.txt","w",encoding="utf-8") as f:

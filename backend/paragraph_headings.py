@@ -1,7 +1,3 @@
-# Install Modules
-# !pip install pysbd
-# !pip install spacy-universal-sentence-encoder
-# !pip install sumy
 # !pip install spacy==2.1.0
 # !pip install neuralcoref
 
@@ -14,9 +10,9 @@ Similarity_threshold = Degree of similarity between two sentences (paragraph fun
 Word_threshold = Number of words in a paragraph (paragraph function)
 Sentence_threshold = Number of sentences in a paragraph (get_titles_paras function)
 ''' 
+
 from collections import Counter
 import pysbd
-from math import floor
 import spacy
 import neuralcoref
 import spacy.cli
@@ -24,29 +20,55 @@ import spacy.cli
 import math
 import numpy as np
 import os
-# import tensorflow_hub as hub
-from sklearn.metrics.pairwise import cosine_similarity
 
 spacy.cli.download('en_core_web_lg')
 nlp = spacy.load('en_core_web_lg')
 neuralcoref.add_to_pipe(nlp)
 
-def paragraph(text,model,similarity_threshold=0.27,word_threshold = 20):
+from gensim.models.wrappers import FastText
+from gensim.models import FastText
+import re
+from fse.models import Average
+from fse import IndexedList
+import time
+import logging
+
+logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
+
+import warnings
+warnings.filterwarnings("ignore")
+
+def modify(string):
+    return re.sub('[^A-Za-z0-9]+', ' ', string).strip().lower().split()
+
+def sentence_similarity(los):
+    sentences = [modify(i) for i in los]
+    ft = FastText(sentences, min_count=1,size=12,workers=4)
+
+    model = Average(ft)
+    model.train(IndexedList(sentences),update=True,report_delay=10,queue_factor=4)
+
+    res_similar = []
+    for i in range(len(los)-1):
+        res_similar.append(model.sv.similarity(i,i+1))
+        
+    return res_similar
+
+def paragraph(text,similarity_threshold=0.35,word_threshold = 20):
     # Sentence Boundary Detection
     seg = pysbd.Segmenter(language="en", clean=True)
     sentences = seg.segment(text) # List of sentences as string
     # print("Number of sentences : ",len(res))
-
-    # Sentence Similarity : USE - Universal Sentence Encoder
-    embedding = model(sentences)
-    similarity = cosine_similarity(embedding, embedding)
+    
+    # Sentence Similarity
+    res_similar = sentence_similarity(sentences)
     
     para = ''
-    n = len(similarity)
+    n = len(res_similar)
     for i in range(n-1):
         first = sentences[i]
         second = sentences[i+1]
-        similar = similarity[i][i+1]
+        similar = res_similar[i]
         similar = round(similar,2)
         # print("Sentence ",i,',',i+1," : ",similar)
         
@@ -97,7 +119,8 @@ def GenerateTitle(i):
     common_wordsADJ = word_freqADJ.most_common(10)
     maxcount = common_words[0][1]
     Range = min(len(common_wordsNoun),len(common_wordsADJ))
-
+    title2 = ''
+    title1 = ''
     for j in range(Range):
         title2 = common_wordsADJ[j][0]+" "+common_wordsNoun[j][0]
         if title2 in i:
@@ -118,13 +141,20 @@ def GenerateTitle(i):
     title = [common_wordsNoun[0][0]]
     title = ' '.join(title)
     # print("Noun Title : ",title)
-
-    if title1 != '' : 
-        return title1
     
-    elif title != '':
+    #title - phrases
+    #title1 - single word
+    #title2 - adj + noun title
+    
+    if len(title) >= 5 and title != '' : 
         return title
+    
+    elif len(title1) >= 5 and title1 != '':
+        return title1
 
+    elif len(title2) >= 5 and title2 != '':
+        return title2
+    
     else:
         return ''
 
@@ -148,7 +178,8 @@ def get_titles_paras(list_para,sentence_threshold = 5):
         if len(res) >= sentence_threshold:
             # print(len(res))
             heading = GenerateTitle(in_para).strip().upper()
-            title.append((heading,in_para))
+            if heading != '':
+                title.append((heading,in_para))
             in_para = ''
 
         i+=1
@@ -164,13 +195,9 @@ def get_titles_paras(list_para,sentence_threshold = 5):
 
     return title
 
-
 if __name__ == '__main__':
-    module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
-    model = hub.load(module_url)
-    
     text = input("Enter transcript : ")
-    list_para = paragraph(text,model)
+    list_para = paragraph(text)
+    # print(list_para)
     title_para = get_titles_paras(list_para)
-
     print(title_para)

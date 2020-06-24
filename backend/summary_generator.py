@@ -14,14 +14,15 @@ def summary(text,percentage):
     summarizer_LexRank = LexRankSummarizer(stemmer)
     summarizer_LexRank.stop_words = get_stop_words(LANGUAGE)
     res=[]
-    count=0
     for sentence in summarizer_LexRank(parser.document, SENTENCES_COUNT):    
         res.append(str(sentence))
-        count+=1
-        if(count==4):
-            res.append("\n")
-            count=0
-    return '\n'.join(res)
+        res.append(" ")
+    
+    final_summ = ''.join(res)
+    with open("summary.txt","w",encoding="utf-8") as f:
+            f.write(final_summ)
+            
+    return final_summ
 
 
 #Driver Code
