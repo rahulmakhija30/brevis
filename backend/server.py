@@ -7,10 +7,12 @@ from paragraph_headings import paragraph,get_titles_paras
 from notes import add_picture
 from web_scraping import web_scrape
 from flask import Flask, request,jsonify,send_file
+from flask_socketio import SocketIO, emit,send
 from bs4 import BeautifulSoup as bs
 from zipfile import ZipFile
 
 import requests
+import re
 import os.path
 import operator
 import paragraph_headings
@@ -18,9 +20,10 @@ import notes
 import io
 import os
 import pytesseract
+from flask_cors import CORS
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 import logging
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
@@ -29,6 +32,16 @@ import warnings
 warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app,cors_allowed_origins='*',timeout=3600000,ping_timeout=3600,ping_interval=1800)
+#socketio = SocketIO(app,cors_allowed_origins='*',timeout=3600000)
+print("This is socketio",socketio)
+#CORS(app)
+
+app.debug=True
+
+app.host='localhost'
+
 
 output=0
 path=""
@@ -45,7 +58,7 @@ def generate(data):
 	global json_result
 	global keywords
 	global text
-    global result
+	global result
     
     # Transcription and Cleaning
 	text = youtube_transcribe(video_url)
@@ -66,28 +79,13 @@ def generate(data):
 	fh.write(result)
 	fh.close()
     
-	#with ZipFile('brevis_notes2.zip','w') as zip:
-	#	print("Writing zip")
-	#	zip.write("summary.txt") 
-	#	zip.write("keywords.txt")
-	#zip.close()
-	#path=os.path.abspath("brevis_notes2.zip")
-	
-	# Keyframe Extraction
-	#Image_Processing(video_url,keywords)
-	#print("Images Extracted in 'out' folder")
-	    
-	# Text Recognition And Extraction
-	#text_recognition()
-	#print("Cropped Text Extracted in 'crop' folder")
-
 def gen():
 	global video_url
 	global keywords
 	global path
 	global json_result
 	global text
-    global result
+	global result
     
     # Keyframe Extraction (Output : 'out' folder)
 	Image_Processing(video_url,keywords)
@@ -95,9 +93,9 @@ def gen():
     
     # Paragraph and Headings (Output : paragraph_headings.txt)    
 	list_para = paragraph(result)
-    title_para = get_titles_paras(list_para)
+	title_para = get_titles_paras(list_para)
     
-    # Final Notes - To be added (Refer : main.py)
+    #Final Notes - To be added (Refer : main.py)
 	add_picture(video_url,json_result)
 	print("Notes Generated")
 	
@@ -107,9 +105,15 @@ def gen():
 		zip.write("Brevis-Notes.docx") 
 	zip.close()
 	path=os.path.abspath("brevis_notes.zip")
-	
 
-	
+@socketio.on('connect')
+def test_connect():
+	print("connected")
+	emit('my response', {'data': 'Connected'})
+
+@socketio.on('disconnect')
+def test_disconnect():
+    print('Client disconnected')
 
 
 @app.route('/result',methods=['GET','POST'])
@@ -124,14 +128,14 @@ def result():
    
 	video_url = link
 
-	content = requests.get(video_url)
+	"""content = requests.get(video_url)
 
 	soup = bs(content.content, "html.parser")
 
-	"""cards=(soup.find_all("ul", attrs={'class', 'watch-extras-section'}))
+	cards=(soup.find_all("ul", attrs={'class', 'watch-extras-section'}))
 
 	for card in cards:
-		x=card.find_all("ul", attrs={'class', 'content watch-info-tag-list'})"""
+		x=card.find_all("ul", attrs={'class', 'content watch-info-tag-list'})
 
 	transcripts=(soup.find_all("div",attrs={'class','hid'}))
 
@@ -148,29 +152,38 @@ def result():
 		output=0
 	#else:
 		#output=-1
-	#print(output)
+	#print(output)"""
+	if(re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url)):
+		output=1
+	else:
+		output=0
 	return " "
 
 @app.route('/res',methods=['GET','POST'])
 def res():
 	return jsonify({'result':output})
     
-@app.route('/download',methods=['GET','POST'])
-def download():
+
+@socketio.on('event1')
+def download(x):
 	global output
-	x=request.get_json()
 	data=x['value']
-	if(output ==1):
+	print(data)
+	if(output==1):
 		generate(data)
 	print(json_result)
-	return jsonify(json_result)
-@app.route('/down',methods=['GET','POST'])
-def down():
+	#emit('myresponse',{'data':'generate'},callback=ack)
+	#send("done")
+	emit('response1',json_result)
+	print("sent")
+
+@socketio.on('event2')
+def down(z):
 	global output
 	if(output==1):
-		print("in down")
+		print("in event2")
 		gen()
-	return jsonify({'result':output})
+	emit('response2',{'task':'done'})
 		
 	
 @app.route('/send/<x>',methods=['GET','POST'])
@@ -187,5 +200,5 @@ def send(x):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app)
 

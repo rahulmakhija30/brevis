@@ -20,7 +20,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 if __name__ == '__main__':
     

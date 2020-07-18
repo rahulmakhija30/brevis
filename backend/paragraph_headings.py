@@ -44,9 +44,9 @@ def modify(string):
 def sentence_similarity(los):
     sentences = [modify(i) for i in los]
     ft = FastText(sentences, min_count=1,size=12,workers=4)
-
     model = Average(ft)
     model.train(IndexedList(sentences),update=True,report_delay=10,queue_factor=4)
+
 
     res_similar = []
     for i in range(len(los)-1):

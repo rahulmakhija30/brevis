@@ -7,6 +7,9 @@ import './Preview.css'
 import {Link,NavLink} from 'react-router-dom'
 import LoadingSpinner from './LoadingSpinner'
 import Collapsible from './collapsible'
+import io from 'socket.io-client'
+
+const socket=io('http://localhost:5000',{transports:['websocket'],pingTimeout:3600000,pingInterval:180000});
 
 
 class Preview extends React.Component{ 
@@ -23,7 +26,30 @@ class Preview extends React.Component{
         });
       }
 
-    handleSubmit = async() => {
+      setSocketListeners(){
+        console.log("listening")
+        socket.on('response1',(json_result)=>{
+        console.log("in response")
+        console.log(json_result);
+        this.setState({
+          showdownload:true,
+          scrape:json_result
+        });
+        socket.emit('event2','junkdata')
+        
+        }
+
+        )
+        socket.on('response2',(resp)=>{
+          console.log(resp)
+          this.setState({downloadresponse:true})
+          //document.getElementById('LoadingMessage').style.visibility = "hidden";
+        })
+      }
+      componentDidMount(){
+        this.setSocketListeners()
+      }
+    handleSubmit =() => {
         this.setState({
           loading:true
         })
@@ -31,19 +57,21 @@ class Preview extends React.Component{
         document.getElementById('Inputfield').style.visibility = "hidden";
         document.getElementById('Preview').disabled=true;
         document.getElementById('Inputfield').disabled=true;
-        let response= await axios.post('/download',this.state);
-        console.log(response);
-        const scrape=response.data;
-        console.log({scrape});
-        this.setState({
-            showdownload:true,
-            scrape:scrape,
-            loading: false
-        })
-        let res= await axios.get('/down');
-        console.log({res})
-        this.setState({downloadresponse:true})
-        document.getElementById('LoadingMessage').style.visibility = "hidden";
+
+        socket.emit('event1',this.state)
+        //let response= await axios.post('/download',this.state);
+        //console.log(response);
+        //const scrape=response.data;
+        //console.log({scrape});
+        //this.setState({
+          //  showdownload:true,
+            //scrape:scrape,
+           // loading: false
+        //})
+        //let res= await axios.get('/down');
+        //console.log({res})
+        //this.setState({downloadresponse:true})
+        //document.getElementById('LoadingMessage').style.visibility = "hidden";
       }
     render(){
         let download=null

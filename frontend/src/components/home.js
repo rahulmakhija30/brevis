@@ -42,7 +42,7 @@ class Home extends React.Component {
               });
               if(response.data.result==0)
               {
-                document.getElementById('disp').innerHTML='Transcripts for the video do not exist!'
+                document.getElementById('disp').innerHTML='Please check the link again!'
               }
               else{
                 document.getElementById('disp').innerHTML='Not an educational video!'

@@ -40,7 +40,7 @@ def clean(text):
 def modify(string):
     return re.sub('[^A-Za-z0-9]+', ' ', string).strip().lower().split()
 
-def sentence_similarity(text1,text2,similarity_threshold=0.35):
+def sentence_similarity(text1,text2,similarity_threshold=0.50):
     sentences = [modify(text1),modify(text2)]
     ft = FastText(sentences, min_count=1,size=12,workers=4)
 
@@ -114,8 +114,9 @@ def get_title(url):
 def add_picture(url,scrape_results):
         urlID = url.partition('https://www.youtube.com/watch?v=')[-1]
         transcript = YouTubeTranscriptApi.get_transcript(urlID)
-        vid_title=get_title(url)
-        vid_title="Notes on " + vid_title
+        #vid_title=get_title(url)
+        #vid_title="Notes on " + vid_title
+        vid_title="title"
 
         f1=open('paragraph_headings.txt',encoding="utf-8")
         summary=f1.read()
@@ -151,6 +152,7 @@ def add_picture(url,scrape_results):
                                         t1 = clean(text)
                                         t2 = clean(paras[index][0])
                                         if((t1 in t2) or sentence_similarity(t1,t2)):
+                                        #if((t1 in t2)):
                                                 if(filename not in paras[index][1]):
                                                         # print(filename)
                                                         paras[index][1].append(filename)
@@ -248,11 +250,12 @@ def add_picture(url,scrape_results):
         document.save('Brevis-Notes.docx')
         if os.path.exists('out'):
             shutil.rmtree('out')
-        # os.remove("video.mp4")
+        #os.remove("video.mp4")
         #f.close()
 
 if __name__ == "__main__":
-    keywords = ['powers decrease integrals increase', 'remember integrals increase powers', 'big theoretical ball', 'conversely derivatives decrease', 'avoids common errors', '2x squared plummy constant', 'varies directly find', 'minus sign hangs', 'leave fractional indices', 'negative number son', 'fraction sin commons', 'nice easy numbers', 'question forces find', 'constant integration flying', 'leave negative indices']
-    url = "https://www.youtube.com/watch?v=1a8d3rWQPhg"
+    keywords = ['natural language processing techniques', 'ali wong stays generally positive', 'called naive bayes', 'label sand outputs', 'rule based technique', 'good starting point', 'similar comedians heirlooms', 'generally pretty positive', 'great torso show', 'called text blob', 'called sentiment analysis', 'polarity score assigned', 'import text blob', 'videos sentiment analysis', 'calculating sentiment analysis']
+
+    url = "https://www.youtube.com/watch?v=N9CT6Ggh0oE"
     s=web_scrape(keywords)
     add_picture(url,s)
