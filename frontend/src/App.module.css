@@ -1,0 +1,10 @@
+.center{
+    text-align: center;
+}
+
+.brevisHeading{
+    letter-spacing: 0.025em;
+    color: #0067C7;
+    font-weight: bolder !important;
+    font-family: 'Palanquin' , sans-serif !important;
+}

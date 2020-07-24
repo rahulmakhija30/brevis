@@ -1,0 +1,110 @@
+:root{
+  --transition-time: 0.5s; 
+}
+
+.mysidenav {
+    height: 100%;
+    width: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  .DarkMode{
+    transition: var(--transition-time);
+    background-color: #3D3E47;
+  }
+
+  .LightMode{
+    transition: var(--transition-time);;
+      background-color: #E5DCE5;
+  }
+
+  .button:hover{
+      background-color: transparent !important;
+  }
+
+  .about{
+    width: 30px;
+    height: 30.87px;
+    margin-left: 7px;
+    margin-top: 8px;
+    margin-bottom: auto;
+    transition: transform 0.4s;
+  }
+
+  .about:hover{
+      transform: scale(1.3);
+  }
+  
+  .night{
+    width: 25px ;
+    height: 25.87px ;
+    margin-left: 26px;
+    margin-top: 240%;
+    filter: contrast(100%);
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+  
+  .mysidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+  }
+  
+  .mysidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  .main {
+    margin-left: 80px; /* Same as the width of the sidenav */
+    padding: 0px 10px;
+  }
+
+  .popper{
+      min-width:70px;
+      text-align: center;
+      font-size: 12px !important;
+  }
+  
+  @media screen and (max-height: 450px) {
+    .mysidenav {padding-top: 15px;}
+    .mysidenav a {font-size: 18px;}
+  }
+  
+  .dot {
+    height: 54px;
+    width: 54px;
+    background-color: grey; 
+    background-size: 54px 54px;
+    position: center;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 9.5px;
+    margin-bottom: 127px;
+  }
+
+  .invert{
+    transition: var(--transition-time);;
+      filter:invert(100%)
+  }
+
+  .BodyDarkMode{
+    transition: var(--transition-time);;
+    background-color: #161625;
+  }
+
+  .BodyLightMode{
+    transition: var(--transition-time);;
+    background-color: #F0ECEC;
+  }
+
+  .colorwhite{
+    transition: var(--transition-time);;
+    color:#8c98a3 !important;
+  }
