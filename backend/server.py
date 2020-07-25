@@ -167,7 +167,8 @@ def res():
 @socketio.on('event1')
 def download(x):
 	global output
-	data=x['value']
+	print(x)
+	data=x['type']
 	print(data)
 	if(output==1):
 		generate(data)

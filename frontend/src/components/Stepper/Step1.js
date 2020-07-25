@@ -35,6 +35,7 @@ class Step1 extends React.Component{
 
     componentDidMount=()=>{
         DarkStep1()
+        console.log(this.state)
     }
 
     render(){
@@ -62,6 +63,7 @@ class Step1 extends React.Component{
             )
         }
         else if(this.state.open){
+            console.log(this.state)
             return(
                 <Backdrop open={this.state.open} className={StepStyle.backdrop}>
                     <Loader></Loader>

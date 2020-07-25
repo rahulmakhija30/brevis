@@ -90,6 +90,7 @@ class StepComponent extends React.Component{
     url:null,
     validurl:false,
     scrape:"",
+    type:""
   }
 
   IsValidURL=(event)=> {
@@ -98,26 +99,30 @@ class StepComponent extends React.Component{
       .then(res=>{
         axios.get('/res')
         .then(response=>{
-        
+        console.log(response)
           let download=null;
           if(response.data.result==1)
             {
               this.setState({
                 validurl:true,
+                activestep:1
               });
               // document.getElementById('disp').innerHTML=""
           }
           else{
+            alert("Please enter a valid link! ");
               this.setState({
                 validurl:false,
+                activestep:0
               });
-              if(response.data.result==0)
-              {
+              console.log(this.state)
+              //if(response.data.result==0)
+              //{
                 // document.getElementById('disp').innerHTML='Transcripts for the video do not exist!'
-              }
-              else{
+              //}
+              //else{
                 // document.getElementById('disp').innerHTML='Not an educational video!'
-              }
+              //}
           } 
           
         },(error) => {
@@ -136,20 +141,26 @@ class StepComponent extends React.Component{
         }
       }
     );
+    console.log(this.state)
   }
 
   gotostep1= () =>{
     this.setState({activestep:0})
   }
 
-  gotostep2= () =>{
+  gotostep2=() =>{
     this.IsValidURL()
-    if(this.state.validurl){
-    this.setState({activestep:1})}
+    //if(this.state.validurl){
+    //this.setState({activestep:1})}
+    console.log(this.state)
   }
+  
 
-  gotostep3= () =>{
-    this.setState({activestep:2})
+  gotostep3= (value) =>{
+    this.setState({activestep:2,
+      type:value
+    })
+    console.log(this.state)
   }
 
   getURL = (url) =>{
@@ -167,7 +178,7 @@ class StepComponent extends React.Component{
       case 1:
         return <Step2 onNext={this.gotostep3} url={this.state.url} onPrevious={this.gotostep1} onScrapeContent={this.getScrapeContent}/>;
       case 2:
-        return <Step3/>;
+        return <Step3 data={this.state} onScrapeContent={this.getScrapeContent}/>;
       default:
         return 'Unknown stepIndex';
     }
