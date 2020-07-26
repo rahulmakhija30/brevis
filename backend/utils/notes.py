@@ -66,19 +66,19 @@ class Notes:
         else:
             return False
 
-    def add_hyperlink(self, paragraph, text, color, underline):
+    def add_hyperlink(self, paragraph, text, place_url, color, underline):
         """
         A function that places a hyperlink within a paragraph object.
 
         :param paragraph: The paragraph we are adding the hyperlink to.
-        :param url: A string containing the required url
+        :param place_url: A string containing the required url
         :param text: The text displayed for the url
         :return: The hyperlink object
         """
 
         # This gets access to the document.xml.rels file and gets a new relation id value
         part = paragraph.part
-        r_id = part.relate_to(self.url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
+        r_id = part.relate_to(place_url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
 
         # Create the w:hyperlink tag and add needed values
         hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
@@ -252,7 +252,7 @@ class Notes:
             for d in google_links:
                     p.add_run(str(link_no)+".> ")
                     link_no+=1
-                    self.add_hyperlink(p,d["title"],"0000FF",True)
+                    self.add_hyperlink(p,d["title"],d["linktopage"],"0000FF",True)
                     p.add_run().add_break()
             h=document.add_heading("",level=2)
             h.add_run("Youtube References :").underline=True
@@ -262,7 +262,7 @@ class Notes:
             for d in youtube_links:
                     p.add_run(str(link_no)+".> ")
                     link_no+=1
-                    self.add_hyperlink(p,d["title"],"0000FF",True)
+                    self.add_hyperlink(p,d["title"],d["linktopage"],"0000FF",True)
                     p.add_run().add_break()
 
             #Adding copyright notice to notes
@@ -277,7 +277,7 @@ class Notes:
             if os.path.exists('out'):
                 shutil.rmtree('out')
 
-            generated_files = ["transcript.txt","paragraph_headings.txt","summary.txt"]
+            generated_files = ["keywords.txt","transcript.txt","paragraph_headings.txt","summary.txt"]
 
             for i in generated_files:
                 if os.path.exists(i): os.remove(i)
