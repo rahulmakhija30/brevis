@@ -68,9 +68,10 @@ class Step3 extends React.Component{
         if(this.state.disabled){
             var googleList=null;
             var youtubeList=null;
+            var wikilist=null;
         }
         else{
-        const {google,youtube}=this.state.scrape;
+        const {google,youtube,wikipedia}=this.state.scrape;
         var googleList=google.map(element=>{
           return(
             <div key={element.linktopage}>
@@ -82,6 +83,14 @@ class Step3 extends React.Component{
           return(
             <div key={element.linktopage}>
               <a href={element.linktopage}>{element.title}</a>
+            </div>
+          )
+        })
+        var wikilist=wikipedia.map(element=>{
+          return(
+            <div key={element.title}>
+              <p><b>{element.title}</b></p>
+          <p>{element.definition}</p>
             </div>
           )
         })
@@ -105,8 +114,7 @@ class Step3 extends React.Component{
                     </AccordionSummary>
                     <AccordionDetails>
                     <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                        sit amet blandit leo lobortis eget.
+                       {wikilist}
                     </Typography>
                     </AccordionDetails>
                 </Accordion>
