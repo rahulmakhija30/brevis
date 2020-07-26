@@ -1,9 +1,11 @@
 #Importing required modules
 import RAKE
 import operator
+import textrazor
+textrazor.api_key = "0b9fcea7af6471cbae27b0a877229d23751fbfd2d4961719a3dcdad3"
 from sys import exit
 class KeywordsExtractor:
-    def __init__(self,text,num_keywords):
+    def __init__(self,text,num_keywords=10):
         self.text=text
         self.num_keywords=num_keywords
         
@@ -26,11 +28,31 @@ class KeywordsExtractor:
             exit(1)
         self.keywords=self.keywords[:self.num_keywords]
         return self.keywords
+        
+    def ExtractScrapeKeywords(self):
+        #TextRazor API Extraction
+        client = textrazor.TextRazor(extractors=["entities"])
+        response = client.analyze(self.text)
 
+        entities = list(response.entities())
+        entities.sort(key=lambda x: x.relevance_score, reverse=True)
+        seen = set()
+        self.scrape_keywords=list()
+        for entity in entities:
+            if entity.id not in seen:
+                self.scrape_keywords.append(entity.id)
+                seen.add(entity.id)
+        if(len(self.scrape_keywords) > 10):
+            self.scrape_keywords = self.scrape_keywords[:10]
+        return self.scrape_keywords
+      
     
 if __name__ == "__main__":
 	text=input("Enter text : ")
 	num_keywords=int(input("Enter number of keywords to be extracted : "))
 	words=KeywordsExtractor(text,num_keywords)
 	keywords = words.ExtractKeywords()
+	scrape_keywords=words.ExtractScrapeKeywords()
 	print("Keywords : ",keywords)
+	print()
+	print("Scrape Keywords : ",scrape_keywords)
