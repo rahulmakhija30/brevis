@@ -24,11 +24,10 @@ cd frontend
 npm start
 ```
 
-### **Backend**
-Testing backend
+### **Testing Backend**
 
 ```
-Install modules mentioned in requirements.txt
+Install modules mentioned in requirements.md
 ```
 
 Run the command to test
