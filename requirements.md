@@ -56,6 +56,7 @@ Flask-SocketIO==4.3.0
 Flask-Cors==3.0.7
 eventlet==0.25.2
 Werkzeug==0.15.2
+textrazor==1.4.0
 ```
 
 ### *Additional Models :-*

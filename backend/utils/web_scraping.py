@@ -93,7 +93,7 @@ class Scrapper:
 		assert isinstance(query, str) #Search term must be a string
 		assert isinstance(number_results, int) #Number of results must be an integer
 		escaped_search_term = query.replace(' ', '+')
-		google_url = "https://www.google.com/search?q={}&num={}".format(query,number_results+1)
+		google_url = "https://www.google.com/search?q={}&num={}".format(query,1)
 		response = requests.get(google_url, {"User-Agent": ua.random})
 		soup = BeautifulSoup(response.text, "html.parser")
 		result_div = soup.find_all('div', attrs = {'class': 'ZINbbc'})
@@ -134,7 +134,7 @@ class Scrapper:
 		assert isinstance(query, str) #Search term must be a string
 		assert isinstance(number_results, int) #Number of results must be an integer
 		escaped_search_term = query.replace(' ', '+')
-		google_url = "https://www.google.com/search?q={}&num={}".format(query+"+site:youtube.com",number_results+1)
+		google_url = "https://www.google.com/search?q={}&num={}".format(query+"+site:youtube.com",1)
 		#print(google_url)
 		response = requests.get(google_url, {"User-Agent": ua.random})
 		soup = BeautifulSoup(response.text, "html.parser")
