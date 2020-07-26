@@ -86,6 +86,4 @@ sudo apt install ffmpeg
 
 **Visit Here (This is my entire list of dependencies)** 
 
-```
-https://drive.google.com/file/d/1K4THvob9_ASuSqzgbUp-7plXA2AeaT26/view?usp=sharing
-```
+> https://drive.google.com/file/d/1K4THvob9_ASuSqzgbUp-7plXA2AeaT26/view?usp=sharing
