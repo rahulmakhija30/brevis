@@ -18,8 +18,8 @@ import math
 import numpy as np
 import os
 
-spacy.cli.download('en_core_web_lg')
-nlp = spacy.load('en_core_web_lg')
+spacy.cli.download('en_core_web_sm')
+nlp = spacy.load('en_core_web_sm')
 neuralcoref.add_to_pipe(nlp)
 
 from gensim.models.wrappers import FastText
