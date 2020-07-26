@@ -37,7 +37,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 print("All Modules Imported Sucessfully")
 
@@ -71,6 +71,7 @@ def generate(data):
 	global keywords
 	global text
 	global summary_result
+	global scrape_json
     
 	start = time.perf_counter()
 
@@ -84,15 +85,18 @@ def generate(data):
 	num_keywords = 10
 	words = KeywordsExtractor(text,num_keywords)
 	keywords = words.ExtractKeywords()
+	scrape_keywords = words.ExtractScrapeKeywords()
 	print(f'\nKeywords:\n {keywords}')
+	print(f'\nScrape Keywords:\n {scrape_keywords}')
 
 	fp=open("keywords.txt","w")
 	fp.write("\n".join(keywords))
 	fp.close()
 	
-	scraped_results = Scrapper(keywords,2,2,2)
+	scraped_results = Scrapper(scrape_keywords,2,2,2)
 	json_result = scraped_results.web_scrape()
-
+	#print(json_result)
+	scrape_json = json_result
 
 	# Summarization    
 	summ = Summarizer()
@@ -117,6 +121,7 @@ def gen():
 	global json_result
 	global text
 	global summary_result
+	global scrape_json
 
 	start = time.perf_counter()
     
@@ -137,18 +142,18 @@ def gen():
 
 	# Final Notes (Includes Web Scraping) 
 	print("\nGenerating Final Notes\n")   
-	scraped_results = Scrapper(keywords,2,2,2)
-	s = scraped_results.web_scrape()
-	notes = Notes(video_url,s)
+	#scraped_results = Scrapper(scrape_keywords,2,2,2)
+	#s = scraped_results.web_scrape()
+	notes = Notes(video_url,scrape_json)
 	notes.generate_notes()
 	print("\nBrevis-Notes.docx Generated\n")
 	
     
-	with ZipFile('brevis_notes.zip','w') as zip:
+	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
 		zip.write("Brevis-Notes.docx") 
 	zip.close()
-	path=os.path.abspath("brevis_notes.zip")
+	path=os.path.abspath("Brevis_Notes.zip")
 
 	finish = time.perf_counter()
 
@@ -244,7 +249,7 @@ def down(z):
 @app.route('/send/<x>',methods=['GET','POST'])
 def send(x):
 	global path
-	return send_file(path,attachment_filename='brevis_notes.zip')
+	return send_file(path,attachment_filename='Brevis_Notes.zip')
 
 
 
