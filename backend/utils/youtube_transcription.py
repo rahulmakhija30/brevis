@@ -16,114 +16,118 @@ from clean_transcript import CleanTranscript
 from clean_transcript import *
 
 class MyException(Exception):
-    pass
+	pass
 
 try:
-    if not(os.system("ffmpeg -version")):
-        print("ffmpeg exists")
-    else:
-        raise MyException("ffmpeg not found")
+	if not(os.system("ffmpeg -version")):
+		print("ffmpeg exists")
+	else:
+		raise MyException("ffmpeg not found")
 except Exception as e:
-    print(e)
-    print("Install ffmpeg from : https://www.ffmpeg.org/download.html")
-    
+	print(e)
+	print("Install ffmpeg from : https://www.ffmpeg.org/download.html")
+	
 
 class YoutubeTranscribe:
-    
-    def __init__(self,url):
-        self.url = url
-        
-        # Format URL
-        first = 'https://www.youtube.com/watch?v='
-        temp = url.partition(first)
-        self.url = first + temp[-1][:11]
-        
-        
-    def youtube_transcribe(self):
-        text = ''
-        try:
-            urlID = self.url.partition('https://www.youtube.com/watch?v=')[-1]
+	
+	def __init__(self,url):
+		self.url = url
+		
+		# Format URL
+		first = 'https://www.youtube.com/watch?v='
+		temp = url.partition(first)
+		self.url = first + temp[-1][:11]
+		
+		
+	def youtube_transcribe(self):
+		text = ''
+		
+		if not os.path.exists('res'):
+			os.mkdir('res')
+			
+		try:
+			urlID = self.url.partition('https://www.youtube.com/watch?v=')[-1]
 
-            transcript_list = YouTubeTranscriptApi.list_transcripts(urlID)
+			transcript_list = YouTubeTranscriptApi.list_transcripts(urlID)
 
-            t = list(transcript_list)
+			t = list(transcript_list)
 
-            for i in range(len(t)):
-                if t[i].language_code == 'en':
+			for i in range(len(t)):
+				if t[i].language_code == 'en':
 
-                    # Manually Created
-                    if not(t[i].is_generated):
-                        print("Got Manually Created Transcript")
-                        data = t[i].fetch()
-                        res=''
-                        for i in data:
-                            res = res + ' ' + i['text']
+					# Manually Created
+					if not(t[i].is_generated):
+						print("Got Manually Created Transcript")
+						data = t[i].fetch()
+						res=''
+						for i in data:
+							res = res + ' ' + i['text']
 
-                        print("Cleaning Manually Created Transcript")
-                        text = res.replace('\n',' ')
-                        text = text.strip()
-                        break
+						print("Cleaning Manually Created Transcript")
+						text = res.replace('\n',' ')
+						text = text.strip()
+						break
 
-                    # Auto-generated 
-                    if i == len(t)-1 and t[i].is_generated:
-                        print("Got Auto-generated Transcript")
-                        data = t[i].fetch()
-                        res=''
-                        for i in data:
-                            res += i['text']
+					# Auto-generated 
+					if i == len(t)-1 and t[i].is_generated:
+						print("Got Auto-generated Transcript")
+						data = t[i].fetch()
+						res=''
+						for i in data:
+							res += i['text']
 
-                        print("Cleaning Auto-generated Transcript")
-                        text = res.replace('\n',' ')
-                        clean_trans=CleanTranscript(text)
-                        clean_trans.add_punctuations(punct_model)
-                        clean_trans.correct_mistakes(lang_model)
-                        text = clean_trans.text
+						print("Cleaning Auto-generated Transcript")
+						text = res.replace('\n',' ')
+						clean_trans=CleanTranscript(text)
+						clean_trans.add_punctuations(punct_model)
+						clean_trans.correct_mistakes(lang_model)
+						text = clean_trans.text
 
-            text = re.sub("[\[].*?[\]]", "", text).strip()
+			text = re.sub("[\[].*?[\]]", "", text).strip()
 
-            with open("transcript.txt","w",encoding="utf-8") as f:
-                f.write(text)
+			with open(os.path.join('res',"transcript.txt"),"w",encoding="utf-8") as f:
+				f.write(text)
 
-            print("Transcription and Cleaning Done!!")
-            return text
+			print("Transcription and Cleaning Done!!")
+			return text
 
-        # No Transcript
-        except NoTranscriptAvailable as t:
-            print("No Transcript Available - Trying to generate one!!")
-            st = SpeechToText(self.url)
-            text = st.speech_to_text()
+		# No Transcript
+		except NoTranscriptAvailable as t:
+			print("No Transcript Available - Trying to generate one!!")
+			st = SpeechToText(self.url)
+			text = st.speech_to_text()
 
-        except TranscriptsDisabled as s:
-            print("Subtitles are disabled for this video - Trying to generate one!!")
-            st = SpeechToText(self.url)
-            text = st.speech_to_text()
+		except TranscriptsDisabled as s:
+			print("Subtitles are disabled for this video - Trying to generate one!!")
+			st = SpeechToText(self.url)
+			text = st.speech_to_text()
 
-        # Other Errors
-        except VideoUnavailable as v:
-            print("Video is not available")
+		# Other Errors
+		except VideoUnavailable as v:
+			print("Video is not available")
 
-        except ConnectionError as c:
-            print("No Internet")
+		except ConnectionError as c:
+			print("No Internet")
 
-        except Exception as e:
-            traceback.print_exc()
-            print(e)
+		except Exception as e:
+			traceback.print_exc()
+			print(e)
 
-        finally:
-            if text == '': 
-                print("No Transcript")
-                return ''
+		finally:
+			if text == '': 
+				print("No Transcript")
+				return ''
 
-            else: return text
-        
+			else: return text
+		
 if __name__ == '__main__':
-    # Testing
-    # Manually Created Transcript - https://www.youtube.com/watch?v=b_sQ9bMltGU
-    # Auto-generated Transcript - https://www.youtube.com/watch?v=1a8d3rWQPhg&t=3s
-    # No transcript - https://www.youtube.com/watch?v=kthmIlrRswc
-    # Invalid - https://www.youtube.com/channel/UCsFmLpSNJuFzpKqdEj5jeHw
-    # Other - https://www.youtube.com/watch?v=b_sQ9bMltGU&list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG
-    url = input("Enter the URL = ")
-    yt = YoutubeTranscribe(url)
-    text = yt.youtube_transcribe()
-    print(text)
+	# Testing
+	# Manually Created Transcript - https://www.youtube.com/watch?v=b_sQ9bMltGU
+	# Auto-generated Transcript - https://www.youtube.com/watch?v=1a8d3rWQPhg&t=3s
+	# No transcript - https://www.youtube.com/watch?v=kthmIlrRswc
+	# Invalid - https://www.youtube.com/channel/UCsFmLpSNJuFzpKqdEj5jeHw
+	# Other - https://www.youtube.com/watch?v=b_sQ9bMltGU&list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG
+	url = input("Enter the URL = ")
+	yt = YoutubeTranscribe(url)
+	text = yt.youtube_transcribe()
+	print(text)
