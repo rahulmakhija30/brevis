@@ -124,7 +124,7 @@ class Step3 extends React.Component{
                     <Typography>Video Links</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                    <Typography>
+                    <Typography align="left">
                         {youtubeList}
                     </Typography>
                     </AccordionDetails>
@@ -139,7 +139,7 @@ class Step3 extends React.Component{
                     <Typography>Article Links</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                    <Typography>
+                    <Typography  align="left">
                         {googleList}
                     </Typography>
                     </AccordionDetails>

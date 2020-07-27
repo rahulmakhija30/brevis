@@ -35,6 +35,7 @@ class Step1 extends React.Component{
                 alert("Please enter a valid link! ");
                   this.setState({
                     validurl:false,
+                    open:false,
                   });
                   console.log(this.state)
                   //if(response.data.result==0)
@@ -76,8 +77,8 @@ class Step1 extends React.Component{
     handleOnClick = () =>{
         if(this.state.videoType==='Preview')
         {
-            this.IsValidURL()
             this.setState({open:true})
+            this.IsValidURL()
             if(this.state.validurl){
                 this.props.onChange()
                 console.log(this.state)
