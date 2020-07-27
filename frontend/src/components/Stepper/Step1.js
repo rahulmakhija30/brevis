@@ -12,7 +12,57 @@ class Step1 extends React.Component{
     state={
         url:'',
         videoType:'Preview',
-        open:false
+        open:false,
+        validurl:false,
+    }
+
+    IsValidURL=(event)=> {
+        console.log(this.state)
+          axios.post('/result',this.state)
+          .then(res=>{
+            axios.get('/res')
+            .then(response=>{
+            console.log(response)
+              let download=null;
+              if(response.data.result==1)
+                {
+                  this.setState({
+                    validurl:true,
+                  });
+                  // document.getElementById('disp').innerHTML=""
+              }
+              else{
+                alert("Please enter a valid link! ");
+                  this.setState({
+                    validurl:false,
+                  });
+                  console.log(this.state)
+                  //if(response.data.result==0)
+                  //{
+                    // document.getElementById('disp').innerHTML='Transcripts for the video do not exist!'
+                  //}
+                  //else{
+                    // document.getElementById('disp').innerHTML='Not an educational video!'
+                  //}
+              } 
+              
+            },(error) => {
+                if (error) {
+                    console.log(error.name)
+                    // document.getElementById("disp").innerHTML=error.message;
+                }
+              }
+              
+              )
+          },(error) => {
+            
+            if (error) {
+                console.log(error.name)
+                // document.getElementById("disp").innerHTML='Please check the link again!';
+            }
+          }
+        );
+        console.log(this.state)
     }
 
     changetoUpload = (e) =>{
@@ -24,9 +74,15 @@ class Step1 extends React.Component{
     }
 
     handleOnClick = () =>{
-        this.setState({open:true,videoType:''})
-        this.props.onChange()
-        console.log(this.state)
+        if(this.state.videoType==='Preview')
+        {
+            this.IsValidURL()
+            this.setState({open:true})
+            if(this.state.validurl){
+                this.props.onChange()
+                console.log(this.state)
+            }
+        }
     }
 
     handleChange=(event)=> {

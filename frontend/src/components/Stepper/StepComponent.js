@@ -93,65 +93,12 @@ class StepComponent extends React.Component{
     type:""
   }
 
-  IsValidURL=(event)=> {
-    console.log(this.state)
-      axios.post('/result',this.state)
-      .then(res=>{
-        axios.get('/res')
-        .then(response=>{
-        console.log(response)
-          let download=null;
-          if(response.data.result==1)
-            {
-              this.setState({
-                validurl:true,
-                activestep:1
-              });
-              // document.getElementById('disp').innerHTML=""
-          }
-          else{
-            alert("Please enter a valid link! ");
-              this.setState({
-                validurl:false,
-                activestep:0
-              });
-              console.log(this.state)
-              //if(response.data.result==0)
-              //{
-                // document.getElementById('disp').innerHTML='Transcripts for the video do not exist!'
-              //}
-              //else{
-                // document.getElementById('disp').innerHTML='Not an educational video!'
-              //}
-          } 
-          
-        },(error) => {
-            if (error) {
-                console.log(error.name)
-                // document.getElementById("disp").innerHTML=error.message;
-            }
-          }
-          
-          )
-      },(error) => {
-        
-        if (error) {
-            console.log(error.name)
-            // document.getElementById("disp").innerHTML='Please check the link again!';
-        }
-      }
-    );
-    console.log(this.state)
-  }
-
   gotostep1= () =>{
     this.setState({activestep:0})
   }
 
   gotostep2=() =>{
-    this.IsValidURL()
-    //if(this.state.validurl){
-    //this.setState({activestep:1})}
+    this.setState({activestep:1})
     console.log(this.state)
   }
   
