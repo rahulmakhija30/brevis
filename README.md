@@ -1,6 +1,6 @@
 ### *Requirements*
 
-> Refer [**requirements.md**](https://github.com/himanshujain171/brevis/blob/Version-2.0/requirements.md)
+> Refer [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/requirements.md)
 
 
 ### *Dependencies Installation for frontend*
