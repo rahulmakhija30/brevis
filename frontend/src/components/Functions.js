@@ -1,3 +1,6 @@
+import Nav from './Navbar/Nav.module.css'
+import Step from './Stepper/Step.module.css'
+
 var i=0
 
 const Mode = ()=>{
@@ -15,19 +18,19 @@ const Mode = ()=>{
 
     i++;
     if(i%2!==0){
-      element.classList.remove("Nav_LightMode__2VM7G");
-      element.classList.add("Nav_DarkMode__2sqP_");
+      element.classList.remove(Nav.LightMode);
+      element.classList.add(Nav.DarkMode);
       image.src='/static/media/sun.e1edd63e.png';
-      homeicon.classList.add("Nav_invert__3wJdG");
-      suggestionsicon.classList.add("Nav_invert__3wJdG");
-      abouticon.classList.add("Nav_invert__3wJdG");
-      image.classList.add("Nav_invert__3wJdG");
-      document.body.classList.remove("Nav_BodyLightMode__2olZR")
-      document.body.classList.add("Nav_BodyDarkMode__EFIdu")
-      Step1.classList.add('Nav_colorwhite__1dFlw')
-      Step2.classList.add('Nav_colorwhite__1dFlw')
-      Step3.classList.add('Nav_colorwhite__1dFlw')
-      footer.classList.add('Nav_colorwhite__1dFlw')
+      homeicon.classList.add(Nav.invert);
+      suggestionsicon.classList.add(Nav.invert);
+      abouticon.classList.add(Nav.invert);
+      image.classList.add(Nav.invert);
+      document.body.classList.remove(Nav.BodyLightMode)
+      document.body.classList.add(Nav.BodyDarkMode)
+      Step1.classList.add(Nav.colorwhite)
+      Step2.classList.add(Nav.colorwhite)
+      Step3.classList.add(Nav.colorwhite)
+      footer.classList.add(Nav.colorwhite)
       try {
         DarkStep1()
       } catch (error){}
@@ -39,19 +42,19 @@ const Mode = ()=>{
       } catch (error) {}
     }
     else{
-      element.classList.remove("Nav_DarkMode__2sqP_");
-      element.classList.add("Nav_LightMode__2VM7G");
+      element.classList.remove(Nav.DarkMode);
+      element.classList.add(Nav.LightMode);
       image.src='/static/media/night.6048b803.png';
-      homeicon.classList.remove("Nav_invert__3wJdG");
-      suggestionsicon.classList.remove("Nav_invert__3wJdG");
-      abouticon.classList.remove("Nav_invert__3wJdG");
-      image.classList.remove("Nav_invert__3wJdG");
-      document.body.classList.remove("Nav_BodyDarkMode__EFIdu")
-      document.body.classList.add("Nav_BodyLightMode__2olZR")
-      Step1.classList.remove('Nav_colorwhite__1dFlw')
-      Step2.classList.remove('Nav_colorwhite__1dFlw')
-      Step3.classList.remove('Nav_colorwhite__1dFlw')
-      footer.classList.remove('Nav_colorwhite__1dFlw')
+      homeicon.classList.remove(Nav.invert);
+      suggestionsicon.classList.remove(Nav.invert);
+      abouticon.classList.remove(Nav.invert);
+      image.classList.remove(Nav.invert);
+      document.body.classList.remove(Nav.BodyDarkMode)
+      document.body.classList.add(Nav.BodyLightMode)
+      Step1.classList.remove(Nav.colorwhite)
+      Step2.classList.remove(Nav.colorwhite)
+      Step3.classList.remove(Nav.colorwhite)
+      footer.classList.remove(Nav.colorwhite)
       try {
         DarkStep1()
       } catch (error){}
@@ -69,34 +72,34 @@ const Mode = ()=>{
 
 const DarkStep1 = () =>{
   var inputfield = document.getElementById("inputfield")
-  if(document.body.classList.contains("Nav_BodyDarkMode__EFIdu")){
-    inputfield.classList.add('Step_Darkinput__1sFOK')
+  if(document.body.classList.contains(Nav.BodyDarkMode)){
+    inputfield.classList.add(Step.Darkinput)
   }
   else{
-    inputfield.classList.remove('Step_Darkinput__1sFOK')
+    inputfield.classList.remove(Step.Darkinput)
   }
 }
 
 const DarkLoader = () =>{
   var loader = document.getElementById("loader")
-  if(document.body.classList.contains("Nav_BodyDarkMode__EFIdu")){
-    loader.classList.add('Step_Darkinput__1sFOK')
+  if(document.body.classList.contains(Nav.BodyDarkMode)){
+    loader.classList.add(Step.Darkinput)
   }
   else{
-    loader.classList.remove('Step_Darkinput__1sFOK')
+    loader.classList.remove(Step.Darkinput)
   }
 }
 
 const DarkStep2 = () =>{
   var dropdown = document.getElementById("dropdown")
   var other_video = document.getElementById('other-video')
-  if(document.body.classList.contains("Nav_BodyDarkMode__EFIdu")){
-    dropdown.classList.add('Step_Darkinput__1sFOK')
-    other_video.classList.add('Step_Darkinput__1sFOK')
+  if(document.body.classList.contains(Nav.BodyDarkMode)){
+    dropdown.classList.add(Step.Darkinput)
+    other_video.classList.add(Step.Darkinput)
   }
   else{
-    dropdown.classList.remove('Step_Darkinput__1sFOK')
-    other_video.classList.remove('Step_Darkinput__1sFOK')
+    dropdown.classList.remove(Step.Darkinput)
+    other_video.classList.remove(Step.Darkinput)
   }
 }
 
