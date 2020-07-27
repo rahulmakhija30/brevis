@@ -1,8 +1,8 @@
 import React from 'react'
-import {Navbar,Footer,StepComponent} from './Components'
+import {Navbar,Footer,StepComponent} from './components'
 import { Container } from '@material-ui/core'
 import { Typography } from '@material-ui/core'
-import Home from './Components/Home/Home'
+import Home from './components/Home/Home'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 
 class App extends React.Component{
