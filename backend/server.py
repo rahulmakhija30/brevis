@@ -29,6 +29,7 @@ import io
 import os
 import pytesseract
 import time
+import shutil
 
 import logging
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
@@ -89,9 +90,9 @@ def generate(data):
 	print(f'\nKeywords:\n {keywords}')
 	print(f'\nScrape Keywords:\n {scrape_keywords}')
 
-	fp=open("keywords.txt","w")
-	fp.write("\n".join(keywords))
-	fp.close()
+	# fp=open("keywords.txt","w")
+	# fp.write("\n".join(keywords))
+	# fp.close()
 	
 	scraped_results = Scrapper(scrape_keywords,2,2,2)
 	json_result = scraped_results.web_scrape()
@@ -105,7 +106,7 @@ def generate(data):
 	summary_result = summ.summary(text,percentage)
 	print(f'\nSummary:\n {summary_result}')
 
-	fh=open("summary.txt","w")
+	fh = open(os.path.join('res', "summary.txt"),"w")
 	fh.write(summary_result)
 	fh.close()
 
@@ -129,7 +130,7 @@ def gen():
 	print("\nExtracting Keyframes\n")
 	ip = ImageProcessing(video_url,keywords)
 	ip.img_processing(jump=1000)
-	print(f"\n{len(os.listdir(r'out'))} images extracted in 'out' folder\n")
+	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
 
 
 	# Paragraph and Headings (Output : paragraph_headings.txt)
@@ -151,9 +152,12 @@ def gen():
     
 	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
-		zip.write("Brevis-Notes.docx") 
+		zip.write(os.path.join('res','Brevis-Notes.docx')) 
 	zip.close()
-	path=os.path.abspath("Brevis_Notes.zip")
+	path = os.path.abspath("Brevis_Notes.zip")
+
+	if os.path.exists('res'):
+		shutil.rmtree('res')
 
 	finish = time.perf_counter()
 

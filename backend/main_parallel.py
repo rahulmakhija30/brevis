@@ -17,6 +17,7 @@ import notes
 import io
 import os
 import pytesseract
+import shutil
 
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import ThreadPoolExecutor
@@ -95,6 +96,9 @@ def main():
     notes = Notes(url,level2_results3.result())
     notes.generate_notes()
     print("\nBrevis-Notes.docx Generated\n")
+
+    if os.path.exists('res'):
+	shutil.rmtree('res')
 
     finish = time.perf_counter()
 
