@@ -89,7 +89,7 @@ class Scrapper:
 	def google_scrapper(self,query,number_results=2):
 		"Function to scrape results from Google Search"
 		query = urllib.parse.quote_plus(query) # Format into URL encoding
-		ua = UserAgent()
+		ua = UserAgent(verify_ssl=False)
 		assert isinstance(query, str) #Search term must be a string
 		assert isinstance(number_results, int) #Number of results must be an integer
 		escaped_search_term = query.replace(' ', '+')
@@ -130,7 +130,7 @@ class Scrapper:
 	def youtube_scrapper(self,query,number_results=2):
 		"Function to scrape results from Youtube Search"
 		query = urllib.parse.quote_plus(query) # Format into URL encoding
-		ua = UserAgent()
+		ua = UserAgent(verify_ssl=False)
 		assert isinstance(query, str) #Search term must be a string
 		assert isinstance(number_results, int) #Number of results must be an integer
 		escaped_search_term = query.replace(' ', '+')
