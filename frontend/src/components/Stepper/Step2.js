@@ -11,7 +11,6 @@ class Step2 extends React.Component{
         open: true,
         type:'Both',
         disabled:true,
-        scrape:''
     }
 
     handleChange = (event) => {

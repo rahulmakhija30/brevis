@@ -87,6 +87,7 @@ class Step1 extends React.Component{
 
     handleChange=(event)=> {
         this.props.onURLChange(event.target.value)
+        this.setState({url:event.target.value})
     }
 
     componentDidMount=()=>{

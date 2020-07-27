@@ -88,8 +88,6 @@ class StepComponent extends React.Component{
   state={
     activestep:0,
     url:null,
-    validurl:false,
-    scrape:"",
     type:""
   }
 
