@@ -4,9 +4,6 @@ import { Typography, Backdrop, CircularProgress, FormControl, InputLabel, Select
 import Stepstyle from './Step.module.css'
 import { DarkStep2 } from '../Functions'
 import Loader from '../Loader/Loader'
-//import io from 'socket.io-client'
-
-//const socket=io('http://localhost:5000',{transports:['websocket'],pingTimeout:3600000,pingInterval:180000});
 
 class Step2 extends React.Component{
 
@@ -25,48 +22,13 @@ class Step2 extends React.Component{
         this.setState({open:false,disabled:false})
     }
 
-   // setSocketListeners(){
-     //   console.log("listening")
-       // socket.on('response1',(json_result)=>{
-   //     console.log("in response")
-     //   console.log(json_result);
-    //    this.setState({
-     //     scrape:json_result
-     //   });
-      //  socket.emit('event2','junkdata')
-      //  }
-
-     //   )
-       // socket.on('response2',(resp)=>{
-         // console.log(resp)
-        //  this.setState({downloadresponse:true})
-          //document.getElementById('LoadingMessage').style.visibility = "hidden";
-     //   })
-      //  this.props.onScrapeContent(this.state.scrape)
-   // }
-
     componentDidMount(){
         DarkStep2()
-      //  this.setSocketListeners()
     }
 
     handleOnClick=() => {
         this.props.onNext(this.state.type)
-        //socket.emit('event1',this.state)
         this.setState({open:true})
-        //let response= await axios.post('/download',this.state);
-        //console.log(response);
-        //const scrape=response.data;
-        //console.log({scrape});
-        //this.setState({
-          //  showdownload:true,
-            //scrape:scrape,
-           // loading: false
-        //})
-        //let res= await axios.get('/down');
-        //console.log({res})
-        //this.setState({downloadresponse:true})
-        //document.getElementById('LoadingMessage').style.visibility = "hidden";
     }
 
     render(){

@@ -23,13 +23,7 @@ class Step3 extends React.Component{
         scrape:''
     }
     
-
-    handleOnClick=(e)=>{
-        this.setState({open:false,disabled:false})
-
-    }
     handleDownload = async() => {
-    
       let res= await axios.get('/send/'+this.props.data.url.slice(32)+this.props.data.type,{responseType: 'blob'});
   
       let url = window.URL.createObjectURL(res.data);
@@ -45,7 +39,8 @@ class Step3 extends React.Component{
         console.log(json_result);
         this.setState({
           scrape:json_result,
-          disabled:false
+          disabled:false,
+          open:false
         });
         socket.emit('event2','junkdata')
         }
@@ -64,6 +59,7 @@ class Step3 extends React.Component{
         socket.emit('event1',this.props.data)
         this.setSocketListeners()
     }
+
     render(){
         if(this.state.disabled){
             var googleList=null;
@@ -74,21 +70,21 @@ class Step3 extends React.Component{
         var googleList=google.map(element=>{
           return(
             <div key={element.linktopage}>
-              <a href={element.linktopage} >{element.title}</a>
+              •<a href={element.linktopage} >{element.title}</a>
             </div>
           )
         })
         var youtubeList=youtube.map(element=>{
           return(
             <div key={element.linktopage}>
-              <a href={element.linktopage}>{element.title}</a>
+              •<a href={element.linktopage}>{element.title}</a>
             </div>
           )
         })
     }
         return(
             <div>
-                <Backdrop open={this.state.open} className={StepStyle.backdrop} onClick={this.handleOnClick}>
+                <Backdrop open={this.state.open} className={StepStyle.backdrop}>
                     <Loader></Loader>
                 </Backdrop>
                 <Button variant="contained" className={StepStyle.Button} component="span" onClick={this.handleDownload} disabled={this.state.buttondisabled}>
