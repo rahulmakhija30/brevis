@@ -29,6 +29,7 @@ class Step1 extends React.Component{
                   this.setState({
                     validurl:true,
                   });
+                  this.props.onChange()
                   // document.getElementById('disp').innerHTML=""
               }
               else{
@@ -79,16 +80,13 @@ class Step1 extends React.Component{
         {
             this.setState({open:true})
             this.IsValidURL()
-            if(this.state.validurl){
-                this.props.onChange()
-                console.log(this.state)
-            }
+            console.log(this.state)
         }
     }
 
     handleChange=(event)=> {
-        this.props.onURLChange(event.target.value)
         this.setState({url:event.target.value})
+        this.props.onURLChange(event.target.value)
     }
 
     componentDidMount=()=>{
