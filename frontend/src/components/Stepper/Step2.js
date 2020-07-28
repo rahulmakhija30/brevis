@@ -9,7 +9,7 @@ class Step2 extends React.Component{
 
     state={
         open: true,
-        type:'Both',
+        type:'Notes+Ref',
         disabled:true,
     }
 
@@ -51,9 +51,9 @@ class Step2 extends React.Component{
                 displayEmpty
                 labelWidth={150}
                 >
-                <MenuItem value='Both'><em>Short Summary and Detailed Notes</em></MenuItem>
-                <MenuItem value='Short'>Short Summary only</MenuItem>
-                <MenuItem value='Detailed'>Detailed Notes only</MenuItem>
+                <MenuItem value='Overview'><em>Overview</em></MenuItem>
+                <MenuItem value='Notes'>Notes without External Refrences</MenuItem>
+                <MenuItem value='Notes+Ref'>Full Notes with References</MenuItem>
                 </Select>
             </FormControl>
             <p></p>
