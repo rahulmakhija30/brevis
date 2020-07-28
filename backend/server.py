@@ -152,7 +152,7 @@ def gen():
     
 	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
-		zip.write(os.path.join('res','Brevis-Notes.docx')) 
+		zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx') 
 	zip.close()
 	path = os.path.abspath("Brevis_Notes.zip")
 
