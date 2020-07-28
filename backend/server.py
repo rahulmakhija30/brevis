@@ -73,10 +73,12 @@ def generate(data):
 	global text
 	global summary_result
 	global scrape_json
-    
+	global option
+	option = data
+	
 	start = time.perf_counter()
 
-    # Transcription and Cleaning
+	# Transcription and Cleaning
 	yt = YoutubeTranscribe(video_url)
 	text = yt.youtube_transcribe()
 
@@ -101,20 +103,28 @@ def generate(data):
 
 	# Summarization    
 	summ = Summarizer()
-    # percentage = int(input("Enter percentage of text you want as summary : "))
-	percentage = 60
+	
+	if option == "Overview":
+		percentage = 50
+	
+	elif option == "Notes":
+		percentage = 60
+	
+	elif option == "Notes+Ref":
+		percentage = 80
+		
 	summary_result = summ.summary(text,percentage)
 	print(f'\nSummary:\n {summary_result}')
 
-	fh = open(os.path.join('res', "summary.txt"),"w")
-	fh.write(summary_result)
-	fh.close()
+	# fh = open(os.path.join('res', "summary.txt"),"w")
+	# fh.write(summary_result)
+	# fh.close()
 
 	finish = time.perf_counter()
 
 	print(f'Generate Function: Finished in {round(finish-start, 2)} second(s)')
 
-    
+	
 def gen():
 	global video_url
 	global keywords
@@ -123,14 +133,20 @@ def gen():
 	global text
 	global summary_result
 	global scrape_json
+	global option
 
 	start = time.perf_counter()
-    
-	# Keyframe Extraction (Output : 'out' folder)
-	print("\nExtracting Keyframes\n")
-	ip = ImageProcessing(video_url,keywords)
-	ip.img_processing(jump=1000)
-	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
+	
+	if option == "Overview":
+		if not os.path.exists(os.path.join('res','out')):
+			os.mkdir(os.path.join('res','out'))
+	
+	elif option == "Notes" or option == "Notes+Ref":
+		# Keyframe Extraction (Output : 'out' folder)
+		print("\nExtracting Keyframes\n")
+		ip = ImageProcessing(video_url,keywords)
+		ip.img_processing(jump=1000)
+		print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
 
 
 	# Paragraph and Headings (Output : paragraph_headings.txt)
@@ -143,16 +159,20 @@ def gen():
 
 	# Final Notes (Includes Web Scraping) 
 	print("\nGenerating Final Notes\n")   
+	
+	if option == "Overview" or option == "Notes":
+		scrape_json = {}
+	
 	#scraped_results = Scrapper(scrape_keywords,2,2,2)
 	#s = scraped_results.web_scrape()
 	notes = Notes(video_url,scrape_json)
 	notes.generate_notes()
 	print("\nBrevis-Notes.docx Generated\n")
 	
-    
+	
 	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
-		zip.write(os.path.join('res','Brevis-Notes.docx')) 
+		zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx')
 	zip.close()
 	path = os.path.abspath("Brevis_Notes.zip")
 
@@ -172,7 +192,7 @@ def test_connect():
 
 @socketio.on('disconnect')
 def test_disconnect():
-    print('Client disconnected')
+	print('Client disconnected')
 
 
 @app.route('/result',methods=['GET','POST'])
@@ -204,7 +224,7 @@ def result():
 		if('Transcript' in transcript.text):
 			c=1
 
-    #print(x[0].text)
+	#print(x[0].text)
 	#if(str(x[0].text).strip()=="Education"):
 	if(c):
 		output=1
@@ -225,7 +245,7 @@ def result():
 @app.route('/res',methods=['GET','POST'])
 def res():
 	return jsonify({'result':output})
-    
+	
 
 @socketio.on('event1')
 def download(x):
@@ -258,5 +278,4 @@ def send(x):
 
 
 if __name__ == '__main__':
-    socketio.run(app)
-
+	socketio.run(app)

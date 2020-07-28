@@ -34,6 +34,11 @@ class Notes:
 	def __init__(self,url,scrape_results):
 		self.url = url
 		self.scrape_results = scrape_results
+		
+		if self.scrape_results == {}:
+			self.SCRAPE_STATUS = 0
+		else:
+			self.SCRAPE_STATUS = 1
 
 	def clean(self,text):
 		clean = re.sub(r"""
@@ -132,108 +137,111 @@ class Notes:
 		
 
 	def generate_notes(self):
-			urlID = self.url.partition('https://www.youtube.com/watch?v=')[-1]
-			transcript = YouTubeTranscriptApi.get_transcript(urlID)
-			vid_title = self.get_title()
-			vid_title="Notes on " + vid_title
+		urlID = self.url.partition('https://www.youtube.com/watch?v=')[-1]
+		transcript = YouTubeTranscriptApi.get_transcript(urlID)
+		vid_title = self.get_title()
+		vid_title="Notes on " + vid_title
 
-			f1=open(os.path.join('res','paragraph_headings.txt'),encoding="utf-8")
-			summary=f1.read()
+		f1=open(os.path.join('res','paragraph_headings.txt'),encoding="utf-8")
+		summary=f1.read()
 
-			f1.close()
-			#print(summary)
+		f1.close()
 
-			# Extracting Heading and Paragraphs
-			data = summary.split('\n')
-			heading = []
-			para = ""
-			for i in range(len(data)-1):
-				temp = data[i].split('$')
-				heading.append(temp[0])
-				para = para + temp[1] + "\n"
+		# Extracting Heading and Paragraphs
+		data = summary.split('\n')
+		heading = []
+		para = ""
+		for i in range(len(data)-1):
+			temp = data[i].split('$')
+			heading.append(temp[0])
+			para = para + temp[1] + "\n"
 
-			#f=open("file1.txt","w")
-			s=set()
-			paras=[[i,[]]for i in para.split('\n')]
-			paras = paras[:-1]
+		#f=open("file1.txt","w")
+		s=set()
+		paras=[[i,[]]for i in para.split('\n')]
+		paras = paras[:-1]
+		j=0
+		for filename in os.listdir(directory):
+			l=filename.split(".")
+			time=float(l[0][5:])
 			j=0
-			for filename in os.listdir(directory):
-					l=filename.split(".")
-					time=float(l[0][5:])
-					j=0
-					while(j<len(transcript)):
-							data=transcript[j]
-							index=0
-							if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+2000)):
-									text=data['text'].replace('\n',' ')
-									t=(text,time)
-									while index <(len(paras)):
-											t1 = self.clean(text)
-											t2 = self.clean(paras[index][0])
-											if((t1 in t2) or self.sentence_similarity(t1,t2)):
-													if(filename not in paras[index][1]):
-															# print(filename)
-															paras[index][1].append(filename)
-													break
+			
+			while(j<len(transcript)):
+				data=transcript[j]
+				index=0
+				
+				if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+2000)):
+					text=data['text'].replace('\n',' ')
+					t=(text,time)
+					
+					while index <(len(paras)):
+						t1 = self.clean(text)
+						t2 = self.clean(paras[index][0])
+						
+						if((t1 in t2) or self.sentence_similarity(t1,t2)):
+							if(filename not in paras[index][1]):
+								paras[index][1].append(filename)
+							break
+							
+						index+=1
+						
+				j+=1
+				
 
-											index+=1
-							j+=1
+		document = docx.Document()
+		d=document.add_heading(vid_title,0)
+		d.alignment=1
 
-			document = docx.Document()
-			d=document.add_heading(vid_title,0)
-			d.alignment=1
+		l=document.add_heading("", level=2)
+		l.alignment=1
+		l.add_run("Link :  " + str(self.url)).underline=True
 
-			l=document.add_heading("", level=2)
-			l.alignment=1
-			l.add_run("Link :  " + str(self.url)).underline=True
-
-			c=document.add_heading('', level=1)
-			c.alignment=0
-			c.add_run("Content : ").underline=True
-
-
-
-			p = document.add_paragraph()
-			r = p.add_run()
-			r.add_break()
-			img_no=1
-			e=0
-			# print(len(paras))
-			for para in paras:
-					if(para[0]):
-							#f.write(para[0])
-							#f.write("\n\n")
-							h=document.add_heading("",level=2)
-							h.alignment=0
-							h.add_run(heading[e]).underline = True
-							h.add_run().add_break()
-							p = document.add_paragraph()
-							r = p.add_run()
-							r.add_text(para[0])
-							#f.write("\n\n")
-							r.add_break()
-							r.add_break()
-							e+=1
-					if(para[1]):
-							for name in para[1]:
-									p=document.add_paragraph()
-									r=p.add_run()
-									r.add_picture(directory+'/'+name,width=Inches(5.0))
-									r.add_break()
-									p.add_run("Fig. "+str(img_no)).italics=True
-									img_no+=1
-									paragraph = document.paragraphs[-1]
-									paragraph.alignment = 1
-									p=document.add_paragraph()
-									r=p.add_run()
-									r.add_break()
-									#f.write("\n\n")
-									#f.write(name)
-									#f.write("\n\n")
-									r.add_break()
-									r.add_break()
+		c=document.add_heading('', level=1)
+		c.alignment=0
+		c.add_run("Content : ").underline=True
 
 
+		p = document.add_paragraph()
+		r = p.add_run()
+		r.add_break()
+		img_no=1
+		e=0
+		# print(len(paras))
+		for para in paras:
+			if(para[0]):
+				#f.write(para[0])
+				#f.write("\n\n")
+				h=document.add_heading("",level=2)
+				h.alignment=0
+				h.add_run(heading[e]).underline = True
+				h.add_run().add_break()
+				p = document.add_paragraph()
+				r = p.add_run()
+				r.add_text(para[0])
+				#f.write("\n\n")
+				r.add_break()
+				r.add_break()
+				e+=1
+			if(para[1]):
+				for name in para[1]:
+					p=document.add_paragraph()
+					r=p.add_run()
+					r.add_picture(directory+'/'+name,width=Inches(5.0))
+					r.add_break()
+					p.add_run("Fig. "+str(img_no)).italics=True
+					img_no+=1
+					paragraph = document.paragraphs[-1]
+					paragraph.alignment = 1
+					p=document.add_paragraph()
+					r=p.add_run()
+					r.add_break()
+					#f.write("\n\n")
+					#f.write(name)
+					#f.write("\n\n")
+					r.add_break()
+					r.add_break()
+
+		if self.SCRAPE_STATUS == 1:
 			#Adding Scraped links to the file 
 			l=document.add_heading('', level=1)
 			l.alignment=0
@@ -250,44 +258,47 @@ class Notes:
 			p.add_run().add_break()
 			link_no=1
 			for d in google_links:
-					p.add_run(str(link_no)+".> ")
-					link_no+=1
-					self.add_hyperlink(p,d["title"],d["linktopage"],"0000FF",True)
-					p.add_run().add_break()
+				p.add_run(str(link_no)+".> ")
+				link_no+=1
+				self.add_hyperlink(p,d["title"],d["linktopage"],"0000FF",True)
+				p.add_run().add_break()
 			h=document.add_heading("",level=2)
 			h.add_run("Youtube References :").underline=True
 			p=document.add_paragraph()
 			p.add_run().add_break()
 			link_no=1
 			for d in youtube_links:
-					p.add_run(str(link_no)+".> ")
-					link_no+=1
-					self.add_hyperlink(p,d["title"],d["linktopage"],"0000FF",True)
-					p.add_run().add_break()
+				p.add_run(str(link_no)+".> ")
+				link_no+=1
+				self.add_hyperlink(p,d["title"],d["linktopage"],"0000FF",True)
+				p.add_run().add_break()
+						
 
-			#Adding copyright notice to notes
-			h=document.add_heading("",level=2)
-			h.add_run("Disclaimer :").underline=True
-			p=document.add_paragraph()
-			p.add_run().add_break()
-			p.add_run("The contents of these notes are solely derived from the video. The contents of this video is created by "+str(self.channel_name)+" channel. We are not responsible for providing any irrelevant content or errors that might have crept in. The information contained in these notes is intended to be used only for educational purposes & no part of it should be reproduced in any form without prior permission from us.")
-			p.add_run().add_break()
+		#Adding copyright notice to notes
+		h=document.add_heading("",level=2)
+		h.add_run("Disclaimer :").underline=True
+		p=document.add_paragraph()
+		p.add_run().add_break()
+		p.add_run("The contents of these notes are solely derived from the video. The contents of this video is created by "+str(self.channel_name)+" channel. We are not responsible for providing any irrelevant content or errors that might have crept in. The information contained in these notes is intended to be used only for educational purposes & no part of it should be reproduced in any form without prior permission from us.")
+		p.add_run().add_break()
 
-			#Removing temporary files
-			#if os.path.exists('res'):
-			#    shutil.rmtree('res')
+		#Removing temporary files
+		#if os.path.exists('res'):
+		#    shutil.rmtree('res')
 			
-			document.save(os.path.join('res','Brevis-Notes.docx'))
-			# document.save('Brevis-Notes.docx')
-			# os.remove("video.mp4")
-			#f.close()
+		document.save(os.path.join('res','Brevis-Notes.docx'))
+		# document.save('Brevis-Notes.docx')
+		# os.remove("video.mp4")
+		#f.close()
 
 if __name__ == "__main__":
 	keywords = ['open source mobile sdk', 'lightweight object designed', 'experienced flutter developer', 'flutter youtube channel', 'important flutter widgets', 'important step', 'important features', 'important properties', 'apps made', 'specific task']
-	scraped_results = Scrapper(keywords,2,2,2)
-	scraped_results.web_scrape()
-	s = scraped_results.scrape_result
+    
+# 	scraped_results = Scrapper(keywords,2,2,2)
+# 	scraped_results.web_scrape()
+# 	s = scraped_results.scrape_result
 	
+	s = {}
 	url = "https://www.youtube.com/watch?v=b_sQ9bMltGU"
 	notes = Notes(url,s)
 	notes.generate_notes()
