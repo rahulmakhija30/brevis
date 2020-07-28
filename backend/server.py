@@ -1,35 +1,47 @@
-from youtube_transcription import youtube_transcribe
-from keywords_extractor import get_keywords
-from summary_generator import summary
-from clean_transcript import add_punctuations,correct_mistakes
-from keyframes import Image_Processing
-from paragraph_headings import paragraph,get_titles_paras
-from notes import add_picture
-from web_scraping import web_scrape
+import sys
+sys.path.append("utils")
+
+from youtube_transcription import YoutubeTranscribe
+from google_speech_to_text import SpeechToText
+from clean_transcript import CleanTranscript
+from clean_transcript import *
+from keywords_extractor import KeywordsExtractor
+from summary_generator import Summarizer
+from keyframes_extractor import ImageProcessing
+from paragraph_headings import ParaFormation,ParaHeadings
+from web_scraping import Scrapper
+from notes import Notes
+import paragraph_headings
+import notes
+
 from flask import Flask, request,jsonify,send_file
 from flask_socketio import SocketIO, emit,send
 from bs4 import BeautifulSoup as bs
 from zipfile import ZipFile
 
+from flask_cors import CORS
 import requests
 import re
 import os.path
 import operator
-import paragraph_headings
-import notes
+
 import io
 import os
 import pytesseract
-from flask_cors import CORS
-
-# Path to your tesseract executable
-#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+import time
+import shutil
 
 import logging
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
 
 import warnings
 warnings.filterwarnings("ignore")
+
+# Path to your tesseract executable
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+
+print("All Modules Imported Sucessfully")
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -51,6 +63,7 @@ json_result=dict()
 keywords=[]
 text=""
 
+# data: Information about type of notes required by the user
 
 def generate(data):
 	global video_url
@@ -58,26 +71,49 @@ def generate(data):
 	global json_result
 	global keywords
 	global text
-	global result
+	global summary_result
+	global scrape_json
     
+	start = time.perf_counter()
+
     # Transcription and Cleaning
-	text = youtube_transcribe(video_url)
-        
-    # Keywords Extractor
-	keywords=get_keywords(text,15)
-	print('\nKeywords:\n',keywords)
-	fp=open("keywords.txt","w")
-	fp.write("\n".join(keywords))
-	fp.close()
-	json_result=web_scrape(keywords)
-    
-    # Summarization
-    # Percentage of summary - input
-    # percentage=int(input())
-	result = summary(text,50)
-	fh=open("summary.txt","w")
-	fh.write(result)
+	yt = YoutubeTranscribe(video_url)
+	text = yt.youtube_transcribe()
+
+
+	# Keywords Extractor
+	# num_keywords=int(input("Enter number of keywords to be extracted : "))
+	num_keywords = 10
+	words = KeywordsExtractor(text,num_keywords)
+	keywords = words.ExtractKeywords()
+	scrape_keywords = words.ExtractScrapeKeywords()
+	print(f'\nKeywords:\n {keywords}')
+	print(f'\nScrape Keywords:\n {scrape_keywords}')
+
+	# fp=open("keywords.txt","w")
+	# fp.write("\n".join(keywords))
+	# fp.close()
+	
+	scraped_results = Scrapper(scrape_keywords,2,2,2)
+	json_result = scraped_results.web_scrape()
+	#print(json_result)
+	scrape_json = json_result
+
+	# Summarization    
+	summ = Summarizer()
+    # percentage = int(input("Enter percentage of text you want as summary : "))
+	percentage = 60
+	summary_result = summ.summary(text,percentage)
+	print(f'\nSummary:\n {summary_result}')
+
+	fh = open(os.path.join('res', "summary.txt"),"w")
+	fh.write(summary_result)
 	fh.close()
+
+	finish = time.perf_counter()
+
+	print(f'Generate Function: Finished in {round(finish-start, 2)} second(s)')
+
     
 def gen():
 	global video_url
@@ -85,26 +121,49 @@ def gen():
 	global path
 	global json_result
 	global text
-	global result
+	global summary_result
+	global scrape_json
+
+	start = time.perf_counter()
     
-    # Keyframe Extraction (Output : 'out' folder)
-	Image_Processing(video_url,keywords)
-	print(len(os.listdir(r"out")),"images extracted in 'out' folder")
-    
-    # Paragraph and Headings (Output : paragraph_headings.txt)    
-	list_para = paragraph(result)
-	title_para = get_titles_paras(list_para)
-    
-    #Final Notes - To be added (Refer : main.py)
-	add_picture(video_url,json_result)
-	print("Notes Generated")
+	# Keyframe Extraction (Output : 'out' folder)
+	print("\nExtracting Keyframes\n")
+	ip = ImageProcessing(video_url,keywords)
+	ip.img_processing(jump=1000)
+	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
+
+
+	# Paragraph and Headings (Output : paragraph_headings.txt)
+	print("\nGenerating Paragraphs and Headings\n")
+	pf = ParaFormation(summary_result)
+	list_para = pf.paragraph()
+	ph = ParaHeadings(list_para)
+	title_para = ph.get_titles_paras(sentence_threshold=2)
+
+
+	# Final Notes (Includes Web Scraping) 
+	print("\nGenerating Final Notes\n")   
+	#scraped_results = Scrapper(scrape_keywords,2,2,2)
+	#s = scraped_results.web_scrape()
+	notes = Notes(video_url,scrape_json)
+	notes.generate_notes()
+	print("\nBrevis-Notes.docx Generated\n")
 	
     
-	with ZipFile('brevis_notes.zip','w') as zip:
+	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
-		zip.write("Brevis-Notes.docx") 
+		zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx') 
 	zip.close()
-	path=os.path.abspath("brevis_notes.zip")
+	path = os.path.abspath("Brevis_Notes.zip")
+
+	if os.path.exists('res'):
+		shutil.rmtree('res')
+
+	finish = time.perf_counter()
+
+	print(f'Gen Function: Finished in {round(finish-start, 2)} second(s)')
+
+
 
 @socketio.on('connect')
 def test_connect():
@@ -128,7 +187,8 @@ def result():
    
 	video_url = link
 
-	"""content = requests.get(video_url)
+	"""
+	content = requests.get(video_url)
 
 	soup = bs(content.content, "html.parser")
 
@@ -152,7 +212,10 @@ def result():
 		output=0
 	#else:
 		#output=-1
-	#print(output)"""
+	#print(output)
+	
+	"""
+	
 	if(re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url)):
 		output=1
 	else:
@@ -167,7 +230,8 @@ def res():
 @socketio.on('event1')
 def download(x):
 	global output
-	data=x['value']
+	print(x)
+	data=x['type']
 	print(data)
 	if(output==1):
 		generate(data)
@@ -189,14 +253,8 @@ def down(z):
 @app.route('/send/<x>',methods=['GET','POST'])
 def send(x):
 	global path
-	return send_file(path,attachment_filename='brevis_notes.zip')
+	return send_file(path,attachment_filename='Brevis_Notes.zip')
 
-	
-
-
-    
-
-        
 
 
 if __name__ == '__main__':
