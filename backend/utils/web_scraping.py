@@ -89,7 +89,7 @@ class Scrapper:
 	def google_scrapper(self,query,number_results=2):
 		"Function to scrape results from Google Search"
 		query = urllib.parse.quote_plus(query) # Format into URL encoding
-		ua = UserAgent(verify_ssl=False)
+		ua = UserAgent(use_cache_server=False)
 		assert isinstance(query, str) #Search term must be a string
 		assert isinstance(number_results, int) #Number of results must be an integer
 		escaped_search_term = query.replace(' ', '+')
@@ -130,7 +130,7 @@ class Scrapper:
 	def youtube_scrapper(self,query,number_results=2):
 		"Function to scrape results from Youtube Search"
 		query = urllib.parse.quote_plus(query) # Format into URL encoding
-		ua = UserAgent(verify_ssl=False)
+		ua = UserAgent(use_cache_server=False)
 		assert isinstance(query, str) #Search term must be a string
 		assert isinstance(number_results, int) #Number of results must be an integer
 		escaped_search_term = query.replace(' ', '+')
@@ -224,10 +224,38 @@ class Scrapper:
 		self.wiki_summary()
 
 		self.scrape_result=dict()
-		self.scrape_result["google"]= self.google_result
-		self.scrape_result["youtube"]= self.youtube_result
-		self.scrape_result["wikipedia"]= self.wiki_result
-
+		
+		#Checking if Google links are found related to the video and handling the not found case
+		if(len(self.google_result)!=0):
+			self.scrape_result["google"]= self.google_result
+		else:
+			d=dict()
+			d["title"] = "Sorry, Articles realted to this topic are not found."
+			d["linktopage"] = ""
+			self.google_result.append(d)
+			self.scrape_result["google"]= self.google_result
+		
+		
+		#Checking if Youtube links are found related to the topic and handling the not found case
+		if(len(self.youtube_result)!=0):
+			self.scrape_result["youtube"]= self.youtube_result
+		else:
+			d=dict()
+			d["title"] = "Sorry, Videos realted to this topic are not found."
+			d["linktopage"] = ""
+			self.youtube_result.append(d)
+			self.scrape_result["youtube"]= self.youtube_result
+			
+		#Checking if results are found for the topic on Wikipedia and handling the not found case
+		if(len(self.wiki_result)!=0):
+			self.scrape_result["wikipedia"]= self.wiki_result
+		else:
+			d=dict()
+			d["title"] = "Sorry, Summary realted to this topic is not found."
+			d["definition"] = ""
+			self.wiki_result.append(d)
+			self.scrape_result["wikipedia"]= self.wiki_result
+	
 		return self.scrape_result
 
 #Driver Code
