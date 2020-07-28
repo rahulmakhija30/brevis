@@ -71,14 +71,14 @@ class Step3 extends React.Component{
         var googleList=google.map(element=>{
           return(
             <div key={element.linktopage}>
-              •<a href={element.linktopage} >{element.title}</a>
+              •<a href={element.linktopage} target="_blank">{element.title}</a>
             </div>
           )
         })
         var youtubeList=youtube.map(element=>{
           return(
             <div key={element.linktopage}>
-              •<a href={element.linktopage}>{element.title}</a>
+              •<a href={element.linktopage} target="_blank">{element.title}</a>
             </div>
           )
         })
