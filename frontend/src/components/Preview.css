@@ -1,0 +1,24 @@
+.reactplayer{
+    width:100% !important;
+    text-align: center !important;
+}
+
+.dropdown{
+    width: 44% !important;
+    margin-left: 28% !important;
+}
+
+.browser-default{
+    border-radius: 20px !important;
+    text-align: center;
+}
+
+select{
+    border-radius: 20px !important;
+}
+
+.center{
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
