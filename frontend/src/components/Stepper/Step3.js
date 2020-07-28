@@ -29,7 +29,7 @@ class Step3 extends React.Component{
       let url = window.URL.createObjectURL(res.data);
       let a = document.createElement('a');
       a.href = url;
-      a.download = 'brevis_notes2.zip';
+      a.download = 'Brevis_Notes.zip';
       a.click();
     }
     setSocketListeners(){
