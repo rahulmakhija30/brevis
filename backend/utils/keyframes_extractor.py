@@ -147,7 +147,7 @@ class ImageProcessing:
 					'image1': open(os.path.join('res','out',files[i]), 'rb'),
 					'image2': open(os.path.join('res','out',files[i+1]), 'rb'),
 				},
-				headers={'api-key': '08dd8c70-ad69-43aa-bd1d-01de53d8ebd6'}
+				headers={'api-key': 'b9d5b013-8260-4b5f-ac38-0c8d19946d78'}
 			)
 			res = r.json()
 
