@@ -1,44 +1,78 @@
-*Requirements*
-```
-Python version - 3.6.7
-Flask version  - 0.12
-npm version    - 6.14.5
-```
+### *Requirements*
 
-*Dependencies Installation*
+> Refer [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/requirements.md)
+
+
+### *Dependencies Installation for frontend*
 ```
 cd frontend
-```
-```
 npm install
 ```
 
-*Folder Structure*
+### *Starting the Application*
+
+To start the server type the following  commands :
+```
+cd backend
+python server.py
+```
+
+Open a new terminal
+To start the client type the follwoing commands :
+```
+cd frontend
+npm start
+```
+
+### **Testing Backend**
+
+```
+Install modules mentioned in requirements.md
+```
+
+Run the command to test
+
+```
+python main_serial.py
+```
+
+
+### *Folder Structure*
 ```
 +
 |--- frontend
 |     |
 |     |--- src
 |            |---components
-|                  |---profileimages
-|                  |---about.js
-|                  |---About.css
-|                  |---collapsible.css
-|                  |---collapsible.js
-|                  |---download.js
-|                  |---footer.js
-|                  |---home.js
-|                  |---LoadingSpinner.js
-|                  |---navbar.js
-|                  |---Navbar.css
-|                  |---Preview.css
-|                  |---Preview.js
-|                  |---search.svg
+|                  |---Footer
+|                       |---Footer.js
+|                       |---Footer.module.css
+|                  |---Home
+|                       |---Home.js
+|                  |---Loader
+|                       |---Loader.js
+|                       |---Loader.css
+|                  |---Navbar
+|                       |---home-run.png
+|                       |---info.png
+|                       |---lightbulb.png
+|                       |---Nav.module.css
+|                       |---sun.png
+|                       |---night.png
+|                       |---Navbar.js
+|                  |---Stepper
+|                       |---Step.module.css
+|                       |---search.svg.js
+|                       |---Step3.js
+|                       |---Step2.js
+|                       |---Step1.js
+|                       |---StepComponent.js
+|                  |---Functions.js
+|                  |---index.js
 |            |---App.js
 |            |---index.css
 |            |---index.js
-|            |---serviceWorker.js
-|            |---setupTests.js
+|            |---App.module.css
 |     |--- node_modules
 |     |--- public
 |            |---favicon.ico
@@ -52,62 +86,30 @@ npm install
 |
 |--- backend
 |     |
-|     |--- server.py
-|     |--- youtube_transcription.py
-|     |--- clean_transcript.py
-|     |--- keywords_extractor.py
-|     |--- summary_generator.py
-|     |--- google_speech_to_text.py
-|     |--- keyframes.py
+|     |--- utils
+|           |--- clean_transcript.py
+|           |--- google_speech_to_text.py
+|           |--- keyframes_extractor.py
+|           |--- keywords_extractor.py
+|           |--- notes.py
+|           |--- paragraph_headings.py
+|           |--- web_scraping.py
+|           |--- youtube_transcription.py
+|     |--- Demo-Europarl-EN.pcl
+|     |--- main_parallel.py
+|     |--- main_serial.py
 |     |--- prog.py
+|     |--- server.py
 |     |--- SmartStoplist.txt
-|     |--- downloadfile.zip
-|     |--- google_scrape.py
-|     |--- youtube_scrape.py
-|     |--- web_scraping.py
-|     |--- wikipedia_summary.py
-|     |--- wikipedia_sections.py
-|     
 |
 |
-|--- README
 |
 |--- .gitignore
 |
-|--- requirements.txt
+|--- README.md
+|
+|--- requirements.md
 |
 +
 
-```
-
-
-*Starting the Application*
-
-To start the server type the following  commands :
-```
-cd backend
-```
-```
-python3 server.py
-```
-Open a new terminal
-To start the client type the follwoing commands :
-```
-cd frontend
-```
-
-```
-npm start
-```
-### **Backend**
-Testing Transcription, Keywords Extraction, and Summarization
-
-```
-Install modules mentioned in requirements.txt
-```
-
-Run the command to test
-
-```
-python3 main.py
 ```
