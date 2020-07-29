@@ -86,7 +86,7 @@ def main():
         level2_results3 = executor.submit(Scrapper(level1_results1.result(),2,2,2).web_scrape)
         
 
-        print(f"\n{len(os.listdir(r'out'))} images extracted in 'out' folder\n")
+        print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
     
     
     ph = ParaHeadings(level2_results2.result())
@@ -98,7 +98,7 @@ def main():
     print("\nBrevis-Notes.docx Generated\n")
 
     if os.path.exists('res'):
-	shutil.rmtree('res')
+        shutil.rmtree('res')
 
     finish = time.perf_counter()
 

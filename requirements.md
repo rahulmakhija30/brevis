@@ -14,7 +14,7 @@ Python Modules: **(Command : pip install modulename)**
 ```
 numpy==1.18.1
 beautifulsoup4==4.9.0
-fake-useragent==0.1.11
+my-fake-useragent==0.1.6
 gensim==3.8.3
 fse==0.1.15
 h5py==2.10.0
