@@ -105,7 +105,7 @@ def main():
 	#Generating final notes
 	notes = Notes(url,scraped_res)
 	notes.generate_notes()
-	print("\nBrevis-Notes.docx Generated\n")
+	print("\nBrevis-Notes.docx and Brevis-Notes.pdf(on Windows) Generated\n")
 	
 	#Removing the temporary res folder
 	if os.path.exists('res'):

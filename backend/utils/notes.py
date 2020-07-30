@@ -22,6 +22,7 @@ import pysbd
 import time
 import logging
 import pafy
+import platform
 
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
 
@@ -288,6 +289,10 @@ class Notes:
 			
 		#document.save(os.path.join('res','Brevis-Notes.docx'))
 		document.save('Brevis-Notes.docx')
+	    if platform.system() == "Windows":
+		    from docx2pdf import convert
+		    path=str(os.path.abspath(os.getcwd())) + "\Brevis-Notes.pdf"
+		    convert("Brevis-Notes.docx",path)
 		# os.remove("video.mp4")
 		#f.close()
 
