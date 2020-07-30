@@ -85,7 +85,7 @@ def generate(data):
 
 	# Keywords Extractor
 	# num_keywords=int(input("Enter number of keywords to be extracted : "))
-	num_keywords = 10
+	num_keywords = 20
 	words = KeywordsExtractor(text,num_keywords)
 	keywords = words.ExtractKeywords()
 	scrape_keywords = words.ExtractScrapeKeywords()
@@ -145,16 +145,16 @@ def gen():
 		# Keyframe Extraction (Output : 'out' folder)
 		print("\nExtracting Keyframes\n")
 		ip = ImageProcessing(video_url,keywords)
-		ip.img_processing(jump=1000)
+		ip.img_processing(text_threshold = 50, dis_threshold = 20, jump = 1500)
 		print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
 
 
 	# Paragraph and Headings (Output : paragraph_headings.txt)
 	print("\nGenerating Paragraphs and Headings\n")
 	pf = ParaFormation(summary_result)
-	list_para = pf.paragraph()
+	list_para = pf.paragraph(similarity_threshold = 0.35,word_threshold = 20)
 	ph = ParaHeadings(list_para)
-	title_para = ph.get_titles_paras(sentence_threshold=2)
+	title_para = ph.get_titles_paras(sentence_threshold = 4,training = 200, heading_threshold = 3)
 
 
 	# Final Notes (Includes Web Scraping) 
@@ -236,8 +236,16 @@ def result():
 	
 	"""
 	
-	if(re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url)):
-		output=1
+	if((re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url))):
+		content = requests.get(video_url)
+
+		soup = bs(content.content, "html.parser")
+
+		print('"simpleText":"Video unavailable"' in (soup.get_text()))
+		if('"simpleText":"Video unavailable"' not in (soup.get_text()) and "404 Not Found" not in soup.get_text()):
+			output=1
+		else:
+			output=0
 	else:
 		output=0
 	return " "
@@ -268,7 +276,7 @@ def down(z):
 		print("in event2")
 		gen()
 	emit('response2',{'task':'done'})
-		
+
 	
 @app.route('/send/<x>',methods=['GET','POST'])
 def send(x):
