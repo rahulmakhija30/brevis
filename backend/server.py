@@ -236,8 +236,16 @@ def result():
 	
 	"""
 	
-	if(re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url)):
-		output=1
+	if((re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url))):
+		content = requests.get(video_url)
+
+		soup = bs(content.content, "html.parser")
+
+		print('"simpleText":"Video unavailable"' in (soup.get_text()))
+		if('"simpleText":"Video unavailable"' not in (soup.get_text()) and "404 Not Found" not in soup.get_text()):
+			output=1
+		else:
+			output=0
 	else:
 		output=0
 	return " "
@@ -268,7 +276,7 @@ def down(z):
 		print("in event2")
 		gen()
 	emit('response2',{'task':'done'})
-		
+
 	
 @app.route('/send/<x>',methods=['GET','POST'])
 def send(x):
