@@ -30,6 +30,7 @@ import os
 import pytesseract
 import time
 import shutil
+import platform
 
 import logging
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
@@ -172,8 +173,18 @@ def gen():
 	
 	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
-		zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx')
-	zip.close()
+		if platform.system() == "Windows":
+			from docx2pdf import convert
+			docxpath=str(os.path.join('res','Brevis-Notes.docx'))
+			pdfpath=str(os.path.join('res','Brevis-Notes.pdf'))
+			convert(docxpath,pdfpath)
+			zip.write(os.path.join('res','Brevis-Notes.pdf'),arcname='Brevis-Notes.pdf')
+			zip.close()
+		
+		else:
+			zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx')
+			zip.close()
+	
 	path = os.path.abspath("Brevis_Notes.zip")
 
 	if os.path.exists('res'):

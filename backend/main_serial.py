@@ -76,7 +76,7 @@ def main():
 	s = scraped_results.web_scrape()
 	notes = Notes(url,s)
 	notes.generate_notes()
-	print("\nBrevis-Notes.docx Generated\n")
+	print("\nBrevis-Notes.docx and Brevis-Notes.pdf(on Windows) Generated\n")
 	
 	
 	if os.path.exists('res'):

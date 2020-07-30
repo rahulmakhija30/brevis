@@ -57,6 +57,7 @@ Flask-Cors==3.0.7
 eventlet==0.25.2
 Werkzeug==0.15.2
 textrazor==1.4.0
+docx2pdf==0.1.7
 ```
 
 ### *Additional Models :-*
