@@ -175,5 +175,5 @@ if __name__ == '__main__':
 	
 	
 	ip = ImageProcessing(url,keywords)
-	ip.img_processing(jump=1000)
+	ip.img_processing(text_threshold = 50,dis_threshold = 20,jump=1500)
 	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
