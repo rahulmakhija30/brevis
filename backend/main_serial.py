@@ -27,7 +27,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 print("All Modules Imported Sucessfully")
 
@@ -76,7 +76,7 @@ def main():
 	s = scraped_results.web_scrape()
 	notes = Notes(url,s)
 	notes.generate_notes()
-	print("\nBrevis-Notes.docx Generated\n")
+	print("\nBrevis-Notes.docx and Brevis-Notes.pdf(on Windows) Generated\n")
 	
 	
 	if os.path.exists('res'):
