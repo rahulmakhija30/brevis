@@ -112,7 +112,7 @@ class Step1 extends React.Component{
                         Preview
                     </Button>
                     <p></p>
-                    <div id={StepStyle.or}><Typography variant='caption'>OR</Typography></div>
+                    <div id={StepStyle.or}><Typography variant='caption' align='center'>OR</Typography></div>
                     <p></p>
                     <Button variant='contained' startIcon={<CloudUploadIcon/>} color="primary" onClick={this.changetoUpload}>Upload a Video Instead ?</Button>
                 </div>
