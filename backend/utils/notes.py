@@ -22,7 +22,10 @@ import pysbd
 import time
 import logging
 import pafy
+
 import platform
+import os
+from docx2pdf import convert
 
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
 
@@ -287,12 +290,15 @@ class Notes:
 		#if os.path.exists('res'):
 		#    shutil.rmtree('res')
 			
-		#document.save(os.path.join('res','Brevis-Notes.docx'))
-		document.save('Brevis-Notes.docx')
+		document.save(os.path.join('res','Brevis-Notes.docx'))
+		# document.save('Brevis-Notes.docx')
+
 		if platform.system() == "Windows":
-			from docx2pdf import convert
-			path=str(os.path.abspath(os.getcwd())) + "\Brevis-Notes.pdf"
-			convert("Brevis-Notes.docx",path)
+			word_path = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.docx")
+			pdf_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.pdf")
+			pdf_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.pdf")
+			convert(word_path,pdf_path)
+
 		# os.remove("video.mp4")
 		#f.close()
 

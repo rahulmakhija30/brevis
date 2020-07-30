@@ -84,6 +84,14 @@ sudo apt install default-jdk
 sudo apt install ffmpeg
 ```
 
+### *Additional Requirements for Windows :-*
+
+PDF Installer for Microsoft Word 2007
+> https://drive.google.com/file/d/0Bw-8fzdMfWSFLS1vcXNhV05tbnM/view
+
+Built Tools 
+> 
+
 #### After installing all these modules, still if you face any issues or any module is missing
 
 **Visit Here (This is my entire list of dependencies)** 
