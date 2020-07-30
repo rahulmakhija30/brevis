@@ -287,7 +287,7 @@ class Notes:
 		#    shutil.rmtree('res')
 			
 		document.save(os.path.join('res','Brevis-Notes.docx'))
-		#document.save('Brevis-Notes.docx')
+		document.save('Brevis-Notes.docx')
 		# os.remove("video.mp4")
 		#f.close()
 
