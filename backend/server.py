@@ -173,17 +173,9 @@ def gen():
 	
 	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
-		if platform.system() == "Windows":
-			from docx2pdf import convert
-			docxpath=str(os.path.join('res','Brevis-Notes.docx'))
-			pdfpath=str(os.path.join('res','Brevis-Notes.pdf'))
-			convert(docxpath,pdfpath)
+		if os.path.exists(os.path.join('res','Brevis-Notes.pdf')):
 			zip.write(os.path.join('res','Brevis-Notes.pdf'),arcname='Brevis-Notes.pdf')
-			zip.close()
-		
-		else:
-			zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx')
-			zip.close()
+		zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx')
 	
 	path = os.path.abspath("Brevis_Notes.zip")
 
