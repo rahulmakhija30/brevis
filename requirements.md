@@ -89,8 +89,8 @@ sudo apt install ffmpeg
 PDF Installer for Microsoft Word 2007
 > https://drive.google.com/file/d/0Bw-8fzdMfWSFLS1vcXNhV05tbnM/view
 
-Built Tools 
-> 
+Build Tools 
+> http://go.microsoft.com/fwlink/?LinkId=691126&fixForIE=.exe
 
 #### After installing all these modules, still if you face any issues or any module is missing
 
