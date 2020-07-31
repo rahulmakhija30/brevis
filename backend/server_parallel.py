@@ -13,7 +13,7 @@ from web_scraping import Scrapper
 from notes import Notes
 import paragraph_headings
 import notes
-
+import pafy
 from flask import Flask, request,jsonify,send_file
 from flask_socketio import SocketIO, emit,send
 from bs4 import BeautifulSoup as bs
@@ -245,17 +245,20 @@ def result():
 	
 	"""
 	
-	if((re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url))):
-		content = requests.get(video_url)
-
-		soup = bs(content.content, "html.parser")
-
-		print('"simpleText":"Video unavailable"' in (soup.get_text()))
-		if('"simpleText":"Video unavailable"' not in (soup.get_text()) and "404 Not Found" not in soup.get_text()):
+	if((re.match("^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$",video_url))):
+		try:
+			video = pafy.new(video_url)
+			print(video.author)
+			print(video.title)
 			output=1
-		else:
+		except:
+			print("Invalid video id(pafy)")
 			output=0
+		print("Done")
+    
+
 	else:
+		print("Invalid link(regex)")
 		output=0
 	return " "
 
