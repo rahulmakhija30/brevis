@@ -6,23 +6,23 @@ import { DarkLoader } from '../Functions';
 export default class Loader extends React.Component { 
 
   static messages = [
-    'Crunching the data 🗃️',
-    'Rebooting the solver',
-    'Creating time vortexes 🌀',
-    'Analyzing the department 🔎',
-    'Taking a break ☕',
-    'Implementing math equations 📚',
-    'Allocating more memory 💽',
-    '‍Meeting teachers\' needs',
-    'Trying hard to find the solutions 💡',
-    'Extending the breaks',
-    'Adding more constraints 🔗',
-    'Validating possible solutions 📜',
-    'Fetching 192.77.82.68 🌐',
-    'Packaging the timetables 📦',
-    'Making life simpler 🎉',
-    'Debugging 🐞',
-    'Burning infeasible timetables 💥'
+    '🚀Going to get the Content 🚀',
+'🗃️ Crunching the Content 🗃️',
+'🧝 Hiring some Elves for Work 🧝',
+'💥 Burning extra Stuff 💥',
+'📷 Taking pictures of Important Parts 📷',
+'🗒️ Summarizing the Content 🗒️',
+'💤 Falling Asleep 💤',
+'♻️ Recycling leftover Papers ♻️',
+'🔗 Fetching useful Links 🔗',
+'🌀 Creating Time Vortexes 🌀',
+'☕ Taking a break ☕',
+'📜 Generating the Notes 📜',
+'📦 Packaging the Notes 📦',
+'💵 Paying the Elves 💵',
+'🎉 Making Life Simpler 🎉',
+'🧠 Searching my brain for data 🧠',
+'👨‍💻 Validating the Notes 👨‍💻'
   ];
 
   constructor() {
