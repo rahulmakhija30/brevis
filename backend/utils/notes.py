@@ -291,11 +291,14 @@ class Notes:
 		#    shutil.rmtree('res')
 			
 		document.save(os.path.join('res','Brevis-Notes.docx'))
-		# document.save('Brevis-Notes.docx')
+		#document.save('Brevis-Notes.docx')
 
 		if platform.system() == "Windows":
-			word_path = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.docx")
+			import pythoncom
+			pythoncom.CoInitialize()
+			word_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.docx")
 			pdf_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.pdf")
+			word_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.docx")
 			pdf_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.pdf")
 			convert(word_path,pdf_path)
 
