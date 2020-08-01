@@ -112,7 +112,7 @@ class Step3 extends React.Component{
                     >
                     <Typography>Summary</Typography>
                     </AccordionSummary>
-                    <AccordionDetails>
+                    <AccordionDetails style={{overflowY:'scroll',maxHeight:'200px'}}>
                     <Typography>
                        {wikilist}
                     </Typography>
