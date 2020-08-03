@@ -28,7 +28,7 @@ import pytesseract
 from sys import exit
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 
 class ImageProcessing:
@@ -138,6 +138,7 @@ class ImageProcessing:
 			start,end = self.start_end(transcript,search)
 			self.frames(self.url,start,end,jump)
 
+		print(f"Initial : {len(os.listdir(os.path.join('res','out')))} images extracted in 'out' folder")
 
 		# Remove non-text images
 		print("Removing non-text images")
@@ -146,6 +147,8 @@ class ImageProcessing:
 			res = self.detect_text(os.path.join('res','out',i))
 			if res == '' or len(res) < text_threshold :
 				os.remove(os.path.join('res','out',i))
+
+		print(f"Number of Images After Removing Non Text Images : {len(os.listdir(os.path.join('res','out')))}")
 
 
 		# Remove Similar Images
@@ -197,6 +200,9 @@ class ImageProcessing:
 				os.remove(os.path.join('res','out',files[i]))
 				i+=1
 
+		print(f"Final : {len(os.listdir(os.path.join('res','out')))} images extracted in 'out' folder")
+
+
 		#Writing the keys back to file
 		try:
 			f=open("Image_Sim_API_Keys.txt","w")
@@ -212,6 +218,7 @@ class ImageProcessing:
 		except Exception as e:
 			print(e)
 			exit(1)
+
 				
 if __name__ == '__main__':
 	# Youtube Transcription
@@ -230,4 +237,3 @@ if __name__ == '__main__':
 	
 	ip = ImageProcessing(url,keywords)
 	ip.img_processing(text_threshold = 50,dis_threshold = 20,jump=1500)
-	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")

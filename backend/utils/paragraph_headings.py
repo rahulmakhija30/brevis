@@ -8,7 +8,8 @@ word_threshold = Number of words in a paragraph (paragraph function)
 sentence_threshold = Number of sentences in a paragraph (get_titles_paras function)
 training = PASSES
 heading_threshold = NUM_HEADING
-Defaults : similarity_threshold=0.35, word_threshold = 20, sentence_threshold = 5, training = 200, heading_threshold = 3
+percent_reduce = When sentence similarity is greater than 0.9, reduce to 0.35
+Defaults : similarity_threshold=0.35, word_threshold = 20, sentence_threshold = 5, training = 500, heading_threshold = 3. percent_reduce = 0.6
 
 
 Heading Threshold:
@@ -78,7 +79,7 @@ class ParaFormation:
 		return re.sub('[^A-Za-z0-9]+', ' ', string).strip().lower().split()
 
 	
-	def sentence_similarity(self,los):
+	def sentence_similarity(self,los,percent = 0.6):
 		sentences = [self.modify(i) for i in los]
 		ft = FastText(sentences, min_count=1,size=12,workers=4)
 
@@ -88,18 +89,22 @@ class ParaFormation:
 		res_similar = []
 		for i in range(len(los)-1):
 			res_similar.append(model.sv.similarity(i,i+1))
+			
+		if np.mean(res_similar) > 0.9:
+			PERCENT_REDUCE = percent        
+			for i in range(len(res_similar)):
+				res_similar[i] -= (PERCENT_REDUCE * res_similar[i])
 
 		return res_similar
 
 	
-	def paragraph(self,similarity_threshold=0.35,word_threshold = 20):
+	def paragraph(self,similarity_threshold=0.35, word_threshold = 20, percent_reduce = 0.6):
 		# Sentence Boundary Detection
 		seg = pysbd.Segmenter(language="en", clean=True)
 		sentences = seg.segment(self.text) # List of sentences as string
-		# print("Number of sentences : ",len(res))
-
+		# print("Number of sentences : ",len(sentences))
 		# Sentence Similarity
-		res_similar = self.sentence_similarity(sentences)
+		res_similar = self.sentence_similarity(sentences,percent=percent_reduce)
 
 		para = ''
 		n = len(res_similar)
@@ -134,7 +139,6 @@ class ParaFormation:
 				final += p[i-1] + ' '
 
 		final += p[len(p)-1]
-
 		return final.split('\n')    # List of paragraphs
 
 	
@@ -225,7 +229,7 @@ class ParaHeadings(ParaFormation):
 		sent = seg.segment(' '.join(self.list_para)) # List of sentences as string
 		no_of_sent = len(sent)
 
-		# print("\nNumber of paragraphs : ",no_of_para)
+		print("\nNumber of paragraphs : ",no_of_para)
 		# print("Number of sentences : ",no_of_sent)
 
 		i=0
@@ -259,8 +263,8 @@ class ParaHeadings(ParaFormation):
 if __name__ == '__main__':
 	text = input("Enter transcript : ")
 	pf = ParaFormation(text)
-	list_para = pf.paragraph(similarity_threshold=0.35,word_threshold = 20)
-	# print(list_para)
+	list_para = pf.paragraph(similarity_threshold=0.35,word_threshold = 20,percent_reduce=0.56)
+	print(f"Number of paragraphs = {len(list_para)}")
 	
 	ph = ParaHeadings(list_para)
 	title_para = ph.get_titles_paras(sentence_threshold=2,training = 200, heading_threshold = 3)
