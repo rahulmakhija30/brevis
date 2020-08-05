@@ -57,7 +57,6 @@ Flask-Cors==3.0.7
 eventlet==0.25.2
 Werkzeug==0.15.2
 textrazor==1.4.0
-docx2pdf==0.1.7
 ```
 
 ### *Additional Models :-*
@@ -83,14 +82,6 @@ sudo apt install tesseract-ocr
 sudo apt install default-jdk
 sudo apt install ffmpeg
 ```
-
-### *Additional Requirements for Windows :-*
-
-PDF Installer for Microsoft Word 2007
-> https://drive.google.com/file/d/0Bw-8fzdMfWSFLS1vcXNhV05tbnM/view
-
-Build Tools 
-> http://go.microsoft.com/fwlink/?LinkId=691126&fixForIE=.exe
 
 #### After installing all these modules, still if you face any issues or any module is missing
 

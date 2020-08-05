@@ -13,7 +13,7 @@ from web_scraping import Scrapper
 from notes import Notes
 import paragraph_headings
 import notes
-import pafy
+
 from flask import Flask, request,jsonify,send_file
 from flask_socketio import SocketIO, emit,send
 from bs4 import BeautifulSoup as bs
@@ -30,7 +30,6 @@ import os
 import pytesseract
 import time
 import shutil
-import platform
 
 import logging
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
@@ -39,7 +38,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 print("All Modules Imported Sucessfully")
 
@@ -86,7 +85,7 @@ def generate(data):
 
 	# Keywords Extractor
 	# num_keywords=int(input("Enter number of keywords to be extracted : "))
-	num_keywords = 20
+	num_keywords = 10
 	words = KeywordsExtractor(text,num_keywords)
 	keywords = words.ExtractKeywords()
 	scrape_keywords = words.ExtractScrapeKeywords()
@@ -146,16 +145,16 @@ def gen():
 		# Keyframe Extraction (Output : 'out' folder)
 		print("\nExtracting Keyframes\n")
 		ip = ImageProcessing(video_url,keywords)
-		ip.img_processing(text_threshold = 50, dis_threshold = 20, jump = 1500)
+		ip.img_processing(jump=1000)
 		print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
 
 
 	# Paragraph and Headings (Output : paragraph_headings.txt)
 	print("\nGenerating Paragraphs and Headings\n")
 	pf = ParaFormation(summary_result)
-	list_para = pf.paragraph(similarity_threshold = 0.35,word_threshold = 20)
+	list_para = pf.paragraph()
 	ph = ParaHeadings(list_para)
-	title_para = ph.get_titles_paras(sentence_threshold = 4,training = 200, heading_threshold = 3)
+	title_para = ph.get_titles_paras(sentence_threshold=2)
 
 
 	# Final Notes (Includes Web Scraping) 
@@ -173,10 +172,8 @@ def gen():
 	
 	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
-		if os.path.exists(os.path.join('res','Brevis-Notes.pdf')):
-			zip.write(os.path.join('res','Brevis-Notes.pdf'),arcname='Brevis-Notes.pdf')
 		zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx')
-	
+	zip.close()
 	path = os.path.abspath("Brevis_Notes.zip")
 
 	if os.path.exists('res'):
@@ -239,20 +236,9 @@ def result():
 	
 	"""
 	
-	if((re.match("^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$",video_url))):
-		try:
-			video = pafy.new(video_url)
-			print(video.author)
-			print(video.title)
-			output=1
-		except:
-			print("Invalid video id(pafy)")
-			output=0
-		print("Done")
-    
-
+	if(re.match("^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",video_url)):
+		output=1
 	else:
-		print("Invalid link(regex)")
 		output=0
 	return " "
 
@@ -282,7 +268,7 @@ def down(z):
 		print("in event2")
 		gen()
 	emit('response2',{'task':'done'})
-
+		
 	
 @app.route('/send/<x>',methods=['GET','POST'])
 def send(x):

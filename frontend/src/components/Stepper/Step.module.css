@@ -23,7 +23,8 @@
     text-align: center;
     font-weight: 800;
     color: darkgray;
-    margin: auto;
+    margin-left: 38%;
+    margin-right: 37%;
   }
   
   #or::before,
