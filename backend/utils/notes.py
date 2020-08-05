@@ -69,11 +69,12 @@ class Notes:
 
 		sim = model.sv.similarity(0,1)
 
-		if sim >= similarity_threshold:
-			return True
+		#if sim >= similarity_threshold:
+		#	return True
 
-		else:
-			return False
+		#else:
+		#	return False
+		return sim
 
 	def add_hyperlink(self, paragraph, text, place_url, color, underline):
 		"""
@@ -174,24 +175,68 @@ class Notes:
 				data=transcript[j]
 				index=0
 				
-				if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+2000)):
+				if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+1000)):
 					text=data['text'].replace('\n',' ')
 					t=(text,time)
-					
+					l1=[]
+					l2=[]
 					while index <(len(paras)):
 						t1 = self.clean(text)
 						t2 = self.clean(paras[index][0])
 						
-						if((t1 in t2) or self.sentence_similarity(t1,t2)):
-							if(filename not in paras[index][1]):
+						if((t1 in t2)):
+							if(filename not in paras[index][1] and filename not in s ):
 								paras[index][1].append(filename)
+								s.add(filename)
 							break
-							
+						#l1.append(index)
+						#l2.append(self.sentence_similarity(t1,t2))
+	
 						index+=1
+					#mapindex=l1[l2.index(max(l2))]
+					#if(filename not in paras[mapindex][1] and filename not in s):
+						#paras[mapindex][1].append(filename)
+						#s.add(filename)
 						
 				j+=1
+		#print(len(s))
+		#print(s)
+		for filename in os.listdir(directory):
+			if(filename not in s):
+				l=filename.split(".")
+				time=float(l[0][5:])
+				j=0
 				
-
+				while(j<len(transcript)):
+					data=transcript[j]
+					index=0
+					
+					if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+1000)):
+						text=data['text'].replace('\n',' ')
+						t=(text,time)
+						l1=[]
+						l2=[]
+						while index <(len(paras)):
+							t1 = self.clean(text)
+							t2 = self.clean(paras[index][0])
+							
+							#if((t1 in t2)):
+							#	if(filename not in paras[index][1] and filename not in s ):
+							#		paras[index][1].append(filename)
+							#		s.add(filename)
+							#	break
+							l1.append(index)
+							l2.append(self.sentence_similarity(t1,t2))
+		
+							index+=1
+						mapindex=l1[l2.index(max(l2))]
+						if(filename not in paras[mapindex][1] and filename not in s):
+							paras[mapindex][1].append(filename)
+							s.add(filename)
+							
+					j+=1
+		#print(paras)
+		#print(len(s))
 		document = docx.Document()
 		d=document.add_heading(vid_title,0)
 		d.alignment=1
@@ -291,29 +336,27 @@ class Notes:
 		#    shutil.rmtree('res')
 			
 		document.save(os.path.join('res','Brevis-Notes.docx'))
-		#document.save('Brevis-Notes.docx')
+		document.save('Brevis-Notes.docx')
 
 		if platform.system() == "Windows":
-			import pythoncom
-			pythoncom.CoInitialize()
-			word_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.docx")
-			pdf_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.pdf")
 			word_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.docx")
+			word_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.docx")
 			pdf_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.pdf")
-			convert(word_path,pdf_path)
+			pdf_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.pdf")
+			convert(word_path_test,pdf_path_test)
 
 		# os.remove("video.mp4")
 		#f.close()
 
 if __name__ == "__main__":
-	keywords = ['open source mobile sdk', 'lightweight object designed', 'experienced flutter developer', 'flutter youtube channel', 'important flutter widgets', 'important step', 'important features', 'important properties', 'apps made', 'specific task']
+	keywords = ['give youth general overview', 'give ita time delay', 'eigenfunction called make smoothie', 'queued fora future task', 'accidentally pause function unnecessarily', 'micro task queue immediately', 'es 7or typescript', 'advanced content designed', 'billion times arbitrarily', 't-shirt giveaway']
 	
 # 	scraped_results = Scrapper(keywords,2,2,2)
 # 	scraped_results.web_scrape()
 # 	s = scraped_results.scrape_result
 	
 	s = {}
-	url = "https://www.youtube.com/watch?v=b_sQ9bMltGU"
+	url = "https://www.youtube.com/watch?v=vn3tm0quoqE"
 	notes = Notes(url,s)
 	notes.generate_notes()
 	print("Brevis-Notes.docx Generated")
