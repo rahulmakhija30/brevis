@@ -12,10 +12,6 @@ import axios from 'axios';
 
 const socket=io('http://localhost:5000',{transports:['websocket'],pingTimeout:3600000,pingInterval:180000});
 
-window.onbeforeunload = function () {
-  console.log('refresh')
-}; 
-
 
 
 class Step3 extends React.Component{

@@ -45,7 +45,7 @@ class SpeechToText:
 					'-ar', '16000'
 				],
 				'prefer_ffmpeg': True,
-				'outtmpl':os.path.join('res','audio','test.mp3')
+				'outtmpl':'audio/test.mp3'
 			}
 
 			with youtube_dl.YoutubeDL(ydl_opts) as ydl:

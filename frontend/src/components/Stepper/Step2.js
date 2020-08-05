@@ -5,10 +5,6 @@ import Stepstyle from './Step.module.css'
 import { DarkStep2 } from '../Functions'
 import Loader from '../Loader/Loader'
 
-window.onbeforeunload = function () {
-    console.log('refresh')
-}; 
-
 class Step2 extends React.Component{
 
     state={

@@ -24,11 +24,10 @@ class KeywordsExtractor:
 			self.keywords.append(word)
 
 		#Handling Error
-		#if(self.num_keywords > len(self.keywords)):
-			#print("No. of keywords entered by the user is more than the number of keywords generated.")
-			#exit(1)
-		if(len(self.keywords) > self.num_keywords):
-			self.keywords=self.keywords[:self.num_keywords]
+		if(self.num_keywords > len(self.keywords)):
+			print("No. of keywords entered by the user is more than the number of keywords generated.")
+			exit(1)
+		self.keywords=self.keywords[:self.num_keywords]
 		return self.keywords
 		
 	def ExtractScrapeKeywords(self):
