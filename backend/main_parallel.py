@@ -95,7 +95,7 @@ def main():
     # Final Notes
     notes = Notes(url,level2_results3.result())
     notes.generate_notes()
-    print("\nBrevis-Notes.docx Generated\n")
+    print("\nBrevis-Notes.docx and Brevis-Notes.pdf(on Windows) Generated\n")
 
     if os.path.exists('res'):
         shutil.rmtree('res')

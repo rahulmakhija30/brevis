@@ -28,16 +28,17 @@ class Step1 extends React.Component{
                 {
                   this.setState({
                     validurl:true,
+                    open:false
                   });
                   this.props.onChange()
-                  // document.getElementById('disp').innerHTML=""
+                  
               }
               else{
-                alert("Please enter a valid link! ");
                   this.setState({
                     validurl:false,
                     open:false,
                   });
+                  alert("Please enter a valid link! ");
                   console.log(this.state)
                   //if(response.data.result==0)
                   //{
@@ -95,7 +96,15 @@ class Step1 extends React.Component{
     }
 
     render(){
-        if (this.state.videoType==='Preview'){
+        if(this.state.open){
+            console.log(this.state)
+            return(
+                <Backdrop open={this.state.open} className={StepStyle.backdrop}>
+                    <Loader></Loader>
+                </Backdrop>
+            )
+        }
+        else if (this.state.videoType==='Preview'){
             return(
                 <div>
 
@@ -112,21 +121,14 @@ class Step1 extends React.Component{
                         Preview
                     </Button>
                     <p></p>
-                    <div id={StepStyle.or}><Typography variant='caption'>OR</Typography></div>
+                    <div id={StepStyle.or}><Typography variant='caption' align='center'>OR</Typography></div>
                     <p></p>
                     <Button variant='contained' startIcon={<CloudUploadIcon/>} color="primary" onClick={this.changetoUpload}>Upload a Video Instead ?</Button>
                 </div>
             )
         }
-        else if(this.state.open){
-            console.log(this.state)
-            return(
-                <Backdrop open={this.state.open} className={StepStyle.backdrop}>
-                    <Loader></Loader>
-                </Backdrop>
-            )
-        }
-        else{
+        else 
+       { 
             return(
                 <div>
                     <input

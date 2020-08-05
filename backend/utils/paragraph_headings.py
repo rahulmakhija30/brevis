@@ -2,32 +2,66 @@
 Input : text
 Output : List of tuples [(heading1,para1),...]
 
-Threshold:
-Similarity_threshold = Degree of similarity between two sentences (paragraph function)
-Word_threshold = Number of words in a paragraph (paragraph function)
-Sentence_threshold = Number of sentences in a paragraph (get_titles_paras function)
+Paragraph Threshold:
+similarity_threshold = Degree of similarity between two sentences (paragraph function)
+word_threshold = Number of words in a paragraph (paragraph function)
+sentence_threshold = Number of sentences in a paragraph (get_titles_paras function)
+training = PASSES
+heading_threshold = NUM_HEADING
+percent_reduce = When sentence similarity is greater than 0.9, reduce to 0.35
+Defaults : similarity_threshold=0.35, word_threshold = 20, sentence_threshold = 5, training = 500, heading_threshold = 3. percent_reduce = 0.6
+
+
+Heading Threshold:
+PASSES = Number of iterations to train the model
+NUM_HEADING = Number of headings required
+POS = List of part of speech in a priority order
+
+Defaults : PASSES = 500, NUM_HEADING = 3, POS = ['PROPN','NOUN','VERB']
 ''' 
 
-from collections import Counter
+# Paragraph Imports
+from gensim.models.wrappers import FastText
+from gensim.models import FastText
+from fse.models import Average
+from fse import IndexedList
 import pysbd
-import spacy
-import neuralcoref
-import spacy.cli
+import re
 
+
+# Heading Import
+import spacy
+import spacy.cli
+spacy.cli.download('en_core_web_sm')
+nlp = spacy.load('en_core_web_sm')
+
+import neuralcoref
+neuralcoref.add_to_pipe(nlp)
+
+import re
+import nltk
+import string
+import itertools
+
+nltk.download('punkt')
+from nltk.tokenize import word_tokenize
+
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+
+from nltk.stem.porter import PorterStemmer
+stemmer = PorterStemmer()
+
+from gensim import corpora
+from gensim import models
+
+
+# Others
 import math
 import numpy as np
 import os
-
-spacy.cli.download('en_core_web_sm')
-nlp = spacy.load('en_core_web_sm')
-neuralcoref.add_to_pipe(nlp)
-
-from gensim.models.wrappers import FastText
-from gensim.models import FastText
-import re
-from fse.models import Average
-from fse import IndexedList
 import time
+
 import logging
 
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
@@ -35,14 +69,17 @@ logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(mes
 import warnings
 warnings.filterwarnings("ignore")
 
+
 class ParaFormation:
 	def __init__(self,text):
 		self.text = text
 
+		
 	def modify(self,string):
 		return re.sub('[^A-Za-z0-9]+', ' ', string).strip().lower().split()
 
-	def sentence_similarity(self,los):
+	
+	def sentence_similarity(self,los,percent = 0.6):
 		sentences = [self.modify(i) for i in los]
 		ft = FastText(sentences, min_count=1,size=12,workers=4)
 
@@ -52,17 +89,22 @@ class ParaFormation:
 		res_similar = []
 		for i in range(len(los)-1):
 			res_similar.append(model.sv.similarity(i,i+1))
+			
+		if np.mean(res_similar) > 0.9:
+			PERCENT_REDUCE = percent        
+			for i in range(len(res_similar)):
+				res_similar[i] -= (PERCENT_REDUCE * res_similar[i])
 
 		return res_similar
 
-	def paragraph(self,similarity_threshold=0.35,word_threshold = 20):
+	
+	def paragraph(self,similarity_threshold=0.35, word_threshold = 20, percent_reduce = 0.6):
 		# Sentence Boundary Detection
 		seg = pysbd.Segmenter(language="en", clean=True)
 		sentences = seg.segment(self.text) # List of sentences as string
-		# print("Number of sentences : ",len(res))
-
+		# print("Number of sentences : ",len(sentences))
 		# Sentence Similarity
-		res_similar = self.sentence_similarity(sentences)
+		res_similar = self.sentence_similarity(sentences,percent=percent_reduce)
 
 		para = ''
 		n = len(res_similar)
@@ -97,79 +139,97 @@ class ParaFormation:
 				final += p[i-1] + ' '
 
 		final += p[len(p)-1]
-
 		return final.split('\n')    # List of paragraphs
 
-	def generate_title(self,i):
-		string=""
-		isfound=False
-		doc = nlp(i)
-		nlp.remove_pipe("neuralcoref")
-		coref = neuralcoref.NeuralCoref(nlp.vocab)
-		nlp.add_pipe(coref, name='neuralcoref')
-
-		#remove stopwords and punctuations
-		words = [token.text for token in doc if token.is_stop != True and token.is_punct != True]
-		Nouns = [chunk.text for chunk in doc.noun_chunks]
-		Adjectives = [token.lemma_ for token in doc if token.pos_ == "ADJ"]
-		word_freq = Counter(words)
-		word_freqNoun = Counter(Nouns)
-		word_freqADJ = Counter(Adjectives)
-		common_words = word_freq.most_common(5)
-		common_wordsNoun = word_freqNoun.most_common(10)
-		common_wordsADJ = word_freqADJ.most_common(10)
-		maxcount = common_words[0][1]
-		Range = min(len(common_wordsNoun),len(common_wordsADJ))
-		title2 = ''
-		title1 = ''
-		for j in range(Range):
-			title2 = common_wordsADJ[j][0]+" "+common_wordsNoun[j][0]
-			if title2 in i:
-				# print("Adjective + Noun Title : ",title2)
-				break
-
-		for j in common_words:
-			if j[1]==maxcount:
-				string+=j[0]+" "
-		string = string[:-1]
-		while not isfound:
-			if string in i:
-				isfound = True
-				title1 = string
-				# print("Title : ",title1)
-			else :
-				string = ' '.join(string.split(' ')[:-1])
-		title = [common_wordsNoun[0][0]]
-		title = ' '.join(title)
-		# print("Noun Title : ",title)
-
-		#title - phrases
-		#title1 - single word
-		#title2 - adj + noun title
-
-		if len(title) >= 5 and title != '' : 
-			return title
-
-		elif len(title1) >= 5 and title1 != '':
-			return title1
-
-		elif len(title2) >= 5 and title2 != '':
-			return title2
-
+	
+	def coreference(self,text):
+		doc = nlp(text)
+		if doc._.has_coref:
+			print("Coreferencing")
+			text = doc._.coref_resolved
 		else:
-			return ''
+			print("No coref")
+		return text
+
+
+	def process_text(self,text):
+		# Make all the strings lowercase and remove non alphabetic characters
+		text = re.sub('[^A-Za-z]', ' ', text.lower())
+
+		# Tokenize the text; this is, separate every sentence into a list of words
+		# Since the text is already split into sentences you don't have to call sent_tokenize
+		tokenized_text = word_tokenize(text)
+
+		# Remove the stopwords and stem each word to its root
+
+		clean_text = [
+			# lemmatizer.lemmatize(word) for word in tokenized_text
+			stemmer.stem(word) for word in tokenized_text
+			if word not in stopwords.words('english')
+		]
+
+		# Remember, this final output is a list of words
+		return clean_text
+
+
+	def spellcheck(self,text,paragraph):
+		paragraph = paragraph.lower()
+		heading = paragraph[paragraph.find(text):].split()[0].capitalize()
+		heading = heading.translate(str.maketrans('', '', string.punctuation)).strip()
+		return heading
+	
+
+	def generate_title(self,para, PASSES = 500, NUM_HEADING = 3, POS = ['PROPN','NOUN','VERB']):
+		texts = self.coreference(para).split()
+
+		texts = [self.process_text(text) for text in texts]
+		dictionary = corpora.Dictionary(texts)
+		corpus = [dictionary.doc2bow(text) for text in texts]
+
+
+		model = models.ldamodel.LdaModel(corpus, num_topics=1, id2word=dictionary, passes=PASSES, per_word_topics=True)
+
+		topics = model.print_topics(num_words=NUM_HEADING)
+		topic = topics[0]
+
+		h = []
+		for i in range(NUM_HEADING):
+			h.append(self.spellcheck(topic[-1].split('+')[i].split("*")[-1].split("\"")[1],para))
+
+		print(topic)
+
+
+		heading_string = " ".join(h)
+		doc = nlp(heading_string)
+		pos_heading = {}
+		for token in doc:
+			if token.pos_ not in pos_heading:
+				pos_heading[token.pos_] = [token.text]
+			else:
+				pos_heading[token.pos_].append(token.text)
+		print(pos_heading)
+
+
+		heading_keys = list(pos_heading.keys())
+		heading_list = [pos_heading[k] for k in POS if k in heading_keys]
+		headings = list(itertools.chain(*heading_list))
+
+		print(headings[:NUM_HEADING])
+			
+		return headings[0]     
+	
 
 class ParaHeadings(ParaFormation):
 	def __init__(self,list_para):
 		self.list_para = list_para
 		
-	def get_titles_paras(self,sentence_threshold = 5):
+	def get_titles_paras(self,sentence_threshold = 5, training = 200, heading_threshold = 3):
 		no_of_para = len(self.list_para)
 		seg = pysbd.Segmenter(language="en", clean=True)
 		sent = seg.segment(' '.join(self.list_para)) # List of sentences as string
 		no_of_sent = len(sent)
 
-		# print("\nNumber of paragraphs : ",no_of_para)
+		print("\nNumber of paragraphs : ",no_of_para)
 		# print("Number of sentences : ",no_of_sent)
 
 		i=0
@@ -182,7 +242,7 @@ class ParaHeadings(ParaFormation):
 
 			if len(res) >= sentence_threshold:
 				# print(len(res))
-				heading = self.generate_title(in_para).strip().upper()
+				heading = self.generate_title(in_para,PASSES = training, NUM_HEADING = heading_threshold).strip().upper()
 				if heading != '':
 					title.append((heading,in_para))
 				in_para = ''
@@ -191,7 +251,7 @@ class ParaHeadings(ParaFormation):
 
 		if in_para != '':
 			# print(len(res))
-			heading = self.generate_title(in_para).strip().upper()
+			heading = self.generate_title(in_para,PASSES = training, NUM_HEADING = heading_threshold).strip().upper()
 			title.append((heading,in_para))
 				
 		with open(os.path.join('res',"paragraph_headings.txt"),"w",encoding="utf-8") as f:
@@ -203,9 +263,9 @@ class ParaHeadings(ParaFormation):
 if __name__ == '__main__':
 	text = input("Enter transcript : ")
 	pf = ParaFormation(text)
-	list_para = pf.paragraph()
-	# print(list_para)
+	list_para = pf.paragraph(similarity_threshold=0.35,word_threshold = 20,percent_reduce=0.56)
+	print(f"Number of paragraphs = {len(list_para)}")
 	
 	ph = ParaHeadings(list_para)
-	title_para = ph.get_titles_paras(sentence_threshold=2)
+	title_para = ph.get_titles_paras(sentence_threshold=2,training = 200, heading_threshold = 3)
 	print(title_para)
