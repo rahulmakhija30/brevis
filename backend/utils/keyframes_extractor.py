@@ -13,6 +13,7 @@ Parameters/Thresholds:
 # Import modules
 from youtube_transcription import YoutubeTranscribe
 from keywords_extractor import KeywordsExtractor
+from youtube_transcript_api._errors import TranscriptsDisabled
 
 from youtube_transcript_api import YouTubeTranscriptApi
 from PIL import Image
@@ -115,7 +116,13 @@ class ImageProcessing:
 
 	def img_processing(self,text_threshold = 50,dis_threshold = 20,jump=1500):
 		urlID = self.url.partition('https://www.youtube.com/watch?v=')[-1]
-		transcript = YouTubeTranscriptApi.get_transcript(urlID)
+		
+		try:
+			transcript = YouTubeTranscriptApi.get_transcript(urlID)
+		
+		except TranscriptsDisabled as s:
+			print("No images will be there in your notes")
+			return
 
 		#Fetching API Keys for Image Simmilarity API
 		try:

@@ -87,6 +87,7 @@ python main_serial.py
 |--- backend
 |     |
 |     |--- utils
+|           |--- api_transcript.py
 |           |--- clean_transcript.py
 |           |--- google_speech_to_text.py
 |           |--- keyframes_extractor.py

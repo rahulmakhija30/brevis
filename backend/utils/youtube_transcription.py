@@ -71,36 +71,62 @@ class YoutubeTranscribe:
 					# Auto-generated 
 					if i == len(t)-1 and t[i].is_generated:
 						print("Got Auto-generated Transcript")
-						data = t[i].fetch()
-						res=''
-						for i in data:
-							res += i['text']
+						
+						print("Using API")
+						# text = ?
+						
+# 						except:
+# 							print("Using YouTubes Transcript")
 
-						print("Cleaning Auto-generated Transcript")
-						text = res.replace('\n',' ')
-						clean_trans=CleanTranscript(text)
-						clean_trans.add_punctuations(punct_model)
-						clean_trans.correct_mistakes(lang_model)
-						text = clean_trans.text
+# 							data = t[i].fetch()
+# 							res=''
+# 							for i in data:
+# 								res += i['text']
 
-			text = re.sub("[\[].*?[\]]", "", text).strip()
+# 							print("Cleaning Auto-generated Transcript")
+# 							text = res.replace('\n',' ')
+# 							clean_trans=CleanTranscript(text)
+# 							clean_trans.add_punctuations(punct_model)
+# 							clean_trans.correct_mistakes(lang_model)
+# 							text = clean_trans.text
 
-			with open(os.path.join('res',"transcript.txt"),"w",encoding="utf-8") as f:
-				f.write(text)
-
-			print("Transcription and Cleaning Done!!")
-			return text
 
 		# No Transcript
 		except NoTranscriptAvailable as t:
-			print("No Transcript Available - Trying to generate one!!")
-			st = SpeechToText(self.url)
-			text = st.speech_to_text()
+			print("No Transcript Available - Trying to generate one!!") 
+			
+			print("Using API")
+			# text = ?
+				
+# 			except:
+# 				print("Using Google Speech To Text")
+				
+# 				st = SpeechToText(self.url)
+# 				text = st.speech_to_text()
+
+# 				print("Cleaning Transcript")         
+# 				clean_trans=CleanTranscript(text)
+# 				clean_trans.add_punctuations(punct_model)
+# 				clean_trans.correct_mistakes(lang_model)
+# 				text = clean_trans.text
 
 		except TranscriptsDisabled as s:
 			print("Subtitles are disabled for this video - Trying to generate one!!")
-			st = SpeechToText(self.url)
-			text = st.speech_to_text()
+			
+			print("Using API")
+			# text = ?                
+				
+# 			except:
+# 				print("Using Google Speech To Text")
+				
+# 				st = SpeechToText(self.url)
+# 				text = st.speech_to_text()
+
+# 				print("Cleaning Transcript")         
+# 				clean_trans=CleanTranscript(text)
+# 				clean_trans.add_punctuations(punct_model)
+# 				clean_trans.correct_mistakes(lang_model)
+# 				text = clean_trans.text           
 
 		# Other Errors
 		except VideoUnavailable as v:
@@ -114,11 +140,18 @@ class YoutubeTranscribe:
 			print(e)
 
 		finally:
+			text = re.sub("[\[].*?[\]]", "", text).strip()
+
+			with open(os.path.join('res',"transcript.txt"),"w",encoding="utf-8") as f:
+				f.write(text)
+		
 			if text == '': 
 				print("No Transcript")
 				return ''
 
-			else: return text
+			else: 
+				print("Transcription and Cleaning Done!!")                
+				return text
 		
 if __name__ == '__main__':
 	# Testing
