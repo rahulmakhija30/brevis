@@ -94,13 +94,18 @@ python main_serial.py
 |           |--- keywords_extractor.py
 |           |--- notes.py
 |           |--- paragraph_headings.py
+|           |--- summary_generator.py
+|           |--- Transcript_Gen_API_Keys.txt
 |           |--- web_scraping.py
 |           |--- youtube_transcription.py
 |     |--- Demo-Europarl-EN.pcl
+|     |--- Image_Sim_API_Keys.txt
+|     |--- main_multi.py
 |     |--- main_parallel.py
 |     |--- main_serial.py
 |     |--- prog.py
 |     |--- server.py
+|     |--- server_parallel.py
 |     |--- SmartStoplist.txt
 |
 |
