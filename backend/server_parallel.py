@@ -69,39 +69,39 @@ text=""
 
 #All process functions to be run in parallel
 
-#Process to extract keywords and run Image Processing and Web Scraping parallely
-def Process_Extract_Keywords(url,text):
+#Process to extract keywords and run Image Processing parallely
+def Process_Extract_Keywords(url,text,num_keywords,text_threshold,distance_threshold,jump):
 	print("Extracting Keywords :-\n")
-	num_keywords=10
+	# num_keywords=10
 	words=KeywordsExtractor(text,num_keywords).ExtractKeywords()
 	print(f"\nKeywords : {words}\n")
 	if option == "Overview":
 		if not os.path.exists(os.path.join('res','out')):
 			os.mkdir(os.path.join('res','out'))
 	else:
-		#Running Image Processing and Web Scraping in Parallel
-		img_process = multiprocessing.Process(target=Process_Image_Extraction, args=(url,words,50,20,1000))
-		#Starting both the process simultaneously
+		#Running Image Processing in Parallel
+		img_process = multiprocessing.Process(target=Process_Image_Extraction, args=(url,words,text_threshold,distance_threshold,jump))
+		#Starting the process simultaneously
 		img_process.start()
-		#Checking if the process have completed and printing the result
+		#Checking if the process have completed
 		img_process.join()
 	
 	
 #Process to generate summary from the text and run Paragraph Formation and Paragraph Heading serially(Can't be run in parallel)
-def Process_Get_Summary(text,percentage):
+def Process_Get_Summary(text,percentage,SENTENCE_SIMILARITY,WORDS_PER_PARA,PERCENT_REDUCE,SENTENCES_PER_PARA,HEADING_TRAINING,TOP_HEADINGS):
 	print("Extracting Summary :-\n")
 	summ = Summarizer().summary(text,percentage)
 	print(f"\n Summary : {summ}\n")
 	#Dividing Text into Paragraphs
-	paras = ParaFormation(summ).paragraph(similarity_threshold = 0.35,word_threshold = 20)
+	paras = ParaFormation(summ).paragraph(similarity_threshold = SENTENCE_SIMILARITY, word_threshold = WORDS_PER_PARA, percent_reduce = PERCENT_REDUCE)
 	#Generating Headings for Paragraphs
-	ParaHeadings(paras).get_titles_paras(sentence_threshold = 4,training = 200, heading_threshold = 3)
+	ParaHeadings(paras).get_titles_paras(sentence_threshold = SENTENCES_PER_PARA, training = HEADING_TRAINING, heading_threshold = TOP_HEADINGS)
 
 	
 #Process to Extract keyframes and remove the non-text and similar images
-def Process_Image_Extraction(url,words,text_threshold,dis_threshold,jump):
+def Process_Image_Extraction(url,words,TEXT_THRESHOLD,DIS_THRESHOLD,JUMP):
 	print("Extracting Images - \n")
-	ImageProcessing(url,words).img_processing(text_threshold,dis_threshold,jump)
+	ImageProcessing(url,words).img_processing(text_threshold = TEXT_THRESHOLD,dis_threshold = DIS_THRESHOLD,jump = JUMP)
 	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
 
 #Scraping the web to fetch links and adding those links to the multiprocessing queue
@@ -150,19 +150,120 @@ def gen():
 	global scrape_json
 	global option
 
+	sec = pafy.new(video_url).length
+	print(f"\nVideo duration in sec = {sec}\n")
+
+    # THRESHOLDS FOR KEYWORDS AND SUMMARY
+	
+	if sec <= 900: # 0-15 min
+		NUM_KEYWORDS = 15
+		SUMMARY_PERCENT = 60
+	
+	elif 900 < sec <= 1800: # 15-30 min
+		NUM_KEYWORDS = 18
+		SUMMARY_PERCENT = 50 
+
+	elif 1800 < sec <= 2700: # 30-45 min
+		NUM_KEYWORDS = 20
+		SUMMARY_PERCENT = 40
+   
+	elif 2700 < sec <= 3600: # 45-60 min
+		NUM_KEYWORDS = 22
+		SUMMARY_PERCENT = 35
+	
+	elif 3600 < sec <= 7200: # 1-2 hr
+		NUM_KEYWORDS = 25
+		SUMMARY_PERCENT = 30
+		
+	else: # More than 2 hr
+		NUM_KEYWORDS = 30
+		SUMMARY_PERCENT = 25
+
+	# THRESHOLDS FOR IMAGE PROCESSING AND HEADING GENERATION
+	
+	DYNAMIC_INTERVAL = (sec/60) * 100
+	
+	if sec <= 900: # 0-15 min
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 6
+		HEADING_TRAINING = 500
+		TOP_HEADINGS = 3
+	
+	elif 900 < sec <= 1800: # 15-30 min
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 25
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20 
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 6
+		HEADING_TRAINING = 200
+		TOP_HEADINGS = 3
+
+	elif 1800 < sec <= 2700: # 30-45 min
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 25
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 6
+		HEADING_TRAINING = 200
+		TOP_HEADINGS = 3
+   
+	elif 2700 < sec <= 3600: # 45-60 min
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 6
+		HEADING_TRAINING = 500
+		TOP_HEADINGS = 3
+	
+	elif 3600 < sec <= 7200: # 1-2 hr
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 6
+		HEADING_TRAINING = 500
+		TOP_HEADINGS = 3
+		
+	else: # More than 2 hr
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 6
+		HEADING_TRAINING = 500
+		TOP_HEADINGS = 3
+
+
 	start = time.perf_counter()
 	
-	if option == "Overview":
-		percentage = 50
+	# if option == "Overview":
+	# 	percentage = 50
 
-	elif option == "Notes":
-		percentage = 60
+	# elif option == "Notes":
+	# 	percentage = 60
 
-	elif option == "Notes+Ref":
-		percentage = 80
+	# elif option == "Notes+Ref":
+	# 	percentage = 80
+
 	#Running keywords and summary Processes parallely
-	key_ext=multiprocessing.Process(target=Process_Extract_Keywords , args=(video_url,text))
-	summ_ext=multiprocessing.Process(target=Process_Get_Summary , args=(text,percentage))
+	key_ext=multiprocessing.Process(target=Process_Extract_Keywords , args=(video_url,text,NUM_KEYWORDS,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES))
+	summ_ext=multiprocessing.Process(target=Process_Get_Summary , args=(text,SUMMARY_PERCENT,SENTENCE_SIMILARITY,WORDS_PER_PARA,PERCENT_REDUCE,SENTENCES_PER_PARA,HEADING_TRAINING,TOP_HEADINGS))
 	#Starting both process simultaneously
 	key_ext.start()
 	summ_ext.start()

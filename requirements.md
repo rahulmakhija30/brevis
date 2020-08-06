@@ -102,7 +102,7 @@ Link to create a new api-key : https://www.assemblyai.com/
 
 ```
 textrazor : Keywords Extraction
-Link to create a new api-key : 
+Link to create a new api-key : https://www.textrazor.com/signup
 ```
 
 ```
