@@ -38,7 +38,7 @@ class GenerateTranscript:
 		}
 
 		with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-		    info = ydl.extract_info(url, download=False)
+		    info = ydl.extract_info(self.url, download=False)
 		    audio_url = info['formats'][0]['url']
 		    print(audio_url)
 	    
@@ -129,7 +129,7 @@ class GenerateTranscript:
 				text = response.json()['text']
 				with open(os.path.join('res','transcript.txt'),'w') as f:
 					f.write(text)
-				#print(f"Video Transcript :\n{text}")
+				print(f"Video Transcript :\n{text}\n")
 				end = time.perf_counter()
 				print(f"Transcript Generated in {round(end-start,2)} second(s).")
 				return text
