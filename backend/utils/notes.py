@@ -312,6 +312,7 @@ class Notes:
 			pdf_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.pdf")
 			pdf_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.pdf")
 			convert(word_path_test,pdf_path_test)
+			convert(word_path,pdf_path)
 
 		# os.remove("video.mp4")
 		#f.close()
