@@ -26,16 +26,22 @@ import numpy as np
 import requests
 import imageio
 import pytesseract
+import string
 from sys import exit
 
 # Path to your tesseract executable
-#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 
 class ImageProcessing:
 	def __init__(self,url,keywords):
 		self.url = url
 		self.keywords = keywords
+		
+	def modify_keyword(self,word):
+		word = word.translate(str.maketrans('', '', string.punctuation))
+		word = word.lower().strip()
+		return word
 	
 	def detect_text(self,img):
 		text = pytesseract.image_to_string(img,lang='eng')
@@ -141,7 +147,7 @@ class ImageProcessing:
 		# Process Every Keyword
 		count=0
 		for key in range(len(self.keywords)):
-			search = self.keywords[key].split()
+			search = self.modify_keyword(self.keywords[key]).split()
 			start,end = self.start_end(transcript,search)
 			self.frames(self.url,start,end,jump)
 
