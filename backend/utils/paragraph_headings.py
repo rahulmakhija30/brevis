@@ -19,7 +19,6 @@ POS = List of part of speech in a priority order
 
 Defaults : PASSES = 500, NUM_HEADING = 3, POS = ['PROPN','NOUN','VERB']
 ''' 
-
 # Paragraph Imports
 from gensim.models.wrappers import FastText
 from gensim.models import FastText
@@ -108,6 +107,7 @@ class ParaFormation:
 
 		para = ''
 		n = len(res_similar)
+		second = sentences[0]
 		for i in range(n-1):
 			first = sentences[i]
 			second = sentences[i+1]

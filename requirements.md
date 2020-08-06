@@ -92,6 +92,24 @@ PDF Installer for Microsoft Word 2007
 Build Tools 
 > http://go.microsoft.com/fwlink/?LinkId=691126&fixForIE=.exe
 
+
+### *List of API used and their description :-*
+
+```
+Assembly AI : Transcript Generation
+Link to create a new api-key : https://www.assemblyai.com/
+```
+
+```
+textrazor : Keywords Extraction
+Link to create a new api-key : 
+```
+
+```
+Deepai Image Similarity : Image Similarity
+Link to create a new api-key : https://deepai.org/machine-learning-model/image-similarity
+```
+
 #### After installing all these modules, still if you face any issues or any module is missing
 
 **Visit Here (This is my entire list of dependencies)** 
