@@ -209,7 +209,7 @@ class Notes:
 							#paras[mapindex][1].append(filename)
 							#s.add(filename)
 
-				j+=1
+					j+=1
 
 			#print(len(s))
 			#print(s)
@@ -244,12 +244,12 @@ class Notes:
 								index+=1
 
 							mapindex=l1[l2.index(max(l2))]
-							
+
 							if(filename not in paras[mapindex][1] and filename not in s):
 								paras[mapindex][1].append(filename)
 								s.add(filename)
 
-					j+=1
+						j+=1
             
             
 		#print(paras)
