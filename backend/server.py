@@ -40,7 +40,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 print("All Modules Imported Sucessfully")
 
@@ -78,7 +78,7 @@ def generate(data):
 	global option
 	option = data
 
-	sec = pafy.new(url).length
+	sec = pafy.new(video_url).length
 	print(f"\nVideo duration in sec = {sec}\n")
 	
 	# THRESHOLDS
@@ -168,7 +168,7 @@ def gen():
 	global scrape_json
 	global option
 
-	sec = pafy.new(url).length
+	sec = pafy.new(video_url).length
 	print(f"\nVideo duration in sec = {sec}\n")
 	
 	# THRESHOLDS
