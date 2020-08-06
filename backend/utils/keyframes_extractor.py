@@ -29,7 +29,7 @@ import pytesseract
 from sys import exit
 
 # Path to your tesseract executable
-pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
 
 
 class ImageProcessing:

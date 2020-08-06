@@ -15,6 +15,8 @@ from google_speech_to_text import SpeechToText
 from clean_transcript import CleanTranscript
 from clean_transcript import *
 
+from api_transcript import *
+
 class MyException(Exception):
 	pass
 
@@ -72,8 +74,10 @@ class YoutubeTranscribe:
 					if i == len(t)-1 and t[i].is_generated:
 						print("Got Auto-generated Transcript")
 						
-						print("Using API")
-						# text = ?
+						print("Using API to generate transcript")
+						
+						#API Calling and Transcript Generation
+						text = GenerateTranscript(self.url).generate_transcript()
 						
 # 						except:
 # 							print("Using YouTubes Transcript")
@@ -96,7 +100,7 @@ class YoutubeTranscribe:
 			print("No Transcript Available - Trying to generate one!!") 
 			
 			print("Using API")
-			# text = ?
+			text = GenerateTranscript(self.url).generate_transcript()
 				
 # 			except:
 # 				print("Using Google Speech To Text")
@@ -114,7 +118,7 @@ class YoutubeTranscribe:
 			print("Subtitles are disabled for this video - Trying to generate one!!")
 			
 			print("Using API")
-			# text = ?                
+			text = GenerateTranscript(self.url).generate_transcript()                
 				
 # 			except:
 # 				print("Using Google Speech To Text")
