@@ -71,11 +71,12 @@ class Notes:
 
 		sim = model.sv.similarity(0,1)
 
-		if sim >= similarity_threshold:
-			return True
+		#if sim >= similarity_threshold:
+		#	return True
 
-		else:
-			return False
+		#else:
+		#	return False
+		return sim
 
 	def add_hyperlink(self, paragraph, text, place_url, color, underline):
 		"""
@@ -175,36 +176,81 @@ class Notes:
 		paras = paras[:-1]
 	
 		if trans == 1:
-			j=0
-			inserted_files = []
-			for filename in os.listdir(directory):
-				l=filename.split(".")
-				time=float(l[0][5:])
-				j=0
+      j=0
+      for filename in os.listdir(directory):
+        l=filename.split(".")
+        time=float(l[0][5:])
+        j=0
 
-				while(j<len(transcript)):
-					data=transcript[j]
-					index=0
+        while(j<len(transcript)):
+          data=transcript[j]
+          index=0
 
-					if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+2000)):
-						text=data['text'].replace('\n',' ')
-						t=(text,time)
+          if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+1000)):
+            text=data['text'].replace('\n',' ')
+            t=(text,time)
+            l1=[]
+            l2=[]
+            while index <(len(paras)):
+              t1 = self.clean(text)
+              t2 = self.clean(paras[index][0])
 
-						while index <(len(paras)):
-							t1 = self.clean(text)
-							t2 = self.clean(paras[index][0])
+              if((t1 in t2)):
+                if(filename not in paras[index][1] and filename not in s ):
+                  paras[index][1].append(filename)
+                  s.add(filename)
+                break
+              #l1.append(index)
+              #l2.append(self.sentence_similarity(t1,t2))
 
-							if((t1 in t2) or self.sentence_similarity(t1,t2)):
-								if (filename not in paras[index][1]) and (filename not in inserted_files):
-									paras[index][1].append(filename)
-									inserted_files.append(filename)
-								break
+              index+=1
+            #mapindex=l1[l2.index(max(l2))]
+            #if(filename not in paras[mapindex][1] and filename not in s):
+              #paras[mapindex][1].append(filename)
+              #s.add(filename)
 
-							index+=1
+          j+=1
+      #print(len(s))
+      #print(s)
+      for filename in os.listdir(directory):
+        if(filename not in s):
+          l=filename.split(".")
+          time=float(l[0][5:])
+          j=0
 
-					j+=1
 				
+          while(j<len(transcript)):
+            data=transcript[j]
+            index=0
 
+            if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+1000)):
+              text=data['text'].replace('\n',' ')
+              t=(text,time)
+              l1=[]
+              l2=[]
+              while index <(len(paras)):
+                t1 = self.clean(text)
+                t2 = self.clean(paras[index][0])
+
+                #if((t1 in t2)):
+                #	if(filename not in paras[index][1] and filename not in s ):
+                #		paras[index][1].append(filename)
+                #		s.add(filename)
+                #	break
+                l1.append(index)
+                l2.append(self.sentence_similarity(t1,t2))
+
+                index+=1
+              mapindex=l1[l2.index(max(l2))]
+              if(filename not in paras[mapindex][1] and filename not in s):
+                paras[mapindex][1].append(filename)
+                s.add(filename)
+
+            j+=1
+            
+            
+		#print(paras)
+		#print(len(s))
 		document = docx.Document()
 		d=document.add_heading(vid_title,0)
 		d.alignment=1
