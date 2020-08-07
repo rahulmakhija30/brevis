@@ -1,0 +1,15 @@
+.video{
+    border: 1px solid black !important;
+    border-radius: 5px;
+}
+
+#about1,
+#about3,
+#about4{
+    font-family: 'Lemonada', cursive !important;
+}
+
+#about2,
+#about5{
+    font-family: 'Lexend Zetta', sans-serif !important;
+}

@@ -19,14 +19,14 @@ class Navbar extends Component {
       <div id='mySidenav' className={`${style.mysidenav} ${style.LightMode}`}>
         <span className={style.dot}></span>  
         <Tooltip title="HOME" arrow placement='right' TransitionComponent={Zoom} classes={{ tooltip: style.popper}} margin-top={10}>
-            <Link to='/'><img id='homeicon' src={home} className={style.about} alt=""/></Link>
+            <a href='/'><img id='homeicon' src={home} className={style.about} alt=""/></a>
         </Tooltip>
         <Tooltip title="SUGGESTIONS" arrow placement='right' TransitionComponent={Zoom} classes={{ tooltip: style.popper}}>  
-            <Link to='/suggestions'><img id='suggestionsicon' src={lightbulb} className={style.about} alt=""/></Link>
+            <Link to='/suggestions' ><img id='suggestionsicon' src={lightbulb} className={style.about} alt=""/></Link>
         </Tooltip>
 
         <Tooltip title="ABOUT" arrow placement='right' TransitionComponent={Zoom} classes={{ tooltip: style.popper}}>          
-            <a href='/about'><img src={info} className={style.about} alt="" id='abouticon'/></a>  
+            <Link to='/about'><img src={info} className={style.about} alt="" id='abouticon'/></Link>  
         </Tooltip>
             
         <Tooltip title="" arrow placement='right' TransitionComponent={Zoom}>
