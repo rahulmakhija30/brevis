@@ -67,7 +67,7 @@ class GenerateTranscript:
 		    }
 
 			with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-				ydl.download([url])
+				ydl.download([self.url])
 
 			# Upload File
 			filename = os.path.join('res','audio','test.mp3')
