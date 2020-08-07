@@ -6,6 +6,11 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import {DarkStep1} from '../Functions'
 import Loader from '../Loader/Loader';
 import axios from 'axios';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 class Step1 extends React.Component{
 
@@ -14,6 +19,7 @@ class Step1 extends React.Component{
         videoType:'Preview',
         open:false,
         validurl:false,
+        Alertopen:false
     }
 
     IsValidURL=(event)=> {
@@ -31,14 +37,15 @@ class Step1 extends React.Component{
                     open:false
                   });
                   this.props.onChange()
-                  
               }
               else{
                   this.setState({
                     validurl:false,
                     open:false,
+                    Alertopen:true,
                   });
-                  alert("Please enter a valid link! ");
+                  // document.getElementById("alert").style.visibility='visible'
+                //   alert("Please enter a valid link! ");
                   console.log(this.state)
                   //if(response.data.result==0)
                   //{
@@ -85,6 +92,10 @@ class Step1 extends React.Component{
         }
     }
 
+    handleAlertClose = () => {
+        this.setState({Alertopen:false})
+      };
+
     handleChange=(event)=> {
         this.setState({url:event.target.value})
         this.props.onURLChange(event.target.value)
@@ -107,7 +118,32 @@ class Step1 extends React.Component{
         else if (this.state.videoType==='Preview'){
             return(
                 <div>
-
+                    {/*
+                        Alert Dialog Start
+                    */}
+                    <div>
+                        <Dialog
+                            open={this.state.Alertopen}
+                            onClose={this.handleAlertClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Invalid Link!"}</DialogTitle>
+                            <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Please try again with a valid link.
+                            </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                            <Button onClick={this.handleAlertClose} color="primary">
+                                OK
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
+                        </div>
+                    {/*
+                        Alert Dialog End
+                    */}
                     <FormControl variant="outlined" className={StepStyle.inputLink} id='inputfield' onChange={this.handleChange} value={this.state.url}>
                         <InputLabel htmlFor="outlined-adornment-amount">Paste Link</InputLabel>
                         <OutlinedInput

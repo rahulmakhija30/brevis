@@ -8,3 +8,7 @@
     font-weight: bolder !important;
     font-family: 'Palanquin' , sans-serif !important;
 }
+
+.contentWrap{
+	padding-bottom: 2.5rem;
+}

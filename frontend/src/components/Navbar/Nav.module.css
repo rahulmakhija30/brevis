@@ -36,7 +36,7 @@
   }
 
   .about:hover{
-      transform: scale(1.3);
+      transform: scale(1.1);
   }
   
   .night{
@@ -91,7 +91,7 @@
 
   .invert{
     transition: var(--transition-time);;
-      filter:invert(100%)
+    filter:invert(100%)
   }
 
   .BodyDarkMode{
