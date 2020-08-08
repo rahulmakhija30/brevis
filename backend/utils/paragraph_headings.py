@@ -255,8 +255,10 @@ class ParaHeadings(ParaFormation):
 			title.append((heading,in_para))
 				
 		with open(os.path.join('res',"paragraph_headings.txt"),"w",encoding="utf-8") as f:
+			num=1
 			for i,j in title:
-				f.write(i + " $ " + j.strip() + "\n")
+				f.write(str(num)+ ".> " + i + " $ " + j.strip() + "\n")
+				num+=1
 
 		return title
 
