@@ -10,7 +10,7 @@ import Loader from '../Loader/Loader';
 import io from 'socket.io-client'
 import axios from 'axios';
 
-const socket=io('http://localhost:5000',{transports:['websocket'],pingTimeout:3600000,pingInterval:180000});
+const socket=io('http://localhost:5000',{transports:['websocket'],pingTimeout:14400000,pingInterval:7200000});
 
 window.onbeforeunload = function () {
   console.log('refresh')

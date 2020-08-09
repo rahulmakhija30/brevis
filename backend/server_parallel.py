@@ -47,7 +47,7 @@ print("All Modules Imported Sucessfully")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app,cors_allowed_origins='*',timeout=3600000,ping_timeout=3600,ping_interval=1800)
+socketio = SocketIO(app,cors_allowed_origins='*',timeout=3600000,ping_timeout=14400,ping_interval=7200)
 #socketio = SocketIO(app,cors_allowed_origins='*',timeout=3600000)
 print("This is socketio",socketio)
 #CORS(app)
