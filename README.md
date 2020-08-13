@@ -5,40 +5,8 @@
 ### *Contributing*
 >For contributing to Brevis refer to [**Contribution.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/Contribution.md)
 
-
-### *Dependencies Installation for frontend*
-```
-cd frontend
-npm install
-```
-
-### *Starting the Application*
-
-To start the server type the following  commands :
-```
-cd backend
-python server.py
-```
-
-Open a new terminal
-To start the client type the follwoing commands :
-```
-cd frontend
-npm start
-```
-
-### **Testing Backend**
-
-```
-Install modules mentioned in requirements.md
-```
-
-Run the command to test
-
-```
-python main_serial.py
-```
-
+### *Setting up your device*
+>Refer to [**Setup.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/Setup.md) to Setup your device.
 
 ### *Folder Structure*
 ```
@@ -118,6 +86,10 @@ python main_serial.py
 |--- README.md
 |
 |--- requirements.md
+|
+|--- Contribution.md
+|
+|--- Setup.md
 |
 +
 
