@@ -27,7 +27,10 @@ from fse import IndexedList
 import pysbd
 import re
 
+# Heading Import Modified
+from keywords_extractor import *
 
+'''
 # Heading Import
 import spacy
 import spacy.cli
@@ -53,7 +56,7 @@ stemmer = PorterStemmer()
 
 from gensim import corpora
 from gensim import models
-
+'''
 
 # Others
 import math
@@ -178,6 +181,18 @@ class ParaFormation:
 		heading = heading.translate(str.maketrans('', '', string.punctuation)).strip()
 		return heading
 	
+	
+	def GetHeadings(self,text):
+		keywords = KeywordsExtractor(text).ExtractScrapeKeywords()
+		if(len(keywords)==0):
+			return ""
+		for word in keywords:
+			if word not in self.headings:
+				self.headings.append(word)
+				return word
+		return ""
+
+
 
 	def generate_title(self,para, PASSES = 500, NUM_HEADING = 3, POS = ['PROPN','NOUN','VERB']):
 		texts = self.coreference(para).split()
@@ -222,8 +237,10 @@ class ParaFormation:
 class ParaHeadings(ParaFormation):
 	def __init__(self,list_para):
 		self.list_para = list_para
-		
-	def get_titles_paras(self,sentence_threshold = 5, training = 200, heading_threshold = 3):
+		self.headings = []        
+	
+	# def get_titles_paras(self,sentence_threshold = 5, training = 200, heading_threshold = 3):
+	def get_titles_paras(self,sentence_threshold = 5):
 		no_of_para = len(self.list_para)
 		seg = pysbd.Segmenter(language="en", clean=True)
 		sent = seg.segment(' '.join(self.list_para)) # List of sentences as string
@@ -242,7 +259,8 @@ class ParaHeadings(ParaFormation):
 
 			if len(res) >= sentence_threshold:
 				# print(len(res))
-				heading = self.generate_title(in_para,PASSES = training, NUM_HEADING = heading_threshold).strip().upper()
+				# heading = self.generate_title(in_para,PASSES = training, NUM_HEADING = heading_threshold).strip().upper()
+				heading = self.GetHeadings(in_para).strip().upper()                
 				if heading != '':
 					title.append((heading,in_para))
 				in_para = ''
@@ -251,7 +269,8 @@ class ParaHeadings(ParaFormation):
 
 		if in_para != '':
 			# print(len(res))
-			heading = self.generate_title(in_para,PASSES = training, NUM_HEADING = heading_threshold).strip().upper()
+			# heading = self.generate_title(in_para,PASSES = training, NUM_HEADING = heading_threshold).strip().upper()
+			heading = self.GetHeadings(in_para).strip().upper()
 			title.append((heading,in_para))
 				
 		with open(os.path.join('res',"paragraph_headings.txt"),"w",encoding="utf-8") as f:
@@ -269,5 +288,6 @@ if __name__ == '__main__':
 	print(f"Number of paragraphs = {len(list_para)}")
 	
 	ph = ParaHeadings(list_para)
-	title_para = ph.get_titles_paras(sentence_threshold=2,training = 200, heading_threshold = 3)
+	# title_para = ph.get_titles_paras(sentence_threshold=2,training = 200, heading_threshold = 3)
+	title_para = ph.get_titles_paras(sentence_threshold=2)
 	print(title_para)
