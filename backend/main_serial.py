@@ -68,8 +68,8 @@ def main():
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
 		SENTENCES_PER_PARA = 6
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 	
 	elif 900 < sec <= 1800: # 15-30 min
 		NUM_KEYWORDS = 18
@@ -81,8 +81,8 @@ def main():
 		WORDS_PER_PARA = 20 
 		PERCENT_REDUCE = 0.6
 		SENTENCES_PER_PARA = 5
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 
 	elif 1800 < sec <= 2700: # 30-45 min
 		NUM_KEYWORDS = 20
@@ -94,8 +94,8 @@ def main():
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
 		SENTENCES_PER_PARA = 4
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
    
 	elif 2700 < sec <= 3600: # 45-60 min
 		NUM_KEYWORDS = 22
@@ -107,8 +107,8 @@ def main():
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
 		SENTENCES_PER_PARA = 4
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 	
 	elif 3600 < sec <= 7200: # 1-2 hr
 		NUM_KEYWORDS = 25
@@ -120,8 +120,8 @@ def main():
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
 		SENTENCES_PER_PARA = 4
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 		
 	else: # More than 2 hr
 		NUM_KEYWORDS = 30
@@ -133,8 +133,8 @@ def main():
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
 		SENTENCES_PER_PARA = 4
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 	
 	start = time.perf_counter()
 	
@@ -166,7 +166,8 @@ def main():
 	pf = ParaFormation(summary_result)
 	list_para = pf.paragraph(similarity_threshold = SENTENCE_SIMILARITY, word_threshold = WORDS_PER_PARA, percent_reduce = PERCENT_REDUCE)
 	ph = ParaHeadings(list_para)
-	title_para = ph.get_titles_paras(sentence_threshold = SENTENCES_PER_PARA, training = HEADING_TRAINING, heading_threshold = TOP_HEADINGS)
+	# title_para = ph.get_titles_paras(sentence_threshold = SENTENCES_PER_PARA, training = HEADING_TRAINING, heading_threshold = TOP_HEADINGS)
+	title_para = ph.get_titles_paras(sentence_threshold = SENTENCES_PER_PARA)
 	
 
 	# Final Notes (Includes Web Scraping) 
