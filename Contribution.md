@@ -6,17 +6,16 @@ Issues
 
 Feel free to submit issues and enhancement requests.
 
-
-## Contributing
-------------
-
-Please refer to each project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
-
 ## _**Setting up remote**_
  ```git
  $ git remote add upstream https://github.com/rahulmakhija30/brevis.git
  $ git remote add origin https://github.com/YOUR-USERNAME/YOUR-FORK.git
 ```
+
+## Contributing
+------------
+
+Please refer to each project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
 
  1. **Fork** the repo on GitHub
  2. **Clone** the project to your own machine
