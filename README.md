@@ -2,6 +2,9 @@
 
 > Refer [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/requirements.md)
 
+### *Contributing*
+>For contributing to Brevis refer to [**Contribution.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/Contribution.md)
+
 
 ### *Dependencies Installation for frontend*
 ```
