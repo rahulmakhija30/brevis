@@ -18,6 +18,7 @@ import io
 import os
 import pytesseract
 import shutil
+import pafy
 
 import multiprocessing
 import time
@@ -36,14 +37,16 @@ print("All Modules Imported Sucessfully")
 #All process functions to be run in parallel
 
 #Process to extract keywords and run Image Processing and Web Scraping parallely
-def Process_Extract_Keywords(url,text,Q):
+def Process_Extract_Keywords(url,text,Q,NUM_KEYWORDS,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES):
 	print("Extracting Keywords :-\n")
-	num_keywords=10
-	words=KeywordsExtractor(text,num_keywords).ExtractKeywords()
+	#num_keywords=10
+	words=KeywordsExtractor(text,NUM_KEYWORDS).ExtractKeywords()
+	scrape_keywords = KeywordsExtractor(text,NUM_KEYWORDS).ExtractScrapeKeywords()
 	print(f"\nKeywords : {words}\n")
+	print(f"\nScape Keywords : {scrape_keywords}\n")
 	#Running Image Processing and Web Scraping in Parallel
-	img_process = multiprocessing.Process(target=Process_Image_Extraction, args=(url,words,50,20,1000))
-	scraping_process = multiprocessing.Process(target=Process_Web_Scraping,args=(words,2,2,2,Q))
+	img_process = multiprocessing.Process(target=Process_Image_Extraction, args=(url,words,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES))
+	scraping_process = multiprocessing.Process(target=Process_Web_Scraping,args=(scrape_keywords,2,2,2,Q))
 	#Starting both the process simultaneously
 	img_process.start()
 	scraping_process.start()
@@ -53,20 +56,20 @@ def Process_Extract_Keywords(url,text,Q):
 	
 	
 #Process to generate summary from the text and run Paragraph Formation and Paragraph Heading serially(Can't be run in parallel)
-def Process_Get_Summary(text,percentage):
+def Process_Get_Summary(text,percentage,SENTENCE_SIMILARITY,WORDS_PER_PARA,PERCENT_REDUCE,SENTENCES_PER_PARA):
 	print("Extracting Summary :-\n")
 	summ = Summarizer().summary(text,percentage)
 	print(f"\n Summary : {summ}\n")
 	#Dividing Text into Paragraphs
-	paras = ParaFormation(summ).paragraph(similarity_threshold = 0.35,word_threshold = 20)
+	paras = ParaFormation(summ).paragraph(similarity_threshold = SENTENCE_SIMILARITY, word_threshold = WORDS_PER_PARA, percent_reduce = PERCENT_REDUCE)
 	#Generating Headings for Paragraphs
-	ParaHeadings(paras).get_titles_paras(sentence_threshold = 4,training = 200, heading_threshold = 3)
+	ParaHeadings(paras).get_titles_paras(sentence_threshold = SENTENCES_PER_PARA)
 
 	
 #Process to Extract keyframes and remove the non-text and similar images
-def Process_Image_Extraction(url,words,text_threshold,dis_threshold,jump):
+def Process_Image_Extraction(url,words,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES):
 	print("Extracting Images - \n")
-	ImageProcessing(url,words).img_processing(text_threshold,dis_threshold,jump)
+	ImageProcessing(url,words).img_processing(text_threshold = NON_TEXT_LEN, dis_threshold = SIMILAR_DISTANCE, jump = INTERVAL_KEYFRAMES)
 	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
 
 #Scraping the web to fetch links and adding those links to the multiprocessing queue
@@ -81,6 +84,92 @@ def Process_Web_Scraping(words,gres,yres,wres,Q):
 def main():
 
 	url = input("Enter the URL = ")
+	#Thresholds
+	sec = pafy.new(url).length
+	print(f"\nVideo duration in sec = {sec}\n")
+	
+	# THRESHOLDS
+	
+	DYNAMIC_INTERVAL = (sec/60) * 100
+	
+	if sec <= 900: # 0-15 min
+		NUM_KEYWORDS = 15
+		SUMMARY_PERCENT = 60
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 6
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
+	
+	elif 900 < sec <= 1800: # 15-30 min
+		NUM_KEYWORDS = 18
+		SUMMARY_PERCENT = 50 
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20 
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 5
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
+
+	elif 1800 < sec <= 2700: # 30-45 min
+		NUM_KEYWORDS = 20
+		SUMMARY_PERCENT = 40
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
+   
+	elif 2700 < sec <= 3600: # 45-60 min
+		NUM_KEYWORDS = 22
+		SUMMARY_PERCENT = 35
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
+	
+	elif 3600 < sec <= 7200: # 1-2 hr
+		NUM_KEYWORDS = 25
+		SUMMARY_PERCENT = 30
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
+		
+	else: # More than 2 hr
+		NUM_KEYWORDS = 30
+		SUMMARY_PERCENT = 25
+		NON_TEXT_LEN = 50
+		SIMILAR_DISTANCE = 20
+		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
+		SENTENCE_SIMILARITY = 0.35
+		WORDS_PER_PARA = 20
+		PERCENT_REDUCE = 0.6
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
+
     #Starting the timer    
 	start = time.perf_counter()
     
@@ -91,8 +180,8 @@ def main():
     #Declaring a multiprocessing queue to exchange data between various functions
 	Q=multiprocessing.Queue()
     #Running keywords and summary Processes parallely
-	key_ext=multiprocessing.Process(target=Process_Extract_Keywords , args=(url,text,Q))
-	summ_ext=multiprocessing.Process(target=Process_Get_Summary , args=(text,40))
+	key_ext=multiprocessing.Process(target=Process_Extract_Keywords , args=(url,text,Q,NUM_KEYWORDS,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES))
+	summ_ext=multiprocessing.Process(target=Process_Get_Summary , args=(text,SUMMARY_PERCENT,SENTENCE_SIMILARITY,WORDS_PER_PARA,PERCENT_REDUCE,SENTENCES_PER_PARA))
 	#Starting both process simultaneously
 	key_ext.start()
 	summ_ext.start()
