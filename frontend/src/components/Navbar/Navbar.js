@@ -8,7 +8,7 @@ import night from './night.png'
 import {Tooltip, Zoom} from '@material-ui/core'
 import {Mode} from '../Functions'
 import sun from './sun.png'
-import logo from './brevis1.PNG'
+// import logo from './brevis1.png'
 
 document.body.classList.add("Nav_BodyLightMode__2olZR")
 
@@ -18,9 +18,7 @@ class Navbar extends Component {
   return (
     <div>
       <div id='mySidenav' className={`${style.mysidenav} ${style.LightMode}`}>
-        <span>
-          <img  className={style.dot} src={logo}/>
-        </span>  
+        <div className={style.dot}></div>
         <Tooltip title="HOME" arrow placement='right' TransitionComponent={Zoom} classes={{ tooltip: style.popper}} margin-top={10}>
             <a href='/'><img id='homeicon' src={home} className={style.about} alt=""/></a>
         </Tooltip>
