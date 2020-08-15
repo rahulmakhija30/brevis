@@ -78,15 +78,14 @@
   }
   
   .dot {
-    height: 54px;
-    width: 54px;
-    background-color: grey; 
-    background-size: 54px 54px;
+    height: 63px;
+    width: 63px; 
+    background-size: 100px 100px;
     position: center;
     border-radius: 50%;
     display: inline-block;
     margin: 9.5px;
-    margin-bottom: 127px;
+    margin-bottom: 120px;
   }
 
   .invert{

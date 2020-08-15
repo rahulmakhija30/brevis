@@ -156,11 +156,11 @@ class Step1 extends React.Component{
                     <Button variant="contained" className={StepStyle.Button} component="span" onClick={this.handleOnClick}>
                         Preview
                     </Button>
-                    <p></p>
+                    {/*<p></p>
                     <div id={StepStyle.or}><Typography variant='caption' align='center'>OR</Typography></div>
                     <p></p>
                     <Button variant='contained' startIcon={<CloudUploadIcon/>} color="primary" onClick={this.changetoUpload}>Upload a Video Instead ?</Button>
-                </div>
+                    */}</div>
             )
         }
         else 
