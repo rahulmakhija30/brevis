@@ -1,12 +1,12 @@
 ### *Requirements*
 
-> Refer [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/requirements.md)
+> Refer [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/master/requirements.md)
 
 ### *Contributing*
->For contributing to Brevis refer to [**Contribution.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/Contribution.md)
+>For contributing to Brevis refer to [**Contribution.md**](https://github.com/rahulmakhija30/brevis/blob/master/Contribution.md)
 
 ### *Setting up your device*
->Refer to [**Setup.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/Setup.md) to Setup your device.
+>Refer to [**Setup.md**](https://github.com/rahulmakhija30/brevis/blob/master/Setup.md) to Setup your device.
 
 ### *Folder Structure*
 ```
