@@ -78,15 +78,16 @@
   }
   
   .dot {
-    height: 54px;
-    width: 54px;
-    background-color: grey; 
-    background-size: 54px 54px;
-    position: center;
+    height: 72px;
+    width: 72px; 
     border-radius: 50%;
     display: inline-block;
     margin: 9.5px;
-    margin-bottom: 127px;
+    margin-left: 4px;
+    margin-bottom: 106px;
+    background-size: 105px 110px;
+    background-position: center;
+    background-image: url(./brevis1.PNG);
   }
 
   .invert{
