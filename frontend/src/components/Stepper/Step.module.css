@@ -23,8 +23,7 @@
     text-align: center;
     font-weight: 800;
     color: darkgray;
-    margin-left: 38%;
-    margin-right: 37%;
+    margin: auto;
   }
   
   #or::before,
@@ -69,4 +68,16 @@
   .Button{
     background: #FF9900 !important;
     font-weight: bold !important;
+  }
+  
+   .playerWrapper {
+    position: relative;
+    padding-top: 19% /* Player ratio: 100 / (1280px / 720);; /* padding-left: 37.25%;; */;
+    margin-left: 80px;
+  }
+  
+  .reactPlayer {
+    position: absolute;
+    top: 0;
+    left: 27%
   }

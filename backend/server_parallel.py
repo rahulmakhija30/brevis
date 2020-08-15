@@ -31,7 +31,7 @@ import pytesseract
 import time
 import shutil
 import platform
-import pafy
+import multiprocessing
 
 import logging
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
@@ -67,6 +67,50 @@ text=""
 
 # data: Information about type of notes required by the user
 
+#All process functions to be run in parallel
+
+#Process to extract keywords and run Image Processing parallely
+def Process_Extract_Keywords(url,text,NUM_KEYWORDS,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES):
+	print("Extracting Keywords :-\n")
+	# num_keywords=10
+	words=KeywordsExtractor(text,NUM_KEYWORDS).ExtractKeywords()
+	print(f"\nKeywords : {words}\n")
+	if option == "Overview":
+		if not os.path.exists(os.path.join('res','out')):
+			os.mkdir(os.path.join('res','out'))
+	else:
+		#Running Image Processing in Parallel
+		img_process = multiprocessing.Process(target=Process_Image_Extraction, args=(url,words,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES))
+		#Starting the process simultaneously
+		img_process.start()
+		#Checking if the process have completed
+		img_process.join()
+	
+	
+#Process to generate summary from the text and run Paragraph Formation and Paragraph Heading serially(Can't be run in parallel)
+def Process_Get_Summary(text,percentage,SENTENCE_SIMILARITY,WORDS_PER_PARA,PERCENT_REDUCE,SENTENCES_PER_PARA):
+	print("Extracting Summary :-\n")
+	summ = Summarizer().summary(text,percentage)
+	print(f"\n Summary : {summ}\n")
+	#Dividing Text into Paragraphs
+	paras = ParaFormation(summ).paragraph(similarity_threshold = SENTENCE_SIMILARITY, word_threshold = WORDS_PER_PARA, percent_reduce = PERCENT_REDUCE)
+	#Generating Headings for Paragraphs
+	ParaHeadings(paras).get_titles_paras(sentence_threshold = SENTENCES_PER_PARA)
+
+	
+#Process to Extract keyframes and remove the non-text and similar images
+def Process_Image_Extraction(url,words,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES):
+	print("Extracting Images - \n")
+	ImageProcessing(url,words).img_processing(text_threshold = NON_TEXT_LEN, dis_threshold = SIMILAR_DISTANCE, jump = INTERVAL_KEYFRAMES)
+	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
+
+#Scraping the web to fetch links and adding those links to the multiprocessing queue
+def Process_Web_Scraping(words,gres,yres,wres):
+	print("Scraping the Web for additional resources :- ")
+	links = Scrapper(words,gres,yres,wres).web_scrape()
+	print(f"Scraped Links : {links}\n")
+
+
 def generate(data):
 	global video_url
 	global path
@@ -78,89 +122,22 @@ def generate(data):
 	global option
 	option = data
 
-	sec = pafy.new(video_url).length
-	print(f"\nVideo duration in sec = {sec}\n")
-	
-	# THRESHOLDS
-	
-	DYNAMIC_INTERVAL = (sec/60) * 100
-	
-	if sec <= 900: # 0-15 min
-		NUM_KEYWORDS = 15
-		SUMMARY_PERCENT = 60
 
-	
-	elif 900 < sec <= 1800: # 15-30 min
-		NUM_KEYWORDS = 18
-		SUMMARY_PERCENT = 50 
-
-
-	elif 1800 < sec <= 2700: # 30-45 min
-		NUM_KEYWORDS = 20
-		SUMMARY_PERCENT = 40
-		
-   
-	elif 2700 < sec <= 3600: # 45-60 min
-		NUM_KEYWORDS = 22
-		SUMMARY_PERCENT = 35
-	
-	
-	elif 3600 < sec <= 7200: # 1-2 hr
-		NUM_KEYWORDS = 25
-		SUMMARY_PERCENT = 30
-		
-		
-	else: # More than 2 hr
-		NUM_KEYWORDS = 30
-		SUMMARY_PERCENT = 25
-		
-	
+    #Starting the timer    
 	start = time.perf_counter()
 
 	# Transcription and Cleaning
 	yt = YoutubeTranscribe(video_url)
 	text = yt.youtube_transcribe()
+	scrape_keywords=KeywordsExtractor(text,10).ExtractScrapeKeywords()
 
-
-	# Keywords Extractor
-	# num_keywords=int(input("Enter number of keywords to be extracted : "))
-	words = KeywordsExtractor(text,NUM_KEYWORDS)
-	keywords = words.ExtractKeywords()
-	scrape_keywords = words.ExtractScrapeKeywords()
-	print(f'\nKeywords:\n {keywords}')
-	print(f'\nScrape Keywords:\n {scrape_keywords}')
-
-	# fp=open("keywords.txt","w")
-	# fp.write("\n".join(keywords))
-	# fp.close()
-	
-	scraped_results = Scrapper(scrape_keywords,2,2,2)
-	json_result = scraped_results.web_scrape()
-	#print(json_result)
+	json_result= Scrapper(scrape_keywords,2,2,2).web_scrape()
 	scrape_json = json_result
+	#Stopping the timer  
+	end=time.perf_counter()
+	#Printing the time taken by the program for execution
+	print(f"Finished in {round(end-start, 2)} second(s)")
 
-	# Summarization    
-	summ = Summarizer()
-
-	# if option == "Overview":
-	# 	percentage = 50
-	
-	# elif option == "Notes":
-	# 	percentage = 60
-	
-	# elif option == "Notes+Ref":
-	# 	percentage = 80
-		
-	summary_result = summ.summary(text,SUMMARY_PERCENT)
-	print(f'\nSummary:\n {summary_result}')
-
-	# fh = open(os.path.join('res', "summary.txt"),"w")
-	# fh.write(summary_result)
-	# fh.close()
-
-	finish = time.perf_counter()
-
-	print(f'Generate Function: Finished in {round(finish-start, 2)} second(s)')
 
 	
 def gen():
@@ -175,8 +152,8 @@ def gen():
 
 	sec = pafy.new(video_url).length
 	print(f"\nVideo duration in sec = {sec}\n")
-	
-	# THRESHOLDS
+
+    # THRESHOLDS
 	
 	DYNAMIC_INTERVAL = (sec/60) * 100
 	
@@ -260,44 +237,38 @@ def gen():
 
 	start = time.perf_counter()
 	
-	if option == "Overview":
-		if not os.path.exists(os.path.join('res','out')):
-			os.mkdir(os.path.join('res','out'))
-	
-	elif option == "Notes" or option == "Notes+Ref":
-		# Keyframe Extraction (Output : 'out' folder)
-		print("\nExtracting Keyframes\n")
-		ip = ImageProcessing(video_url,keywords)
-		ip.img_processing(text_threshold = NON_TEXT_LEN, dis_threshold = SIMILAR_DISTANCE, jump = INTERVAL_KEYFRAMES)
+	# if option == "Overview":
+	# 	percentage = 50
 
+	# elif option == "Notes":
+	# 	percentage = 60
 
-	# Paragraph and Headings (Output : paragraph_headings.txt)
-	print("\nGenerating Paragraphs and Headings\n")
-	pf = ParaFormation(summary_result)
-	list_para = pf.paragraph(similarity_threshold = SENTENCE_SIMILARITY, word_threshold = WORDS_PER_PARA, percent_reduce = PERCENT_REDUCE)
-	ph = ParaHeadings(list_para)
-	title_para = ph.get_titles_paras(sentence_threshold = SENTENCES_PER_PARA)
+	# elif option == "Notes+Ref":
+	# 	percentage = 80
 
+	#Running keywords and summary Processes parallely
+	key_ext=multiprocessing.Process(target=Process_Extract_Keywords , args=(video_url,text,NUM_KEYWORDS,NON_TEXT_LEN,SIMILAR_DISTANCE,INTERVAL_KEYFRAMES))
+	summ_ext=multiprocessing.Process(target=Process_Get_Summary , args=(text,SUMMARY_PERCENT,SENTENCE_SIMILARITY,WORDS_PER_PARA,PERCENT_REDUCE,SENTENCES_PER_PARA))
+	#Starting both process simultaneously
+	key_ext.start()
+	summ_ext.start()
+	#Checking if the process have finished execution
+	key_ext.join()
+	summ_ext.join()
 
-	# Final Notes (Includes Web Scraping) 
-	print("\nGenerating Final Notes\n")   
-	
 	if option == "Overview" or option == "Notes":
 		scrape_json = {}
-	
-	#scraped_results = Scrapper(scrape_keywords,2,2,2)
-	#s = scraped_results.web_scrape()
+	#Generating final notes
 	notes = Notes(video_url,scrape_json)
 	notes.generate_notes()
-	print("\nBrevis-Notes.docx Generated\n")
-	
-	
+	print("\nBrevis-Notes.docx and Brevis-Notes.pdf(on Windows) Generated\n")
+
 	with ZipFile('Brevis_Notes.zip','w') as zip:
 		print("Writing zip")
 		if os.path.exists(os.path.join('res','Brevis-Notes.pdf')):
 			zip.write(os.path.join('res','Brevis-Notes.pdf'),arcname='Brevis-Notes.pdf')
 		zip.write(os.path.join('res','Brevis-Notes.docx'),arcname='Brevis-Notes.docx')
-	
+
 	path = os.path.abspath("Brevis_Notes.zip")
 
 	if os.path.exists('res'):

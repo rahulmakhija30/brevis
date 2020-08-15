@@ -13,6 +13,7 @@ Parameters/Thresholds:
 # Import modules
 from youtube_transcription import YoutubeTranscribe
 from keywords_extractor import KeywordsExtractor
+from youtube_transcript_api._errors import TranscriptsDisabled
 
 from youtube_transcript_api import YouTubeTranscriptApi
 from PIL import Image
@@ -25,6 +26,8 @@ import numpy as np
 import requests
 import imageio
 import pytesseract
+import string
+from sys import exit
 
 # Path to your tesseract executable
 #pytesseract.pytesseract.tesseract_cmd = r'G:\himanshu\Tesseract-OCR\tesseract.exe'
@@ -34,6 +37,11 @@ class ImageProcessing:
 	def __init__(self,url,keywords):
 		self.url = url
 		self.keywords = keywords
+		
+	def modify_keyword(self,word):
+		word = word.translate(str.maketrans('', '', string.punctuation))
+		word = word.lower().strip()
+		return word
 	
 	def detect_text(self,img):
 		text = pytesseract.image_to_string(img,lang='eng')
@@ -114,7 +122,24 @@ class ImageProcessing:
 
 	def img_processing(self,text_threshold = 50,dis_threshold = 20,jump=1500):
 		urlID = self.url.partition('https://www.youtube.com/watch?v=')[-1]
-		transcript = YouTubeTranscriptApi.get_transcript(urlID)
+		
+		try:
+			transcript = YouTubeTranscriptApi.get_transcript(urlID)
+		
+		except TranscriptsDisabled as s:
+			print("No images will be there in your notes")
+			return
+
+		#Fetching API Keys for Image Simmilarity API
+		try:
+			f=open("Image_Sim_API_Keys.txt","r")
+		except Exception as e:
+			print(e)
+			exit(1)
+
+		api_keys = f.read().split("\n")
+		f.close()
+		#print(api_keys)
 
 		if not os.path.exists(os.path.join('res','out')):
 			os.mkdir(os.path.join('res','out'))
@@ -122,10 +147,11 @@ class ImageProcessing:
 		# Process Every Keyword
 		count=0
 		for key in range(len(self.keywords)):
-			search = self.keywords[key].split()
+			search = self.modify_keyword(self.keywords[key]).split()
 			start,end = self.start_end(transcript,search)
 			self.frames(self.url,start,end,jump)
 
+		print(f"Initial : {len(os.listdir(os.path.join('res','out')))} images extracted in 'out' folder")
 
 		# Remove non-text images
 		print("Removing non-text images")
@@ -134,6 +160,8 @@ class ImageProcessing:
 			res = self.detect_text(os.path.join('res','out',i))
 			if res == '' or len(res) < text_threshold :
 				os.remove(os.path.join('res','out',i))
+
+		print(f"Number of Images After Removing Non Text Images : {len(os.listdir(os.path.join('res','out')))}")
 
 
 		# Remove Similar Images
@@ -147,16 +175,62 @@ class ImageProcessing:
 					'image1': open(os.path.join('res','out',files[i]), 'rb'),
 					'image2': open(os.path.join('res','out',files[i+1]), 'rb'),
 				},
-				headers={'api-key': 'b9d5b013-8260-4b5f-ac38-0c8d19946d78'}
+				headers={'api-key': api_keys[0]}
 			)
 			res = r.json()
+			try:
+				dis = res['output']['distance']
 
-			dis = res['output']['distance']
+			except:
+				api_keys.pop(0)
+				if(len(api_keys)==0):
+					print("All API Keys exhausted for Image Similarity.Please add new keys and try again.")
+					try:
+						f=open("Image_Sim_API_Keys.txt","w")
+						f.write("")
+						f.close()	
+						exit(1)
+					except Exception as e:
+						print(e)
+						exit(1)
+
+				r = requests.post(
+					"https://api.deepai.org/api/image-similarity",
+					files={
+						'image1': open(os.path.join('res','out',files[i]), 'rb'),
+						'image2': open(os.path.join('res','out',files[i+1]), 'rb'),
+					},
+					headers={'api-key': api_keys[0]}
+				)
+				
+				res = r.json()
+				dis = res['output']['distance']
+
+
 			if dis >= dis_threshold:
 				i+=1
 			else:
 				os.remove(os.path.join('res','out',files[i]))
 				i+=1
+
+		print(f"Final : {len(os.listdir(os.path.join('res','out')))} images extracted in 'out' folder")
+
+
+		#Writing the keys back to file
+		try:
+			f=open("Image_Sim_API_Keys.txt","w")
+			if(len(api_keys)==1):
+				f.write(api_keys[0])
+				f.close()
+			else:
+				api_keys = '\n'.join(api_keys)
+				#print(api_keys)
+				f.write(api_keys)
+				f.close()
+
+		except Exception as e:
+			print(e)
+			exit(1)
 
 				
 if __name__ == '__main__':
@@ -175,5 +249,4 @@ if __name__ == '__main__':
 	
 	
 	ip = ImageProcessing(url,keywords)
-	ip.img_processing(jump=1000)
-	print(len(os.listdir(os.path.join('res','out'))),"images extracted in 'out' folder")
+	ip.img_processing(text_threshold = 50,dis_threshold = 20,jump=1500)

@@ -5,6 +5,10 @@ import Stepstyle from './Step.module.css'
 import { DarkStep2 } from '../Functions'
 import Loader from '../Loader/Loader'
 
+window.onbeforeunload = function () {
+    console.log('refresh')
+}; 
+
 class Step2 extends React.Component{
 
     state={
@@ -37,7 +41,14 @@ class Step2 extends React.Component{
             <Backdrop open={this.state.open} className={Stepstyle.backdrop}>
                 <Loader></Loader>
             </Backdrop>
-            <ReactPlayer width='387px' height='217px' url={this.props.url} className={Stepstyle.Videocenter} onReady={this.handleClose}/>
+            <div className={Stepstyle.playerWrapper}>
+                <ReactPlayer 
+                    width='39%'
+                    height='100%' 
+                    url={this.props.url} 
+                    className={Stepstyle.reactPlayer} 
+                    onReady={this.handleClose}/>
+            </div>
             <p style={{paddingBottom:'2px'}}></p>
             <FormControl  variant="outlined" disabled={this.state.disabled} id='dropdown'>
                 <InputLabel id="demo-simple-select-autowidth-outlined-label">
@@ -62,6 +73,7 @@ class Step2 extends React.Component{
             </Button>
             <br></br>
             <Typography variant='caption' color='textSecondary' onClick={this.props.onPrevious} id='other-video' disabled={this.state.disabled} className={Stepstyle.othervideo}><u>Other Video ?</u></Typography>
+            <p><br></br></p>
             </div>
         )
     }

@@ -2,6 +2,7 @@
 # !pip install python-docx
 
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import TranscriptsDisabled
 from docx.shared import Inches
 from bs4 import BeautifulSoup as bs
 from docx.enum.text import WD_UNDERLINE
@@ -22,6 +23,11 @@ import pysbd
 import time
 import logging
 import pafy
+
+import platform
+import os
+from docx2pdf import convert
+from sys import exit
 
 logging.basicConfig(format='%(asctime)s : %(threadName)s : %(levelname)s : %(message)s',level=logging.INFO)
 
@@ -65,11 +71,12 @@ class Notes:
 
 		sim = model.sv.similarity(0,1)
 
-		if sim >= similarity_threshold:
-			return True
+		#if sim >= similarity_threshold:
+		#	return True
 
-		else:
-			return False
+		#else:
+		#	return False
+		return sim
 
 	def add_hyperlink(self, paragraph, text, place_url, color, underline):
 		"""
@@ -138,7 +145,15 @@ class Notes:
 
 	def generate_notes(self):
 		urlID = self.url.partition('https://www.youtube.com/watch?v=')[-1]
-		transcript = YouTubeTranscriptApi.get_transcript(urlID)
+		
+		try:
+			transcript = YouTubeTranscriptApi.get_transcript(urlID)
+			trans = 1
+		
+		except TranscriptsDisabled as s:
+			print("No images will be there in your notes")
+			trans = 0
+		
 		vid_title = self.get_title()
 		vid_title="Notes on " + vid_title
 
@@ -155,39 +170,90 @@ class Notes:
 			temp = data[i].split('$')
 			heading.append(temp[0])
 			para = para + temp[1] + "\n"
-
-		#f=open("file1.txt","w")
+			
 		s=set()
 		paras=[[i,[]]for i in para.split('\n')]
 		paras = paras[:-1]
-		j=0
-		for filename in os.listdir(directory):
-			l=filename.split(".")
-			time=float(l[0][5:])
+	
+		if trans == 1:
 			j=0
-			
-			while(j<len(transcript)):
-				data=transcript[j]
-				index=0
-				
-				if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+2000)):
-					text=data['text'].replace('\n',' ')
-					t=(text,time)
-					
-					while index <(len(paras)):
-						t1 = self.clean(text)
-						t2 = self.clean(paras[index][0])
-						
-						if((t1 in t2) or self.sentence_similarity(t1,t2)):
-							if(filename not in paras[index][1]):
-								paras[index][1].append(filename)
-							break
-							
-						index+=1
-						
-				j+=1
-				
+			for filename in os.listdir(directory):
+				l=filename.split(".")
+				time=float(l[0][5:])
+				j=0
 
+				while(j<len(transcript)):
+					data=transcript[j]
+					index=0
+
+					if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+1000)):
+						text=data['text'].replace('\n',' ')
+						t=(text,time)
+						l1=[]
+						l2=[]
+						while index <(len(paras)):
+							t1 = self.clean(text)
+							t2 = self.clean(paras[index][0])
+
+							if((t1 in t2)):
+								if(filename not in paras[index][1] and filename not in s ):
+									paras[index][1].append(filename)
+									s.add(filename)
+								break
+							#l1.append(index)
+							#l2.append(self.sentence_similarity(t1,t2))
+
+							index+=1
+						#mapindex=l1[l2.index(max(l2))]
+						#if(filename not in paras[mapindex][1] and filename not in s):
+							#paras[mapindex][1].append(filename)
+							#s.add(filename)
+
+					j+=1
+
+			#print(len(s))
+			#print(s)
+			for filename in os.listdir(directory):
+				if(filename not in s):
+					l=filename.split(".")
+					time=float(l[0][5:])
+					j=0
+
+							
+					while(j<len(transcript)):
+						data=transcript[j]
+						index=0
+
+						if(time>=(data['start']*1000) and time<(((data['start']+data['duration'])*1000)+1000)):
+							text=data['text'].replace('\n',' ')
+							t=(text,time)
+							l1=[]
+							l2=[]
+							while index <(len(paras)):
+								t1 = self.clean(text)
+								t2 = self.clean(paras[index][0])
+
+								#if((t1 in t2)):
+								#	if(filename not in paras[index][1] and filename not in s ):
+								#		paras[index][1].append(filename)
+								#		s.add(filename)
+								#	break
+								l1.append(index)
+								l2.append(self.sentence_similarity(t1,t2))
+
+								index+=1
+
+							mapindex=l1[l2.index(max(l2))]
+
+							if(filename not in paras[mapindex][1] and filename not in s):
+								paras[mapindex][1].append(filename)
+								s.add(filename)
+
+						j+=1
+            
+            
+		#print(paras)
+		#print(len(s))
 		document = docx.Document()
 		d=document.add_heading(vid_title,0)
 		d.alignment=1
@@ -286,20 +352,28 @@ class Notes:
 		#if os.path.exists('res'):
 		#    shutil.rmtree('res')
 			
-		#document.save(os.path.join('res','Brevis-Notes.docx'))
+		document.save(os.path.join('res','Brevis-Notes.docx'))
 		document.save('Brevis-Notes.docx')
+
+		if platform.system() == "Windows":
+			word_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.docx")
+			word_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.docx")
+			pdf_path = os.path.join(os.path.abspath(os.getcwd()),"res","Brevis-Notes.pdf")
+			pdf_path_test = os.path.join(os.path.abspath(os.getcwd()),"Brevis-Notes.pdf")
+			convert(word_path_test,pdf_path_test)
+			convert(word_path,pdf_path)
+
 		# os.remove("video.mp4")
 		#f.close()
 
 if __name__ == "__main__":
-	keywords = ['open source mobile sdk', 'lightweight object designed', 'experienced flutter developer', 'flutter youtube channel', 'important flutter widgets', 'important step', 'important features', 'important properties', 'apps made', 'specific task']
-    
-# 	scraped_results = Scrapper(keywords,2,2,2)
-# 	scraped_results.web_scrape()
-# 	s = scraped_results.scrape_result
+	keywords = ['driver wanted vital capacity', 'police body', 'cam video', 'neck vein', 'robin refused', '20 times', 'driven', 'died', 'transcripts', 'phone', 'likes', 'quote', 'message', 'betting', 'fluid']
 	
-	s = {}
-	url = "https://www.youtube.com/watch?v=b_sQ9bMltGU"
+	scraped_results = Scrapper(keywords,2,2,2)
+	scraped_results.web_scrape()
+	s = scraped_results.scrape_result
+	
+	url = "https://www.youtube.com/watch?v=kthmIlrRswc"
 	notes = Notes(url,s)
 	notes.generate_notes()
 	print("Brevis-Notes.docx Generated")

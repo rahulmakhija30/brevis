@@ -8,6 +8,7 @@ import night from './night.png'
 import {Tooltip, Zoom} from '@material-ui/core'
 import {Mode} from '../Functions'
 import sun from './sun.png'
+// import logo from './brevis1.png'
 
 document.body.classList.add("Nav_BodyLightMode__2olZR")
 
@@ -17,16 +18,16 @@ class Navbar extends Component {
   return (
     <div>
       <div id='mySidenav' className={`${style.mysidenav} ${style.LightMode}`}>
-        <span className={style.dot}></span>  
+        <div className={style.dot}></div>
         <Tooltip title="HOME" arrow placement='right' TransitionComponent={Zoom} classes={{ tooltip: style.popper}} margin-top={10}>
-            <Link to='/'><img id='homeicon' src={home} className={style.about} alt=""/></Link>
+            <a href='/'><img id='homeicon' src={home} className={style.about} alt=""/></a>
         </Tooltip>
         <Tooltip title="SUGGESTIONS" arrow placement='right' TransitionComponent={Zoom} classes={{ tooltip: style.popper}}>  
-            <Link to='/suggestions'><img id='suggestionsicon' src={lightbulb} className={style.about} alt=""/></Link>
+            <Link to='/suggestions' ><img id='suggestionsicon' src={lightbulb} className={style.about} alt=""/></Link>
         </Tooltip>
 
         <Tooltip title="ABOUT" arrow placement='right' TransitionComponent={Zoom} classes={{ tooltip: style.popper}}>          
-            <a href='/about'><img src={info} className={style.about} alt="" id='abouticon'/></a>  
+            <Link to='/about'><img src={info} className={style.about} alt="" id='abouticon'/></Link>  
         </Tooltip>
             
         <Tooltip title="" arrow placement='right' TransitionComponent={Zoom}>

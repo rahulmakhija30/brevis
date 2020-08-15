@@ -2,40 +2,11 @@
 
 > Refer [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/requirements.md)
 
+### *Contributing*
+>For contributing to Brevis refer to [**Contribution.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/Contribution.md)
 
-### *Dependencies Installation for frontend*
-```
-cd frontend
-npm install
-```
-
-### *Starting the Application*
-
-To start the server type the following  commands :
-```
-cd backend
-python server.py
-```
-
-Open a new terminal
-To start the client type the follwoing commands :
-```
-cd frontend
-npm start
-```
-
-### **Testing Backend**
-
-```
-Install modules mentioned in requirements.md
-```
-
-Run the command to test
-
-```
-python main_serial.py
-```
-
+### *Setting up your device*
+>Refer to [**Setup.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/Setup.md) to Setup your device.
 
 ### *Folder Structure*
 ```
@@ -87,19 +58,25 @@ python main_serial.py
 |--- backend
 |     |
 |     |--- utils
+|           |--- api_transcript.py
 |           |--- clean_transcript.py
 |           |--- google_speech_to_text.py
 |           |--- keyframes_extractor.py
 |           |--- keywords_extractor.py
 |           |--- notes.py
 |           |--- paragraph_headings.py
+|           |--- summary_generator.py
+|           |--- Transcript_Gen_API_Keys.txt
 |           |--- web_scraping.py
 |           |--- youtube_transcription.py
 |     |--- Demo-Europarl-EN.pcl
+|     |--- Image_Sim_API_Keys.txt
+|     |--- main_multi.py
 |     |--- main_parallel.py
 |     |--- main_serial.py
 |     |--- prog.py
 |     |--- server.py
+|     |--- server_parallel.py
 |     |--- SmartStoplist.txt
 |
 |
@@ -109,6 +86,10 @@ python main_serial.py
 |--- README.md
 |
 |--- requirements.md
+|
+|--- Contribution.md
+|
+|--- Setup.md
 |
 +
 
