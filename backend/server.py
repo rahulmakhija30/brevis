@@ -83,30 +83,37 @@ def generate(data):
 	
 	# THRESHOLDS
 	
+	DYNAMIC_INTERVAL = (sec/60) * 100
+	
 	if sec <= 900: # 0-15 min
 		NUM_KEYWORDS = 15
 		SUMMARY_PERCENT = 60
+
 	
 	elif 900 < sec <= 1800: # 15-30 min
 		NUM_KEYWORDS = 18
 		SUMMARY_PERCENT = 50 
 
+
 	elif 1800 < sec <= 2700: # 30-45 min
 		NUM_KEYWORDS = 20
 		SUMMARY_PERCENT = 40
+		
    
 	elif 2700 < sec <= 3600: # 45-60 min
 		NUM_KEYWORDS = 22
 		SUMMARY_PERCENT = 35
 	
+	
 	elif 3600 < sec <= 7200: # 1-2 hr
 		NUM_KEYWORDS = 25
 		SUMMARY_PERCENT = 30
 		
+		
 	else: # More than 2 hr
 		NUM_KEYWORDS = 30
 		SUMMARY_PERCENT = 25
-
+		
 	
 	start = time.perf_counter()
 
@@ -117,8 +124,7 @@ def generate(data):
 
 	# Keywords Extractor
 	# num_keywords=int(input("Enter number of keywords to be extracted : "))
-	num_keywords = NUM_KEYWORDS
-	words = KeywordsExtractor(text,num_keywords)
+	words = KeywordsExtractor(text,NUM_KEYWORDS)
 	keywords = words.ExtractKeywords()
 	scrape_keywords = words.ExtractScrapeKeywords()
 	print(f'\nKeywords:\n {keywords}')
@@ -135,7 +141,6 @@ def generate(data):
 
 	# Summarization    
 	summ = Summarizer()
-	percentage = SUMMARY_PERCENT
 
 	# if option == "Overview":
 	# 	percentage = 50
@@ -146,7 +151,7 @@ def generate(data):
 	# elif option == "Notes+Ref":
 	# 	percentage = 80
 		
-	summary_result = summ.summary(text,percentage)
+	summary_result = summ.summary(text,SUMMARY_PERCENT)
 	print(f'\nSummary:\n {summary_result}')
 
 	# fh = open(os.path.join('res', "summary.txt"),"w")
@@ -176,6 +181,8 @@ def gen():
 	DYNAMIC_INTERVAL = (sec/60) * 100
 	
 	if sec <= 900: # 0-15 min
+		NUM_KEYWORDS = 15
+		SUMMARY_PERCENT = 60
 		NON_TEXT_LEN = 50
 		SIMILAR_DISTANCE = 20
 		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
@@ -183,63 +190,73 @@ def gen():
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
 		SENTENCES_PER_PARA = 6
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 	
 	elif 900 < sec <= 1800: # 15-30 min
+		NUM_KEYWORDS = 18
+		SUMMARY_PERCENT = 50 
 		NON_TEXT_LEN = 50
 		SIMILAR_DISTANCE = 20
 		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
 		SENTENCE_SIMILARITY = 0.35
 		WORDS_PER_PARA = 20 
 		PERCENT_REDUCE = 0.6
-		SENTENCES_PER_PARA = 6
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+		SENTENCES_PER_PARA = 5
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 
 	elif 1800 < sec <= 2700: # 30-45 min
+		NUM_KEYWORDS = 20
+		SUMMARY_PERCENT = 40
 		NON_TEXT_LEN = 50
 		SIMILAR_DISTANCE = 20
 		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
 		SENTENCE_SIMILARITY = 0.35
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
-		SENTENCES_PER_PARA = 6
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
    
 	elif 2700 < sec <= 3600: # 45-60 min
+		NUM_KEYWORDS = 22
+		SUMMARY_PERCENT = 35
 		NON_TEXT_LEN = 50
 		SIMILAR_DISTANCE = 20
 		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
 		SENTENCE_SIMILARITY = 0.35
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
-		SENTENCES_PER_PARA = 6
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 	
 	elif 3600 < sec <= 7200: # 1-2 hr
+		NUM_KEYWORDS = 25
+		SUMMARY_PERCENT = 30
 		NON_TEXT_LEN = 50
 		SIMILAR_DISTANCE = 20
 		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
 		SENTENCE_SIMILARITY = 0.35
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
-		SENTENCES_PER_PARA = 6
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 		
 	else: # More than 2 hr
+		NUM_KEYWORDS = 30
+		SUMMARY_PERCENT = 25
 		NON_TEXT_LEN = 50
 		SIMILAR_DISTANCE = 20
 		INTERVAL_KEYFRAMES = DYNAMIC_INTERVAL
 		SENTENCE_SIMILARITY = 0.35
 		WORDS_PER_PARA = 20
 		PERCENT_REDUCE = 0.6
-		SENTENCES_PER_PARA = 6
-		HEADING_TRAINING = 500
-		TOP_HEADINGS = 3
+		SENTENCES_PER_PARA = 4
+# 		HEADING_TRAINING = 500
+# 		TOP_HEADINGS = 3
 
 	start = time.perf_counter()
 	
@@ -259,7 +276,7 @@ def gen():
 	pf = ParaFormation(summary_result)
 	list_para = pf.paragraph(similarity_threshold = SENTENCE_SIMILARITY, word_threshold = WORDS_PER_PARA, percent_reduce = PERCENT_REDUCE)
 	ph = ParaHeadings(list_para)
-	title_para = ph.get_titles_paras(sentence_threshold = SENTENCES_PER_PARA, training = HEADING_TRAINING, heading_threshold = TOP_HEADINGS)
+	title_para = ph.get_titles_paras(sentence_threshold = SENTENCES_PER_PARA)
 
 
 	# Final Notes (Includes Web Scraping) 
