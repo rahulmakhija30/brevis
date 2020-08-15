@@ -12,7 +12,7 @@ Setting up Brevis on your Device
     $ conda create -n brevis python=3.6.10 
     ```
 
-    - Download all the required packages from [**Requirements.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/requirements.md)
+    - Download all the required packages from [**Requirements.md**](https://github.com/rahulmakhija30/brevis/blob/master/requirements.md)
 
 ### **Dependencies Installation for frontend**
 ```shell
@@ -51,7 +51,7 @@ python main_serial.py
     ```
     - Install node-v12.16.3
 
-    - Download all the required packages from [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/Version-2.0/requirements.md)
+    - Download all the required packages from [**requirements.md**](https://github.com/rahulmakhija30/brevis/blob/master/requirements.md)
 
 ### **Dependencies Installation for frontend**
 ```shell
